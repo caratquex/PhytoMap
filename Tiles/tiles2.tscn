@@ -1,0 +1,17 @@
+[gd_scene load_steps=5 format=3 uid="uid://dypvj625qjycx"]
+
+[ext_resource type="PackedScene" uid="uid://bkmjerwp2trqm" path="res://Map Asset/Grass block.glb" id="1_fnwe0"]
+[ext_resource type="PackedScene" uid="uid://rv0sb1tj5ce7" path="res://Map Asset/Tree1.glb" id="10_075gi"]
+[ext_resource type="PackedScene" uid="uid://banmil88a83yv" path="res://Map Asset/Tree2.glb" id="11_hbtth"]
+[ext_resource type="PackedScene" uid="uid://bblqmkekkk3ss" path="res://Map Asset/TreeRadiant2.glb" id="12_q221p"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Grass block" parent="." instance=ExtResource("1_fnwe0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.39086533, 1.0372915, 0.19277906)
+
+[node name="Tree1" parent="." instance=ExtResource("10_075gi")]
+
+[node name="Tree2" parent="." instance=ExtResource("11_hbtth")]
+
+[node name="TreeRadiant2" parent="." instance=ExtResource("12_q221p")]

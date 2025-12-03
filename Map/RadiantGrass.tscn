@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://btysfti3q7qg6"]
+
+[ext_resource type="PackedScene" uid="uid://u2a4y22ktnfn" path="res://Map Asset/GrassRadiant2.glb" id="2_0q1d7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0q1d7"]
+size = Vector3(2.25, 2.25, 2.25)
+
+[node name="Node3D" type="StaticBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_0q1d7")
+
+[node name="GrassRadiant2" parent="CollisionShape3D" instance=ExtResource("2_0q1d7")]

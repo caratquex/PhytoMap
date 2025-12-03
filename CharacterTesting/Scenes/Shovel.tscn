@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3b8l6xx3pvli"]
+
+[ext_resource type="PackedScene" uid="uid://ircq6btvno26" path="res://Assets/Models/Shovel.glb" id="1_lfyym"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Shovel" parent="." instance=ExtResource("1_lfyym")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)

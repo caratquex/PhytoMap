@@ -1,0 +1,466 @@
+[gd_scene load_steps=38 format=3 uid="uid://co2egw7y3xefe"]
+
+[ext_resource type="PackedScene" uid="uid://do3t3kr4s8nub" path="res://Scenes/gameplay_ui.tscn" id="1_w8jfd"]
+[ext_resource type="PackedScene" uid="uid://ojkg1br2vbk0" path="res://Scenes/player.tscn" id="1_x87qo"]
+[ext_resource type="PackedScene" uid="uid://dap5wi0e3cqq6" path="res://Assets/Models/Cube_Prototype_Large_A.gltf" id="2_b6fju"]
+[ext_resource type="PackedScene" uid="uid://d1wv4u8muirb0" path="res://Assets/Models/Floor.gltf" id="3_6h5vk"]
+[ext_resource type="PackedScene" uid="uid://muf7y6v3gtsh" path="res://Assets/Models/Primitive_Beam.gltf" id="3_wywco"]
+[ext_resource type="Script" uid="uid://cpaq74aa5gqpi" path="res://Scripts/jump_pad.gd" id="4_1ixah"]
+[ext_resource type="Script" uid="uid://fsdbr1e0k86v" path="res://Scripts/game_manager.gd" id="4_2fmhe"]
+[ext_resource type="PackedScene" uid="uid://bclaljerty8rt" path="res://Assets/Models/Primitive_Floor.gltf" id="4_fiftr"]
+[ext_resource type="PackedScene" uid="uid://d2ykpun4g83h5" path="res://Scenes/collectible.tscn" id="6_rgj8m"]
+[ext_resource type="Texture2D" uid="uid://ddce5aideln3v" path="res://Assets/Textures/diamond_icon.png" id="8_7iton"]
+[ext_resource type="Texture2D" uid="uid://bk8woh8tip3bq" path="res://Assets/Textures/coin_icon.png" id="9_5dgvu"]
+[ext_resource type="Texture2D" uid="uid://dktoxukmfxi8k" path="res://Assets/Textures/cherry_icon.png" id="10_uscyt"]
+[ext_resource type="PackedScene" uid="uid://efc0tx4ihc1a" path="res://Assets/Models/obstacle.glb" id="11_4xiap"]
+[ext_resource type="Texture2D" uid="uid://chtg1840njpqg" path="res://Assets/Textures/rainbow_texture.png" id="12_wywco"]
+[ext_resource type="PackedScene" uid="uid://bi51moin8daq1" path="res://Scenes/checkpoint.tscn" id="14_ldntv"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_oqyrl"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_x87qo"]
+sky_material = SubResource("ProceduralSkyMaterial_oqyrl")
+
+[sub_resource type="Environment" id="Environment_b6fju"]
+background_mode = 2
+sky = SubResource("Sky_x87qo")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fiftr"]
+size = Vector3(4, 1, 4)
+
+[sub_resource type="Animation" id="Animation_rgj8m"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(12, 3, -30)]
+}
+
+[sub_resource type="Animation" id="Animation_1ixah"]
+resource_name = "moving"
+length = 3.0
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(1, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(12, 3, -30), Vector3(12, 3, -40)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2fmhe"]
+_data = {
+&"RESET": SubResource("Animation_rgj8m"),
+&"moving": SubResource("Animation_1ixah")
+}
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_6h5vk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1ixah"]
+size = Vector3(2.94702, 0.13031, 2.95605)
+
+[sub_resource type="Curve" id="Curve_1ixah"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0881226), -2.2893, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_rgj8m"]
+curve = SubResource("Curve_1ixah")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2fmhe"]
+particle_flag_align_y = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.1
+emission_ring_radius = 0.2
+emission_ring_inner_radius = 0.0
+emission_ring_cone_angle = 90.0
+angle_min = -30.0
+angle_max = 30.0
+direction = Vector3(0, 1, 0)
+spread = 65.132
+initial_velocity_min = 5.0
+initial_velocity_max = 6.0
+gravity = Vector3(0, -15, 0)
+scale_min = 0.5
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_rgj8m")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7iton"]
+albedo_color = Color(0.996078, 0.796078, 0.360784, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ikfsv"]
+material = SubResource("StandardMaterial3D_7iton")
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ldntv"]
+albedo_color = Color(0.966003, 0.649681, 0, 1)
+roughness = 0.05
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w8jfd"]
+albedo_color = Color(0.663275, 0.663275, 0.663275, 1)
+metallic = 1.0
+roughness = 0.22
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a7fet"]
+albedo_texture = ExtResource("12_wywco")
+roughness = 0.03
+
+[sub_resource type="Animation" id="Animation_wywco"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Obstacle:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_4xiap"]
+resource_name = "rotate"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Obstacle:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5708, 0), Vector3(0, 7.85398, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ldntv"]
+_data = {
+&"RESET": SubResource("Animation_wywco"),
+&"rotate": SubResource("Animation_4xiap")
+}
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ldntv"]
+size = Vector2(200, 200)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ldntv"]
+data = PackedVector3Array(100, 0, 100, -100, 0, 100, 100, 0, -100, -100, 0, 100, -100, 0, -100, 100, 0, -100)
+
+[node name="GameScene" type="Node3D"]
+
+[node name="Gameplay UI" parent="." instance=ExtResource("1_w8jfd")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_b6fju")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.87839, -0.406734, 0.250996, -0.0335631, 0.576354, 0.81651, -0.476765, 0.70879, -0.519915, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("1_x87qo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.15595, 0)
+speed = 5.0
+
+[node name="Ground" type="Node3D" parent="."]
+
+[node name="Cube_Prototype_Large_A2" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.7003062, 0)
+
+[node name="Cube_Prototype_Large_A3" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.7003062, -4)
+
+[node name="Cube_Prototype_Large_A4" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.7003062, -12)
+
+[node name="Cube_Prototype_Large_A5" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1.7003062, -12)
+
+[node name="Cube_Prototype_Large_A6" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -12)
+
+[node name="Cube_Prototype_Large_A7" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -12)
+
+[node name="Cube_Prototype_Large_A8" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -20)
+
+[node name="Cube_Prototype_Large_A9" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -24)
+
+[node name="Cube_Prototype_Large_A10" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -46)
+
+[node name="Cube_Prototype_Large_A11" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, -46)
+
+[node name="Cube_Prototype_Large_A12" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -50)
+
+[node name="Cube_Prototype_Large_A14" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -48)
+
+[node name="Cube_Prototype_Large_A15" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -48)
+
+[node name="Cube_Prototype_Large_A16" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -48)
+
+[node name="Cube_Prototype_Large_A17" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 4, -48)
+
+[node name="Cube_Prototype_Large_A18" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 4, -48)
+
+[node name="Cube_Prototype_Large_A19" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 4, -48)
+
+[node name="Cube_Prototype_Large_A20" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 4, -48)
+
+[node name="Cube_Prototype_Large_A22" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 4, -44)
+
+[node name="Cube_Prototype_Large_A23" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 4, -44)
+
+[node name="Cube_Prototype_Large_A24" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 4, -44)
+
+[node name="Cube_Prototype_Large_A25" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 4, -52)
+
+[node name="Cube_Prototype_Large_A26" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 4, -52)
+
+[node name="Cube_Prototype_Large_A27" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 4, -52)
+
+[node name="Cube_Prototype_Large_A21" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 4, -48)
+
+[node name="Cube_Prototype_Large_A28" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 4, -50)
+
+[node name="Cube_Prototype_Large_A29" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62, 4, -46)
+
+[node name="Cube_Prototype_Large_A30" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66, 4, -50)
+
+[node name="Cube_Prototype_Large_A31" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66, 4, -46)
+
+[node name="Cube_Prototype_Large_A13" parent="Ground" instance=ExtResource("2_b6fju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, -50)
+
+[node name="Primitive_Beam2" parent="Ground" instance=ExtResource("3_wywco")]
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 1, -40, 7, -48)
+
+[node name="Primitive_Beam3" parent="Ground" instance=ExtResource("3_wywco")]
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 1, -52, 7, -48)
+
+[node name="MovingPlatform" type="AnimatableBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 3, -30)
+metadata/_edit_group_ = true
+
+[node name="Floor2" parent="MovingPlatform" instance=ExtResource("3_6h5vk")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MovingPlatform"]
+shape = SubResource("BoxShape3D_fiftr")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MovingPlatform"]
+libraries = {
+&"": SubResource("AnimationLibrary_2fmhe")
+}
+autoplay = "moving"
+
+[node name="DeathZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -15, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeathZone"]
+shape = SubResource("WorldBoundaryShape3D_6h5vk")
+
+[node name="GameManager" type="Node3D" parent="." node_paths=PackedStringArray("item_labels")]
+script = ExtResource("4_2fmhe")
+item_labels = {
+"CHERRY": NodePath("../UI/PanelContainer/VBoxContainer/Cherry/Label3"),
+"COIN": NodePath("../UI/PanelContainer/VBoxContainer/Coin/Label2"),
+"DIAMOND": NodePath("../UI/PanelContainer/VBoxContainer/Diamond/Label")
+}
+
+[node name="JumpPad" type="Area3D" parent="." node_paths=PackedStringArray("particle_system")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 4, -48)
+script = ExtResource("4_1ixah")
+particle_system = NodePath("GPUParticles3D")
+metadata/_edit_group_ = true
+
+[node name="Primitive_Floor2" parent="JumpPad" instance=ExtResource("4_fiftr")]
+transform = Transform3D(0.745, 0, 0, 0, 0.125, 0, 0, 0, 0.745, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="JumpPad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0489807, 0)
+shape = SubResource("BoxShape3D_1ixah")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="JumpPad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0152807, 0)
+emitting = false
+amount = 40
+lifetime = 2.0
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_2fmhe")
+draw_pass_1 = SubResource("BoxMesh_ikfsv")
+
+[node name="Collectibles" type="Node3D" parent="."]
+
+[node name="Collectible" parent="Collectibles" instance=ExtResource("6_rgj8m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -4)
+
+[node name="Collectible2" parent="Collectibles" instance=ExtResource("6_rgj8m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 5, -12)
+
+[node name="Collectible3" parent="Collectibles" instance=ExtResource("6_rgj8m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 5, -12)
+type = 2
+
+[node name="Collectible4" parent="Collectibles" instance=ExtResource("6_rgj8m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 5, -12)
+type = 0
+
+[node name="Collectible5" parent="Collectibles" instance=ExtResource("6_rgj8m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 5, -20)
+
+[node name="Collectible6" parent="Collectibles" instance=ExtResource("6_rgj8m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 5, -24)
+
+[node name="Collectible7" parent="Collectibles" instance=ExtResource("6_rgj8m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 5, -48)
+
+[node name="Collectible8" parent="Collectibles" instance=ExtResource("6_rgj8m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 5, -48)
+
+[node name="Collectible9" parent="Collectibles" instance=ExtResource("6_rgj8m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 9, -48)
+
+[node name="UI" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="PanelContainer" type="PanelContainer" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 37.0
+offset_right = -42.0
+offset_bottom = 348.0
+grow_horizontal = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="Diamond" type="HBoxContainer" parent="UI/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="TextureRect" type="TextureRect" parent="UI/PanelContainer/VBoxContainer/Diamond"]
+layout_mode = 2
+texture = ExtResource("8_7iton")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="UI/PanelContainer/VBoxContainer/Diamond"]
+layout_mode = 2
+text = "0"
+
+[node name="Coin" type="HBoxContainer" parent="UI/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="TextureRect2" type="TextureRect" parent="UI/PanelContainer/VBoxContainer/Coin"]
+layout_mode = 2
+texture = ExtResource("9_5dgvu")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Label2" type="Label" parent="UI/PanelContainer/VBoxContainer/Coin"]
+layout_mode = 2
+theme_type_variation = &"CoinLabel"
+text = "0"
+
+[node name="Cherry" type="HBoxContainer" parent="UI/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="TextureRect3" type="TextureRect" parent="UI/PanelContainer/VBoxContainer/Cherry"]
+layout_mode = 2
+texture = ExtResource("10_uscyt")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Label3" type="Label" parent="UI/PanelContainer/VBoxContainer/Cherry"]
+layout_mode = 2
+theme_type_variation = &"CherryLabel"
+text = "0"
+
+[node name="obstacle" parent="." instance=ExtResource("11_4xiap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 8, -48)
+
+[node name="Obstacle" parent="obstacle" index="0"]
+transform = Transform3D(-3.6199901e-06, 0, 1, 0, 1, 0, -1, 0, -3.6199901e-06, 0, 0, 0)
+surface_material_override/0 = SubResource("StandardMaterial3D_ldntv")
+surface_material_override/1 = SubResource("StandardMaterial3D_w8jfd")
+surface_material_override/2 = SubResource("StandardMaterial3D_a7fet")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="obstacle"]
+callback_mode_process = 0
+libraries = {
+&"": SubResource("AnimationLibrary_ldntv")
+}
+autoplay = "rotate"
+
+[node name="Checkpoint" parent="." instance=ExtResource("14_ldntv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -12)
+
+[node name="Checkpoint2" parent="." instance=ExtResource("14_ldntv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10, 4, -48)
+
+[node name="Checkpoint3" parent="." instance=ExtResource("14_ldntv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -30, 8, -48)
+
+[node name="Checkpoint4" parent="." instance=ExtResource("14_ldntv")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -66, 8, -48)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.99895626, 0, -0.04567682, 0, 1, 0, 0.04567682, 0, 0.99895626, -0.017026901, 0.028595924, 16.8322)
+mesh = SubResource("PlaneMesh_ldntv")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ldntv")
+
+[connection signal="body_entered" from="DeathZone" to="GameManager" method="respawn_player"]
+[connection signal="body_entered" from="JumpPad" to="JumpPad" method="_on_body_entered"]
+
+[editable path="obstacle"]

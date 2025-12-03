@@ -1,0 +1,153 @@
+[gd_scene load_steps=6 format=3 uid="uid://nhc71q5iss6n"]
+
+[ext_resource type="PackedScene" uid="uid://cotfq22rd3w13" path="res://Map Asset/Bridges handle.glb" id="1_6xinw"]
+[ext_resource type="PackedScene" uid="uid://dow600snkupgc" path="res://Map Asset/Bridges plate 1.glb" id="2_qeo2h"]
+[ext_resource type="PackedScene" uid="uid://b1jirbsch7kln" path="res://Map Asset/Bridges plate 2.glb" id="3_d2v1s"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iysm1"]
+size = Vector3(0.8, 4, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qeo2h"]
+size = Vector3(7.05, 0.24, 1.55)
+
+[node name="bridge_physic" type="Node3D"]
+
+[node name="handle" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.77349186, -23.74761)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="handle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.021339, 1.703023, 7.6875086)
+shape = SubResource("BoxShape3D_iysm1")
+
+[node name="Bridges handle" parent="handle" instance=ExtResource("1_6xinw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.536743e-07, -0.022730827, -0.15036964)
+
+[node name="handle2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2923098, 0.77349186, -23.74761)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="handle2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.008059, 1.703023, 7.6875086)
+shape = SubResource("BoxShape3D_iysm1")
+
+[node name="Bridges handle" parent="handle2" instance=ExtResource("1_6xinw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.022730827, -0.15036964)
+
+[node name="handle3" type="StaticBody3D" parent="."]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0.77349186, -34.397808)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="handle3"]
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 3.0609074, 1.703023, 8.581919)
+shape = SubResource("BoxShape3D_iysm1")
+
+[node name="Bridges handle" parent="handle3" instance=ExtResource("1_6xinw")]
+transform = Transform3D(-0.9999997, 0, -1.5099576e-07, 0, 1, 0, 1.5099576e-07, 0, -0.9999997, 6.073152, -0.022730827, 16.423851)
+
+[node name="handle4" type="StaticBody3D" parent="."]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.2076149, 0.77349186, -16.932371)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="handle4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.034618, 1.703023, 8.906082)
+shape = SubResource("BoxShape3D_iysm1")
+
+[node name="Bridges handle" parent="handle4" instance=ExtResource("1_6xinw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.022730827, 1.0579872)
+
+[node name="Plate 1 (Rigid Body)" type="RigidBody3D" parent="."]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.22516632, 0, -32.655952)
+
+[node name="Plate 1" type="Node3D" parent="Plate 1 (Rigid Body)"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.9604645e-08, 0.77349186, -21.921028)
+
+[node name="Bridges plate 1" parent="Plate 1 (Rigid Body)/Plate 1" instance=ExtResource("2_qeo2h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4901161e-08, 0, 0.15036964)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Plate 1 (Rigid Body)"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08270937, 0.6546569, -15.330742)
+shape = SubResource("BoxShape3D_qeo2h")
+
+[node name="plate 2 (Rigid Body)" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.77349186, -23.419437)
+
+[node name="Plate 2" type="Node3D" parent="plate 2 (Rigid Body)"]
+
+[node name="Bridges plate 2" parent="plate 2 (Rigid Body)/Plate 2" instance=ExtResource("3_d2v1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.019397736)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="plate 2 (Rigid Body)"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08270931, -0.11883497, 4.3239956)
+shape = SubResource("BoxShape3D_qeo2h")
+
+[node name="Plate 3 (Rigid Body)" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.77349186, -24.714191)
+
+[node name="Plate 3" type="Node3D" parent="Plate 3 (Rigid Body)"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.46824646)
+
+[node name="Bridges plate 2" parent="Plate 3 (Rigid Body)/Plate 3" instance=ExtResource("3_d2v1s")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Plate 3 (Rigid Body)"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08270931, -0.11883497, 4.305458)
+shape = SubResource("BoxShape3D_qeo2h")
+
+[node name="Plate 4 (Rigid Body)" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.77349186, -26.96068)
+
+[node name="Plate 4" type="Node3D" parent="Plate 4 (Rigid Body)"]
+
+[node name="Bridges plate 2" parent="Plate 4 (Rigid Body)/Plate 4" instance=ExtResource("3_d2v1s")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Plate 4 (Rigid Body)"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08270931, -0.11883497, 4.2986355)
+shape = SubResource("BoxShape3D_qeo2h")
+
+[node name="Plate 5 (Rigid Body)" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.77349186, -28.92778)
+
+[node name="Plate 5" type="Node3D" parent="Plate 5 (Rigid Body)"]
+
+[node name="Bridges plate 2" parent="Plate 5 (Rigid Body)/Plate 5" instance=ExtResource("3_d2v1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.18928337)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Plate 5 (Rigid Body)"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08270931, -0.11883497, 4.489645)
+shape = SubResource("BoxShape3D_qeo2h")
+
+[node name="Handle to Plate 1" type="HingeJoint3D" parent="."]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0.008095443, 0.6709273, -16.450897)
+node_a = NodePath("../Plate 1 (Rigid Body)")
+node_b = NodePath("../handle")
+
+[node name="Hinge for Plate 1 - Plate 2" type="HingeJoint3D" parent="."]
+transform = Transform3D(-4.3711385e-08, 0, -1, 0, 0.99999994, 0, 0.9999999, 0, -4.371139e-08, -0.007174492, 0.664, -18.182076)
+node_a = NodePath("../plate 2 (Rigid Body)")
+node_b = NodePath("../Plate 1 (Rigid Body)")
+motor/enable = true
+motor/target_velocity = 0.017453292
+
+[node name="Hinge for Plate 2 - Plate 3" type="HingeJoint3D" parent="."]
+transform = Transform3D(-4.3711385e-08, 0, -1, 0, 0.99999994, 0, 0.9999999, 0, -4.371139e-08, -0.0071725845, 0.664, -20.006748)
+node_a = NodePath("../Plate 3 (Rigid Body)")
+node_b = NodePath("../plate 2 (Rigid Body)")
+motor/enable = true
+motor/target_velocity = 0.017453292
+
+[node name="Hinge for Plate 3 - Plate 4" type="HingeJoint3D" parent="."]
+transform = Transform3D(-4.3711385e-08, 0, -1, -0.013997083, 0.9999021, 6.11832e-10, 0.99990195, 0.013997085, -4.3707104e-08, -0.041980743, 0.685208, -21.838419)
+node_a = NodePath("../Plate 4 (Rigid Body)")
+node_b = NodePath("../Plate 3 (Rigid Body)")
+motor/enable = true
+motor/target_velocity = 0.017453292
+
+[node name="Hinge for Plate 4 - Plate 5" type="HingeJoint3D" parent="."]
+transform = Transform3D(-4.3704727e-08, 7.62869e-10, -1, 0.017452404, 0.9998478, 0, 0.99984765, -0.017452408, -4.371139e-08, -0.048859596, 0.664, -23.684662)
+node_a = NodePath("../Plate 5 (Rigid Body)")
+node_b = NodePath("../Plate 4 (Rigid Body)")
+motor/enable = true
+motor/target_velocity = 0.017453292
+
+[node name="Hinge for Plate 5 - Plate 6" type="HingeJoint3D" parent="."]
+transform = Transform3D(-4.3711385e-08, 0, -1, 0, 1.0000001, 0, 0.99999994, 0, -4.371139e-08, 0.010807037, 0.664, -25.399527)
+node_a = NodePath("../handle4")
+node_b = NodePath("../Plate 5 (Rigid Body)")
+motor/enable = true
+motor/target_velocity = 0.017453292

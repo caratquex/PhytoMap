@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://bk7xiwbaknp4w"]
+
+[ext_resource type="PackedScene" uid="uid://dow600snkupgc" path="res://Map Asset/Bridges plate 1.glb" id="1_uepji"]
+
+[node name="Bridges plate 1" instance=ExtResource("1_uepji")]

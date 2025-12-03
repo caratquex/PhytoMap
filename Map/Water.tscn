@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://blypntsmq3xo2"]
+
+[ext_resource type="Shader" uid="uid://cjlb6wl8x5ees" path="res://Shader/water.tres" id="1_67tdd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rcftm"]
+render_priority = 0
+shader = ExtResource("1_67tdd")
+shader_parameter/ColorParameter = Color(0.2952, 0.71504, 0.82, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_hyjiy"]
+size = Vector2(200, 200)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Water" type="MeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_rcftm")
+mesh = SubResource("PlaneMesh_hyjiy")

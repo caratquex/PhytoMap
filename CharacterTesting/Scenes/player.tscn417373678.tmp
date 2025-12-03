@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://ojkg1br2vbk0"]
+
+[ext_resource type="Script" uid="uid://b816toh8jwohy" path="res://Scripts/player.gd" id="1_cvnsp"]
+[ext_resource type="Script" uid="uid://byjvw6ylr1l0" path="res://Scripts/camera_controller.gd" id="2_6t5aa"]
+[ext_resource type="PackedScene" uid="uid://c0m12ftik23mt" path="res://Rabid (FINAL 2).glb" id="3_6t5aa"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_b6fju"]
+radius = 0.5839844
+height = 3.3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_b6fju"]
+radius = 0.1
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("model")]
+script = ExtResource("1_cvnsp")
+speed = 6.0
+jump_velocity = 5.0
+model = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6386531, 0)
+shape = SubResource("CapsuleShape3D_b6fju")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.971219, 0)
+shape = SubResource("SphereShape3D_b6fju")
+spring_length = 5.0
+script = ExtResource("2_6t5aa")
+
+[node name="Camera3D" type="Camera3D" parent="SpringArm3D"]
+fov = 60.0
+size = 5.0
+
+[node name="Rabid (FINAL 2)" parent="." instance=ExtResource("3_6t5aa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.011286259, -0.937444, -0.015408039)

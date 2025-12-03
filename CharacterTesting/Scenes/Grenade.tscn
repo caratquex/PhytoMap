@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://1kd3n6lutq8d"]
+
+[ext_resource type="PackedScene" uid="uid://cfjxgpk3pdwf7" path="res://Assets/Models/Grenade.glb" id="1_be0jk"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Grenade" parent="." instance=ExtResource("1_be0jk")]
+transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, 0, 0)
