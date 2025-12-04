@@ -17,7 +17,7 @@ config/icon="res://Map Asset/icon.svg"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/proton_scatter/plugin.cfg")
+enabled=PackedStringArray()
 
 [input]
 
