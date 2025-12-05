@@ -126,14 +126,31 @@ model = NodePath("Rabid (FINAL 2)")
 animation_tree = NodePath("Rabid (FINAL 2)/AnimationPlayer/AnimationTree")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 stretch = true
+stretch_shrink = 2
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
 handle_input_locally = false
-size = Vector2i(40, 40)
+size = Vector2i(320, 180)
 render_target_update_mode = 4
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="SubViewportContainer/SubViewport"]
+update_position = true
+update_rotation = true
+update_scale = false
+remote_path = NodePath("../../SpringArm3D")
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/RemoteTransform3D"]
+fov = 60.0
+size = 5.0
+current = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6386531, 0)
