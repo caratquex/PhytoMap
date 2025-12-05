@@ -1,0 +1,114 @@
+[gd_scene load_steps=15 format=3 uid="uid://do3t3kr4s8nub"]
+
+[ext_resource type="Texture2D" uid="uid://qax1x5xvhfeh" path="res://GUI/Gun.png" id="1_t1sxl"]
+[ext_resource type="Script" uid="uid://oylpje5gaqnq" path="res://Script/ItemController.gd" id="2_6a8u2"]
+[ext_resource type="Texture2D" uid="uid://mu6dg5fstg4w" path="res://GUI/Bullet Empty.png" id="3_4poc1"]
+[ext_resource type="Texture2D" uid="uid://cuk8pu2gn6ohi" path="res://GUI/Bullet Full_Default.png" id="4_3nu8i"]
+[ext_resource type="Texture2D" uid="uid://xhmrbc4kfij0" path="res://GUI/GUI_Gun.png" id="5_d7obc"]
+[ext_resource type="Texture2D" uid="uid://b3bxy5lk7owbw" path="res://GUI/GUI_Gun_Active.png" id="6_6m7sq"]
+[ext_resource type="Texture2D" uid="uid://ce82u3upnoe2a" path="res://GUI/GUI_Grenade.png" id="7_o0aom"]
+[ext_resource type="Texture2D" uid="uid://bqpdstlogwgav" path="res://GUI/GUI_Grenade_Active.png" id="8_to0c6"]
+[ext_resource type="Texture2D" uid="uid://6picgtfh4xq2" path="res://GUI/GUI_Shovel.png" id="9_3lbyp"]
+[ext_resource type="Texture2D" uid="uid://qm0a8wshnci" path="res://GUI/GUI_Shovel_Active.png" id="10_svnl3"]
+
+[sub_resource type="Theme" id="Theme_adi8s"]
+Button/colors/font_hover_color = Color(0.39308527, 0.39308545, 0.39308622, 1)
+Button/constants/icon_max_width = 200
+Button/constants/outline_size = 4
+Button/icons/icon = ExtResource("1_t1sxl")
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_t255e"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_lj6eg"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_3w022"]
+
+[node name="Gameplay UI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 1.0
+offset_right = -1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme = SubResource("Theme_adi8s")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NinePatchRect" node_paths=PackedStringArray("grenade_button", "gun_button", "shovel_button", "bullet_bar", "grenade_bar")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = 259.0
+offset_right = 620.0
+offset_bottom = 446.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.27789465, 0.2790289)
+theme_override_constants/separation = 8
+script = ExtResource("2_6a8u2")
+grenade_button = NodePath("GrenadeButton")
+gun_button = NodePath("GunButton")
+shovel_button = NodePath("ShovelButton")
+bullet_bar = NodePath("Bullet Bar")
+grenade_bar = NodePath("Grenade Bar")
+
+[node name="Bullet Bar" type="TextureProgressBar" parent="NinePatchRect/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+max_value = 5.0
+value = 1.0
+fill_mode = 3
+texture_under = ExtResource("3_4poc1")
+texture_progress = ExtResource("4_3nu8i")
+
+[node name="GunButton" type="TextureButton" parent="NinePatchRect/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_t255e")
+texture_normal = ExtResource("5_d7obc")
+texture_pressed = ExtResource("6_6m7sq")
+
+[node name="GrenadeButton" type="TextureButton" parent="NinePatchRect/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_lj6eg")
+texture_normal = ExtResource("7_o0aom")
+texture_pressed = ExtResource("8_to0c6")
+
+[node name="ShovelButton" type="TextureButton" parent="NinePatchRect/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_3w022")
+texture_normal = ExtResource("9_3lbyp")
+texture_pressed = ExtResource("10_svnl3")
+
+[node name="Grenade Bar" type="TextureProgressBar" parent="NinePatchRect/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+max_value = 5.0
+value = 1.0
+fill_mode = 3
+texture_under = ExtResource("3_4poc1")
+texture_progress = ExtResource("4_3nu8i")

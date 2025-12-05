@@ -1,7 +1,57 @@
-[gd_scene load_steps=2 format=3 uid="uid://biurdvx8lqmmx"]
+[gd_scene load_steps=6 format=3 uid="uid://biurdvx8lqmmx"]
 
 [ext_resource type="PackedScene" uid="uid://c7cw4qc3v8xv1" path="res://Map Asset/Grass2.glb" id="1_iojtk"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_iojtk"]
+load_path = "res://.godot/imported/Grass2_Leaf_texture.png-0e037b09b3bff689edd78edd2eb51de2.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4kppl"]
+resource_name = "Material.001"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+albedo_texture = SubResource("CompressedTexture2D_iojtk")
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_tql2c"]
+_surfaces = [{
+"aabb": AABB(-1, 0, -1, 2, 1e-05, 2),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 1, 0, 2, 0, 0, 0, 3, 0, 1, 0),
+"name": "Material.001",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_nyd8h"]
+resource_name = "Grass2_Plane_008"
+_surfaces = [{
+"aabb": AABB(-1, 0, -1, 2, 1e-05, 2),
+"attribute_data": PackedByteArray(228, 185, 166, 140, 153, 243, 216, 80, 153, 243, 166, 140, 228, 185, 216, 80),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 1, 0, 2, 0, 0, 0, 3, 0, 1, 0),
+"material": SubResource("StandardMaterial3D_4kppl"),
+"name": "Material.001",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 255, 255, 255, 191, 255, 255, 0, 0, 0, 0, 255, 191, 255, 255, 0, 0, 255, 255, 255, 191, 0, 0, 0, 0, 0, 0, 255, 191, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_tql2c")
 
 [node name="Node3D" type="Node3D"]
 
 [node name="Grass2" parent="." instance=ExtResource("1_iojtk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0023706034, -2.9802322e-08, -3.540516e-05)
+
+[node name="Grass 2" parent="Grass2" index="0"]
+mesh = SubResource("ArrayMesh_nyd8h")
+
+[editable path="Grass2"]

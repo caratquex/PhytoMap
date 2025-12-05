@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c3b8l6xx3pvli"]
 
-[ext_resource type="PackedScene" uid="uid://ircq6btvno26" path="res://Assets/Models/Shovel.glb" id="1_lfyym"]
+[ext_resource type="PackedScene" uid="uid://c6sca1bihcy35" path="res://Character Assets/Shovel.glb" id="1_lfyym"]
 
 [node name="Node3D" type="Node3D"]
 
