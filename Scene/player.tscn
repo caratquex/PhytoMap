@@ -125,6 +125,16 @@ camera = NodePath("SpringArm3D/Camera3D")
 model = NodePath("Rabid (FINAL 2)")
 animation_tree = NodePath("Rabid (FINAL 2)/AnimationPlayer/AnimationTree")
 
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(40, 40)
+render_target_update_mode = 4
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6386531, 0)
 shape = SubResource("CapsuleShape3D_b6fju")
@@ -194,24 +204,30 @@ parameters/conditions/run = true
 
 [node name="Rabid (FINAL 2)_Armature_001_Skeleton3D#RightHandAttachment" type="BoneAttachment3D" parent="."]
 transform = Transform3D(-0.9486371, -0.31084448, -0.00094544655, 0.31082562, -0.94853365, -0.014391939, 0.0035830836, -0.013970805, 0.9981619, -0.30685127, 1.0450377, -0.03916321)
+visible = false
 bone_name = "Hand.R"
 bone_idx = 5
 
 [node name="Rabid (FINAL 2)_Armature_001_Skeleton3D_RightHandAttachment#RightHandContainer" type="Node3D" parent="."]
+visible = false
 
 [node name="Rabid (FINAL 2)_Armature_001_Skeleton3D_RightHandAttachment#Gun" parent="." instance=ExtResource("4_x3wgy")]
 transform = Transform3D(0.20723814, 0.6326301, -0.7462115, -0.9623189, -0.0054449365, -0.2718714, -0.17605713, 0.7744351, 0.60766345, -0.025303334, 0.7964385, 0.1432237)
+visible = false
 
 [node name="Rabid (FINAL 2)_Armature_001_Skeleton3D#LeftHandAttachment" type="BoneAttachment3D" parent="."]
 transform = Transform3D(-0.95117897, 0.308635, 0.0023053535, -0.30862436, -0.95100623, -0.01838937, -0.003483202, -0.018203046, 0.9998282, 0.29179165, 1.027932, -0.037627634)
+visible = false
 bone_name = "Bone"
 bone_idx = 4
 
 [node name="Rabid (FINAL 2)_Armature_001_Skeleton3D_LeftHandAttachment#LeftHandContainer" type="Node3D" parent="."]
 transform = Transform3D(1, 1.2878445e-08, 0, -1.6822014e-08, 1, 0, -2.3283064e-10, 0, 1, 0, 0, 0)
+visible = false
 
 [node name="Rabid (FINAL 2)_Armature_001_Skeleton3D_LeftHandAttachment#Grenade" parent="." instance=ExtResource("5_3smsa")]
 transform = Transform3D(0.026791833, -0.87990224, -0.47439763, 0.9601638, -0.10939679, 0.2571328, -0.2781494, -0.46238828, 0.84192014, 0.06751561, 0.7250196, 0.090586215)
+visible = false
 
 [node name="Shovel" parent="." instance=ExtResource("6_8erm5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5793977, 0, -0.2700181)

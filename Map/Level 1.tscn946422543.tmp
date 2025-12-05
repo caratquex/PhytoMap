@@ -189,5 +189,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.705286, 3.6402907, 1.01631
 
 [node name="GrassScatterer" type="Node3D" parent="."]
 script = ExtResource("19_grass_scatterer")
-grass_density = 0.15
-grass_height_offset = 1.5
