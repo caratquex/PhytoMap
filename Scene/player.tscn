@@ -1,11 +1,21 @@
-[gd_scene load_steps=31 format=3 uid="uid://bforddmeqe21d"]
+[gd_scene load_steps=35 format=3 uid="uid://bforddmeqe21d"]
 
 [ext_resource type="Script" uid="uid://xn0hjmvydx74" path="res://Script/player.gd" id="1_6t5aa"]
 [ext_resource type="Script" uid="uid://ffhgjc7pnh2g" path="res://Script/camera_controller.gd" id="2_6t5aa"]
+[ext_resource type="Shader" uid="uid://d37vms16a2t5l" path="res://Shader/edge_detection.gdshader" id="3_2sw5t"]
 [ext_resource type="PackedScene" uid="uid://dfd8oc0mv7kbi" path="res://Character Assets/Rabid (FINAL).glb" id="3_6t5aa"]
 [ext_resource type="PackedScene" path="res://Scene/Gun.tscn" id="4_x3wgy"]
 [ext_resource type="PackedScene" path="res://Scene/Grenade.tscn" id="5_3smsa"]
 [ext_resource type="PackedScene" path="res://Scene/Shovel.tscn" id="6_8erm5"]
+[ext_resource type="Script" uid="uid://b7ecepo30kucs" path="res://Scene/pixelated_camera_sync.gd" id="7_camera_sync"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_p6qlh"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2sw5t"]
+render_priority = 0
+shader = ExtResource("3_2sw5t")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_b6fju"]
 radius = 0.5839844
@@ -126,31 +136,35 @@ model = NodePath("Rabid (FINAL 2)")
 animation_tree = NodePath("Rabid (FINAL 2)/AnimationPlayer/AnimationTree")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
-stretch_shrink = 2
+stretch_shrink = 5
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
 handle_input_locally = false
-size = Vector2i(320, 180)
-render_target_update_mode = 4
 snap_2d_transforms_to_pixel = true
 snap_2d_vertices_to_pixel = true
+size = Vector2i(230, 129)
+render_target_update_mode = 4
 
-[node name="RemoteTransform3D" type="RemoteTransform3D" parent="SubViewportContainer/SubViewport"]
-update_position = true
-update_rotation = true
-update_scale = false
-remote_path = NodePath("../../SpringArm3D")
+[node name="CameraSync" type="Node3D" parent="SubViewportContainer/SubViewport"]
+script = ExtResource("7_camera_sync")
 
-[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/RemoteTransform3D"]
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/CameraSync"]
+current = true
 fov = 60.0
 size = 5.0
-current = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/CameraSync/Camera3D"]
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_p6qlh")
+skeleton = NodePath("../../../../..")
+surface_material_override/0 = SubResource("ShaderMaterial_2sw5t")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6386531, 0)
