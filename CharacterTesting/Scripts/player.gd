@@ -11,6 +11,8 @@ const GRAVITY: float = 9.8
 @export var jump_velocity: float = 8.0      # نطة أقوى (غيّر الرقم لو تبغيه أقوى/أضعف)
 @export var rotation_speed: float = 8.0     # سرعة لف الأرنب
 @export var gun_visible_time: float = 0.15  # كم ثانية السلاح يبان بعد الإطلاق
+@export var acceleration: float = 20.0       # سرعة التسارع عند الحركة
+@export var friction: float = 25.0           # سرعة التباطؤ عند التوقف
 
 # ---------------------------
 # Nodes (عيّنها من الـ Inspector)
@@ -243,11 +245,25 @@ func _physics_process(delta: float) -> void:
 	if camera:
 		direction = direction.rotated(Vector3.UP, camera.global_rotation.y)
 
+	# Calculate target velocity
+	var target_velocity: Vector3
 	if direction != Vector3.ZERO:
-		velocity.x = direction.x * speed
-		velocity.z = direction.z * speed
+		target_velocity = direction * speed
 	else:
-		velocity.x = move_toward(velocity.x, 0.0, speed * delta)
-		velocity.z = move_toward(velocity.z, 0.0, speed * delta)
+		target_velocity = Vector3.ZERO
+
+	# Smoothly accelerate/decelerate towards target velocity
+	var current_velocity_xz = Vector2(velocity.x, velocity.z)
+	var target_velocity_xz = Vector2(target_velocity.x, target_velocity.z)
+	
+	if direction != Vector3.ZERO:
+		# Accelerate towards target speed
+		current_velocity_xz = current_velocity_xz.move_toward(target_velocity_xz, acceleration * delta)
+	else:
+		# Decelerate to zero (faster friction)
+		current_velocity_xz = current_velocity_xz.move_toward(Vector2.ZERO, friction * delta)
+
+	velocity.x = current_velocity_xz.x
+	velocity.z = current_velocity_xz.y
 
 	move_and_slide()

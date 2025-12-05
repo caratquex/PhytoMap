@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://sl5ib4d0b7c6"]
+[gd_scene load_steps=22 format=3 uid="uid://sl5ib4d0b7c6"]
 
 [ext_resource type="PackedScene" uid="uid://dinofa07kkl23" path="res://Map Asset/Grass.glb" id="1_rwwm6"]
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="2_e1aag"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://dy46unlunoric" path="res://Map Asset/Tree2.tscn" id="15_0u6sy"]
 [ext_resource type="PackedScene" uid="uid://bx7uroifmtbyt" path="res://Map Asset/StoneRadiant.tscn" id="16_c7v0i"]
 [ext_resource type="PackedScene" uid="uid://f1q0ykhjjrjh" path="res://Map Asset/Stone1.tscn" id="17_dqsk1"]
+[ext_resource type="PackedScene" uid="uid://biurdvx8lqmmx" path="res://Map Asset/Grass2.tscn" id="18_e1aag"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_c1tmo"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -66,6 +67,9 @@ transform = Transform3D(-0.7954735, 0, -0.6059883, 0, 1, 0, 0.6059883, 0, -0.795
 transform = Transform3D(-0.55484426, 0, 0.83195424, 0, 1, 0, -0.83195424, 0, -0.55484426, 6.8520803, 4.704279, -12.139134)
 
 [node name="Grass4" parent="." instance=ExtResource("1_rwwm6")]
+transform = Transform3D(-0.5591929, 0, -0.8290376, 0, 1, 0, 0.8290376, 0, -0.5591929, -7.3070707, 4.9142933, -12.188584)
+
+[node name="Grass7" parent="." instance=ExtResource("1_rwwm6")]
 transform = Transform3D(-0.5591929, 0, -0.8290376, 0, 1, 0, 0.8290376, 0, -0.5591929, 22.00514, 3.0251184, 2.4091835)
 
 [node name="Node3D" parent="." instance=ExtResource("2_e1aag")]
@@ -178,3 +182,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 4, 3)
 
 [node name="Node3D24" parent="." instance=ExtResource("17_dqsk1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2845488, 4, 3)
+
+[node name="Node3D25" parent="." instance=ExtResource("18_e1aag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.705286, 3.6402907, 1.0163128)
