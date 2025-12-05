@@ -59,6 +59,13 @@ func _ready() -> void:
 	if animation_tree:
 		animation_tree.active = true
 		playback = animation_tree.get("parameters/playback")
+		
+		# Connect animation finished signal
+		var anim_player_path = animation_tree.get("anim_player")
+		if anim_player_path:
+			var anim_player = get_node(anim_player_path) as AnimationPlayer
+			if anim_player and not anim_player.animation_finished.is_connected(_on_shoot_animation_finished):
+				anim_player.animation_finished.connect(_on_shoot_animation_finished)
 
 	# نخفي الأسلحة في البداية
 	if gun_model:
@@ -110,6 +117,10 @@ func _process(delta: float) -> void:
 # SHOOT
 # ---------------------------
 func start_shoot() -> void:
+	# Prevent multiple shots - only allow if not already shooting
+	if is_shooting:
+		return
+	
 	is_shooting = true
 
 	# السلاح يطلع وقت الإطلاق
@@ -137,16 +148,14 @@ func reset_weapon_state() -> void:
 		animation_tree.set("parameters/is_shooting", false)
 
 	if playback:
-		var input_dir: Vector2 = Input.get_vector("left", "right", "forward", "backward")
-		if input_dir != Vector2.ZERO:
-			playback.travel("Run")
-		else:
-			playback.travel("Idle")
+		# Always return to idle after shoot
+		playback.travel("Idle")
 
 
-func _on_shoot_animation_finished() -> void:
-	# لو خلصت الأنيميشن قبل التايمر، نرجّع الوضع برضه
-	reset_weapon_state()
+func _on_shoot_animation_finished(anim_name: String) -> void:
+	# Only reset if it was the shoot animation
+	if anim_name == "Shoot":
+		reset_weapon_state()
 
 
 # ---------------------------

@@ -1,12 +1,14 @@
-[gd_scene load_steps=36 format=3 uid="uid://bforddmeqe21d"]
+[gd_scene load_steps=31 format=3 uid="uid://bforddmeqe21d"]
 
 [ext_resource type="Script" uid="uid://xn0hjmvydx74" path="res://Script/player.gd" id="1_6t5aa"]
-[ext_resource type="Script" uid="uid://ffhgjc7pnh2g" path="res://Script/camera_controller.gd" id="2_6t5aa"]
 [ext_resource type="Shader" uid="uid://d37vms16a2t5l" path="res://Shader/edge_detection.gdshader" id="3_2sw5t"]
 [ext_resource type="PackedScene" uid="uid://dfd8oc0mv7kbi" path="res://Character Assets/Rabid (FINAL).glb" id="3_6t5aa"]
+<<<<<<< HEAD
+=======
 [ext_resource type="PackedScene" path="res://Scene/Gun.tscn" id="4_x3wgy"]
 [ext_resource type="PackedScene" path="res://Scene/Grenade.tscn" id="5_3smsa"]
 [ext_resource type="PackedScene" path="res://Scene/Shovel.tscn" id="6_8erm5"]
+>>>>>>> parent of 0683a86 (Add Rabid Item)
 [ext_resource type="Script" uid="uid://b7ecepo30kucs" path="res://Scene/pixelated_camera_sync.gd" id="7_camera_sync"]
 [ext_resource type="PackedScene" uid="uid://r5hp1q65lxx3" path="res://Scene/Gameplay UI.tscn" id="9_c68nv"]
 
@@ -17,13 +19,15 @@ size = Vector2(2, 2)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2sw5t"]
 render_priority = 0
 shader = ExtResource("3_2sw5t")
+shader_parameter/lightIntensity = 1.0
+shader_parameter/lineAlpha = 0.0
+shader_parameter/useLighting = true
+shader_parameter/lineHighlight = 0.2
+shader_parameter/lineShadow = 0.55
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_b6fju"]
 radius = 0.5839844
 height = 3.3
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_b6fju"]
-radius = 0.1
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vgqql"]
 animation = &"Dash"
@@ -128,11 +132,10 @@ states/idle/position = Vector2(353, 100)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_3smsa"), "idle", "Run", SubResource("AnimationNodeStateMachineTransition_8erm5"), "Run", "idle", SubResource("AnimationNodeStateMachineTransition_f1ek2"), "idle", "Jump", SubResource("AnimationNodeStateMachineTransition_6t5aa"), "Jump", "idle", SubResource("AnimationNodeStateMachineTransition_vgqql"), "Jump", "Run", SubResource("AnimationNodeStateMachineTransition_fkybt"), "Run", "Jump", SubResource("AnimationNodeStateMachineTransition_x3wgy"), "Run", "Dash", SubResource("AnimationNodeStateMachineTransition_tx1dd"), "Dash", "Run", SubResource("AnimationNodeStateMachineTransition_gymyn"), "Jump", "Dash", SubResource("AnimationNodeStateMachineTransition_pu2lt"), "Dash", "Jump", SubResource("AnimationNodeStateMachineTransition_ukyrk"), "idle", "Shoot", SubResource("AnimationNodeStateMachineTransition_7dp3o"), "Shoot", "idle", SubResource("AnimationNodeStateMachineTransition_fd4e3"), "Run", "Shoot", SubResource("AnimationNodeStateMachineTransition_h4iuc"), "Shoot", "Run", SubResource("AnimationNodeStateMachineTransition_qqcod")]
 graph_offset = Vector2(5, -67)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera", "model", "animation_tree")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("model", "animation_tree")]
 script = ExtResource("1_6t5aa")
 speed = 10.0
 jump_velocity = 6.0
-camera = NodePath("SpringArm3D/Camera3D")
 model = NodePath("Rabid (FINAL 2)")
 animation_tree = NodePath("Rabid (FINAL 2)/AnimationPlayer/AnimationTree")
 
@@ -144,24 +147,27 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
-stretch_shrink = 5
+stretch_shrink = 3
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
 handle_input_locally = false
 snap_2d_transforms_to_pixel = true
 snap_2d_vertices_to_pixel = true
-size = Vector2i(230, 129)
+size = Vector2i(384, 216)
 render_target_update_mode = 4
 
-[node name="CameraSync" type="Node3D" parent="SubViewportContainer/SubViewport"]
+[node name="SpringArm3D" type="Node3D" parent="SubViewportContainer/SubViewport" node_paths=PackedStringArray("pixelated_camera")]
 script = ExtResource("7_camera_sync")
+spring_arm_camera_path = NodePath("")
+pixelated_camera = NodePath("Camera3D")
 
-[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/CameraSync"]
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/SpringArm3D"]
 current = true
 fov = 60.0
 size = 5.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/CameraSync/Camera3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/SpringArm3D/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0062885284, 0, 0)
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_p6qlh")
 skeleton = NodePath("../../../../..")
@@ -170,16 +176,6 @@ surface_material_override/0 = SubResource("ShaderMaterial_2sw5t")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6386531, 0)
 shape = SubResource("CapsuleShape3D_b6fju")
-
-[node name="SpringArm3D" type="SpringArm3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.971219, 0)
-shape = SubResource("SphereShape3D_b6fju")
-spring_length = 5.0
-script = ExtResource("2_6t5aa")
-
-[node name="Camera3D" type="Camera3D" parent="SpringArm3D"]
-fov = 60.0
-size = 5.0
 
 [node name="Rabid (FINAL 2)" parent="." instance=ExtResource("3_6t5aa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9199089, 0)
@@ -222,6 +218,9 @@ transform = Transform3D(1.388788e-05, 0.009523379, 0.99995464, -0.011595441, -0.
 [node name="Torso" parent="Rabid (FINAL 2)/Armature_001Ear_LEar_R/Skeleton3D" index="5"]
 transform = Transform3D(1, 2.5746923e-18, -1.4919697e-20, -2.5746923e-18, 0.99993277, -0.011595443, -1.4936005e-20, 0.011595443, 0.99993277, 1.61892e-18, 0.62902445, -0.041790847)
 
+[node name="Sphere_001" parent="Rabid (FINAL 2)/Armature_001Ear_LEar_R/Skeleton3D" index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00053593516, -0.015387416, 0.0022072792)
+
 [node name="AnimationPlayer" parent="Rabid (FINAL 2)" index="1"]
 speed_scale = 0.6
 
@@ -233,37 +232,6 @@ anim_player = NodePath("..")
 parameters/conditions/idle = true
 parameters/conditions/is_shooting = true
 parameters/conditions/run = true
-
-[node name="Rabid (FINAL 2)_Armature_001_Skeleton3D#RightHandAttachment" type="BoneAttachment3D" parent="."]
-transform = Transform3D(-0.9486371, -0.31084448, -0.00094544655, 0.31082562, -0.94853365, -0.014391939, 0.0035830836, -0.013970805, 0.9981619, -0.30685127, 1.0450377, -0.03916321)
-visible = false
-bone_name = "Hand.R"
-bone_idx = 5
-
-[node name="Rabid (FINAL 2)_Armature_001_Skeleton3D_RightHandAttachment#RightHandContainer" type="Node3D" parent="."]
-visible = false
-
-[node name="Rabid (FINAL 2)_Armature_001_Skeleton3D_RightHandAttachment#Gun" parent="." instance=ExtResource("4_x3wgy")]
-transform = Transform3D(0.20723814, 0.6326301, -0.7462115, -0.9623189, -0.0054449365, -0.2718714, -0.17605713, 0.7744351, 0.60766345, -0.025303334, 0.7964385, 0.1432237)
-visible = false
-
-[node name="Rabid (FINAL 2)_Armature_001_Skeleton3D#LeftHandAttachment" type="BoneAttachment3D" parent="."]
-transform = Transform3D(-0.95117897, 0.308635, 0.0023053535, -0.30862436, -0.95100623, -0.01838937, -0.003483202, -0.018203046, 0.9998282, 0.29179165, 1.027932, -0.037627634)
-visible = false
-bone_name = "Bone"
-bone_idx = 4
-
-[node name="Rabid (FINAL 2)_Armature_001_Skeleton3D_LeftHandAttachment#LeftHandContainer" type="Node3D" parent="."]
-transform = Transform3D(1, 1.2878445e-08, 0, -1.6822014e-08, 1, 0, -2.3283064e-10, 0, 1, 0, 0, 0)
-visible = false
-
-[node name="Rabid (FINAL 2)_Armature_001_Skeleton3D_LeftHandAttachment#Grenade" parent="." instance=ExtResource("5_3smsa")]
-transform = Transform3D(0.026791833, -0.87990224, -0.47439763, 0.9601638, -0.10939679, 0.2571328, -0.2781494, -0.46238828, 0.84192014, 0.06751561, 0.7250196, 0.090586215)
-visible = false
-
-[node name="Shovel" parent="." instance=ExtResource("6_8erm5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5793977, 0, -0.2700181)
-visible = false
 
 [node name="Control" parent="." instance=ExtResource("9_c68nv")]
 
