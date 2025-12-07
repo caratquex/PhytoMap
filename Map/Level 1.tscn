@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://dinofa07kkl23" path="res://Map Asset/Grass.glb" id="1_rwwm6"]
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="2_e1aag"]
 [ext_resource type="PackedScene" uid="uid://d1ixt37a64w2y" path="res://Map/Grass.tscn" id="3_uvnbp"]
-[ext_resource type="PackedScene" uid="uid://bforddmeqe21d" path="res://Scene/player.tscn" id="4_eu8kv"]
 [ext_resource type="PackedScene" uid="uid://nhc71q5iss6n" path="res://Map Asset/bridge.tscn" id="5_hv6ql"]
 [ext_resource type="PackedScene" uid="uid://dsnriolqk2lo8" path="res://Map/RadiantGrass2.tscn" id="6_ao60k"]
 [ext_resource type="MeshLibrary" uid="uid://c63ark6a2nsrr" path="res://Tiles/Tiles8.tres" id="7_uhwpd"]
@@ -19,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://f1q0ykhjjrjh" path="res://Map Asset/Stone1.tscn" id="17_dqsk1"]
 [ext_resource type="PackedScene" uid="uid://biurdvx8lqmmx" path="res://Map Asset/Grass2.tscn" id="18_e1aag"]
 [ext_resource type="Script" uid="uid://d24bndcptfltu" path="res://Map/grass_scatterer.gd" id="19_grass_scatterer"]
+[ext_resource type="PackedScene" uid="uid://c7e2vn7a0gikw" path="res://Scene/Player FINAL.tscn" id="19_uvnbp"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_c1tmo"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -90,9 +90,6 @@ transform = Transform3D(3.86, 0, 0, 0, 3.86, 0, 0, 0, 3.86, -23.01513, -2.607085
 
 [node name="GrassBlock3" parent="." instance=ExtResource("3_uvnbp")]
 transform = Transform3D(4.2, 0, 0, 0, 1.66, 0, 0, 0, 5.745, 0, -0.525, 32.01216)
-
-[node name="Player" parent="." instance=ExtResource("4_eu8kv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.440033, 7.579277, -5.382557)
 
 [node name="bridge_physic" parent="." instance=ExtResource("5_hv6ql")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18300223, 1.6083889, 33.72952)
@@ -191,3 +188,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.705286, 3.6402907, 1.01631
 script = ExtResource("19_grass_scatterer")
 grass_density = 0.15
 grass_height_offset = 1.5
+
+[node name="Player2" parent="." instance=ExtResource("19_uvnbp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4658775, 6.7631187, -4.4811773)
