@@ -43,9 +43,6 @@ light_color = Color(0.8, 0.51573336, 0.14400001, 1)
 light_energy = 0.7
 shadow_enabled = true
 
-[node name="Player" parent="." instance=ExtResource("20_eu8kv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.593303, -4.406085)
-
 [node name="Grass" parent="." instance=ExtResource("1_rwwm6")]
 transform = Transform3D(-0.36684218, 0, 0.9302832, 0, 1, 0, -0.9302832, 0, -0.36684218, 17.906404, 3.0251184, 2.4091835)
 

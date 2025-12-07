@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dkt7f471fy326"]
+[gd_scene load_steps=3 format=3 uid="uid://dkt7f471fy326"]
 
 [ext_resource type="PackedScene" uid="uid://bpa84w34hext1" path="res://Character Assets/PhytoGun.glb" id="1_jpqjm"]
+[ext_resource type="PackedScene" path="res://Assets/GUI/shareablebullet.glb" id="2_u7kx4"]
 
 [node name="Node3D" type="Node3D"]
 
@@ -10,17 +11,7 @@ transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, 0, 0)
 [node name="Seed_001" parent="PhytoGun" index="7"]
 transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, -0.002718965, 0.009439388, 0.0038615859)
 
-[node name="shareablebullet" parent="."]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 0
-auto_translate_mode = 0
-editor_description = ""
+[node name="shareablebullet" parent="." instance=ExtResource("2_u7kx4")]
 transform = Transform3D(0.001421373, 0, -0.064984456, 0, 0.065, 0, 0.064984456, 0, 0.001421373, -0.52935135, 0.28449214, -0.14121026)
-script = null
 
 [editable path="PhytoGun"]

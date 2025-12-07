@@ -1,38 +1,18 @@
-[gd_scene load_steps=33 format=3 uid="uid://c7e2vn7a0gikw"]
+[gd_scene load_steps=31 format=3 uid="uid://c7e2vn7a0gikw"]
 
-<<<<<<< HEAD
-[ext_resource type="Script" uid="uid://xn0hjmvydx74" path="res://Script/player.gd" id="1_6t5aa"]
-[ext_resource type="PackedScene" uid="uid://c0m12ftik23mt" path="res://Character Assets/Rabid (FINAL 2).glb" id="3_6t5aa"]
-[ext_resource type="PackedScene" uid="uid://dkt7f471fy326" path="res://Scene/Gun.tscn" id="4_x3wgy"]
-[ext_resource type="PackedScene" uid="uid://1kd3n6lutq8d" path="res://Scene/Grenade.tscn" id="5_3smsa"]
-[ext_resource type="Script" uid="uid://b7ecepo30kucs" path="res://Scene/pixelated_camera_sync.gd" id="6_2uiny"]
-[ext_resource type="PackedScene" uid="uid://c3b8l6xx3pvli" path="res://Scene/Shovel.tscn" id="6_8erm5"]
-[ext_resource type="Shader" uid="uid://d37vms16a2t5l" path="res://Shader/edge_detection.gdshader" id="7_ab448"]
-=======
 [ext_resource type="Script" uid="uid://b816toh8jwohy" path="res://Scripts/player.gd" id="1_6t5aa"]
 [ext_resource type="Script" uid="uid://byjvw6ylr1l0" path="res://Scripts/camera_controller.gd" id="2_6t5aa"]
 [ext_resource type="PackedScene" uid="uid://c0m12ftik23mt" path="res://Assets/Models/Rabid (FINAL 2).glb" id="3_6t5aa"]
 [ext_resource type="PackedScene" uid="uid://dkt7f471fy326" path="res://Scenes/Gun.tscn" id="4_x3wgy"]
 [ext_resource type="PackedScene" uid="uid://1kd3n6lutq8d" path="res://Scenes/Grenade.tscn" id="5_3smsa"]
 [ext_resource type="PackedScene" uid="uid://c3b8l6xx3pvli" path="res://Scenes/Shovel.tscn" id="6_8erm5"]
->>>>>>> parent of 0683a86 (Add Rabid Item)
 
-[sub_resource type="QuadMesh" id="QuadMesh_w2wfd"]
-flip_faces = true
-size = Vector2(2, 2)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qbspr"]
-render_priority = 0
-shader = ExtResource("7_ab448")
-shader_parameter/lightIntensity = 1.0
-shader_parameter/lineAlpha = 0.0
-shader_parameter/useLighting = true
-shader_parameter/lineHighlight = 0.2
-shader_parameter/lineShadow = 0.55
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_eqwxi"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_b6fju"]
 radius = 0.5839844
 height = 3.3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_b6fju"]
+radius = 0.1
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vgqql"]
 animation = &"Dash"
@@ -135,79 +115,38 @@ states/Shoot/position = Vector2(457, -32)
 states/idle/node = SubResource("AnimationNodeAnimation_6t5aa")
 states/idle/position = Vector2(353, 100)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_3smsa"), "idle", "Run", SubResource("AnimationNodeStateMachineTransition_8erm5"), "Run", "idle", SubResource("AnimationNodeStateMachineTransition_f1ek2"), "idle", "Jump", SubResource("AnimationNodeStateMachineTransition_6t5aa"), "Jump", "idle", SubResource("AnimationNodeStateMachineTransition_vgqql"), "Jump", "Run", SubResource("AnimationNodeStateMachineTransition_fkybt"), "Run", "Jump", SubResource("AnimationNodeStateMachineTransition_x3wgy"), "Run", "Dash", SubResource("AnimationNodeStateMachineTransition_tx1dd"), "Dash", "Run", SubResource("AnimationNodeStateMachineTransition_gymyn"), "Jump", "Dash", SubResource("AnimationNodeStateMachineTransition_pu2lt"), "Dash", "Jump", SubResource("AnimationNodeStateMachineTransition_ukyrk"), "idle", "Shoot", SubResource("AnimationNodeStateMachineTransition_7dp3o"), "Shoot", "idle", SubResource("AnimationNodeStateMachineTransition_fd4e3"), "Run", "Shoot", SubResource("AnimationNodeStateMachineTransition_h4iuc"), "Shoot", "Run", SubResource("AnimationNodeStateMachineTransition_qqcod")]
-graph_offset = Vector2(39, -44)
+graph_offset = Vector2(-40, -84)
 
-<<<<<<< HEAD
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("model", "animation_tree", "gun_model", "grenade_model")]
-=======
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera", "model", "animation_tree", "gun_model", "grenade_model")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.016795158)
->>>>>>> parent of 0683a86 (Add Rabid Item)
 script = ExtResource("1_6t5aa")
 speed = 10.0
-jump_velocity = 6.0
+camera = NodePath("SpringArm3D/Camera3D")
 model = NodePath("Rabid (FINAL 2)")
 animation_tree = NodePath("Rabid (FINAL 2)/AnimationPlayer/AnimationTree")
 gun_model = NodePath("Rabid (FINAL 2)/Armature_001/Skeleton3D/RightHandAttachment/Gun")
 grenade_model = NodePath("Rabid (FINAL 2)/Armature_001/Skeleton3D/LeftHandAttachment/Grenade")
 
-[node name="SpringArm3D" type="Node3D" parent="." node_paths=PackedStringArray("pixelated_camera")]
-script = ExtResource("6_2uiny")
-spring_arm_camera_path = NodePath("")
-pixelated_camera = NodePath("Camera3D")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6386531, 0)
+shape = SubResource("CapsuleShape3D_b6fju")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.971219, 0)
+shape = SubResource("SphereShape3D_b6fju")
+spring_length = 5.0
+script = ExtResource("2_6t5aa")
 
 [node name="Camera3D" type="Camera3D" parent="SpringArm3D"]
-current = true
 fov = 60.0
 size = 5.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SpringArm3D/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0062885284, 0, 0)
-extra_cull_margin = 16384.0
-mesh = SubResource("QuadMesh_w2wfd")
-skeleton = NodePath("../../..")
-surface_material_override/0 = SubResource("ShaderMaterial_qbspr")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 3.4906585e-05, 0, -3.4906585e-05, 1, 0, 0.6386531, 0)
-shape = SubResource("CapsuleShape3D_eqwxi")
-
 [node name="Rabid (FINAL 2)" parent="." instance=ExtResource("3_6t5aa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.91990894, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9199089, 0)
 
 [node name="Skeleton3D" parent="Rabid (FINAL 2)/Armature_001" index="0"]
 bones/0/position = Vector3(1.61892e-18, 0.62902445, -0.041790847)
 bones/0/rotation = Quaternion(0.005797819, 4.799599e-24, -1.2873678e-18, 0.9999832)
-<<<<<<< HEAD
-bones/1/rotation = Quaternion(-0.053030677, -0.00011913769, -0.0022434522, 0.99859035)
-bones/2/rotation = Quaternion(0.05243772, 0.0035709268, -0.024115251, 0.99832666)
-bones/3/position = Vector3(-0.24255474, 1.1011194, -0.0061287847)
-bones/3/rotation = Quaternion(-0.07930497, 0.00018535324, 0.016079728, 0.99672073)
-bones/4/position = Vector3(0.29179165, 0.39892906, -0.00046257576)
-bones/4/rotation = Quaternion(-0.21317606, -0.22325154, 0.9090101, -0.2800274)
-bones/5/position = Vector3(-0.3059628, 0.41647094, -0.002902283)
-bones/5/rotation = Quaternion(-0.030021798, -0.11447665, 0.9345931, 0.33545458)
-bones/5/scale = Vector3(0.9975614, 0.9975602, 0.99756026)
-bones/6/rotation = Quaternion(0.7071037, 0.0033670387, 0.7070939, -0.0033670848)
-bones/7/position = Vector3(0.0021133465, 0.19212748, -0.16946527)
-bones/7/rotation = Quaternion(0.08812488, 0.99608207, -0.0073471395, -0.00068049197)
-bones/7/scale = Vector3(1, 0.99999994, 0.99999994)
-bones/8/position = Vector3(0.004492064, 0.17319983, 0.1586078)
-bones/8/rotation = Quaternion(-0.01116022, -0.00017740634, 0.10805729, 0.994082)
-bones/8/scale = Vector3(1, 0.9999999, 0.99999994)
-
-[node name="Bone" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="0"]
-transform = Transform3D(-0.7522822, 0.6042792, -0.26252526, -0.40794063, -0.7401148, -0.5346164, -0.5173572, -0.29508734, 0.8032843, 0.29179165, 1.027932, -0.037627634)
-
-[node name="Hand_R" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="1"]
-transform = Transform3D(-0.77125245, -0.61864024, -0.13259543, 0.63207287, -0.74414545, -0.20459345, 0.027967697, -0.24219377, 0.9673089, -0.3059628, 1.045501, -0.03986377)
-
-[node name="Leg_R" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="2"]
-transform = Transform3D(0.0017190573, -0.005379102, -0.9999839, -0.1641335, -0.9864251, 0.0050240047, -0.9864365, 0.16412227, -0.0025785526, -0.16762786, 0.43528032, -0.04192172)
-
-[node name="Leg_L" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="3"]
-transform = Transform3D(4.8219226e-07, -0.012930056, 0.9999163, -0.22615965, -0.9740085, -0.012594924, 0.97409016, -0.22614071, -0.002924786, 0.16025011, 0.45730245, -0.03929204)
-=======
 bones/1/rotation = Quaternion(-0.04863192, -0.00010925534, -0.0022439552, 0.9988142)
 bones/2/rotation = Quaternion(-0.09662366, -0.018630378, -0.10665793, 0.98941445)
 bones/3/position = Vector3(-0.24255474, 1.1011194, -0.0061287847)
@@ -236,7 +175,6 @@ transform = Transform3D(0.0043963636, -0.0054150736, -0.9999756, -0.4207371, -0.
 
 [node name="Leg_L" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="3"]
 transform = Transform3D(5.038455e-07, -0.01292982, 0.9999163, -0.15585499, -0.98769706, -0.012771733, 0.98777986, -0.15584196, -0.002015735, 0.1689477, 0.44445315, -0.04092396)
->>>>>>> parent of 0683a86 (Add Rabid Item)
 
 [node name="Hip" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="4"]
 transform = Transform3D(1.388788e-05, 0.009523379, 0.99995464, -0.011595441, -0.9998872, 0.009522901, 0.99993265, -0.011595046, 9.648126e-05, 1.6189199e-18, 0.62902445, -0.041790847)
@@ -244,15 +182,8 @@ transform = Transform3D(1.388788e-05, 0.009523379, 0.99995464, -0.011595441, -0.
 [node name="Torso" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="5"]
 transform = Transform3D(1, 2.5746923e-18, -1.4918251e-20, -2.5746923e-18, 0.99993277, -0.011595443, -1.493745e-20, 0.011595443, 0.99993277, 1.61892e-18, 0.62902445, -0.041790847)
 
-[node name="Head" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0037750304, 0, -0.00067567825)
-
 [node name="RightHandAttachment" type="BoneAttachment3D" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="7"]
-<<<<<<< HEAD
-transform = Transform3D(-0.77125245, -0.61864024, -0.13259543, 0.63207287, -0.74414545, -0.20459345, 0.027967697, -0.24219377, 0.9673089, -0.3059628, 1.045501, -0.03986377)
-=======
 transform = Transform3D(-0.82036406, -0.5491489, -0.08629131, 0.555463, -0.8037856, -0.16551907, 0.021731323, -0.18539283, 0.97322327, -0.29765818, 1.0498319, -0.04641206)
->>>>>>> parent of 0683a86 (Add Rabid Item)
 bone_name = "Hand.R"
 bone_idx = 5
 
@@ -261,23 +192,8 @@ bone_idx = 5
 [node name="Gun" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D/RightHandAttachment" instance=ExtResource("4_x3wgy")]
 transform = Transform3D(0.20723814, 0.6326301, -0.7462115, -0.9623189, -0.0054449365, -0.2718714, -0.17605713, 0.7744351, 0.60766345, -0.025303334, 0.7964385, 0.1432237)
 
-<<<<<<< HEAD
-[node name="RightHandAttachment2" type="BoneAttachment3D" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="8"]
-transform = Transform3D(-0.77125245, -0.61864024, -0.13259543, 0.63207287, -0.74414545, -0.20459345, 0.027967697, -0.24219377, 0.9673089, -0.3059628, 1.045501, -0.03986377)
-bone_name = "Hand.R"
-bone_idx = 5
-
-[node name="RightHandContainer" type="Node3D" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D/RightHandAttachment2"]
-
-[node name="Shovel" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D/RightHandAttachment2" instance=ExtResource("6_8erm5")]
-transform = Transform3D(-0.93770677, 0.060878064, 0.36004916, 0.29418495, 0.7137469, 0.64549005, -0.21632507, 0.7067504, -0.682894, 0, 0.725, 0)
-
-[node name="LeftHandAttachment" type="BoneAttachment3D" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="9"]
-transform = Transform3D(-0.7522822, 0.6042792, -0.26252526, -0.40794063, -0.7401148, -0.5346164, -0.5173572, -0.29508734, 0.8032843, 0.29179165, 1.027932, -0.037627634)
-=======
 [node name="LeftHandAttachment" type="BoneAttachment3D" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="8"]
 transform = Transform3D(-0.84399396, 0.53447497, 0.044863097, -0.51005876, -0.77393156, -0.37532753, -0.16588241, -0.33965647, 0.92580587, 0.29179165, 1.027932, -0.037627634)
->>>>>>> parent of 0683a86 (Add Rabid Item)
 bone_name = "Bone"
 bone_idx = 4
 
