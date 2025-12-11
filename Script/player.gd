@@ -4,13 +4,19 @@ extends CharacterBody3D
 static var instance: CharacterBody3D
 
 # ---------------------------
+# Weapon System
+# ---------------------------
+enum WeaponType { GUN = 1, GRENADE = 2, SHOVEL = 3 }
+var current_weapon: WeaponType = WeaponType.SHOVEL  # Default is Shovel (Plant)
+
+# ---------------------------
 # Movement
 # ---------------------------
 const GRAVITY: float = 9.8
 @export var speed: float = 4.0
 @export var jump_velocity: float = 8.0      # نطة أقوى (غيّر الرقم لو تبغيه أقوى/أضعف)
 @export var rotation_speed: float = 5.0     # سرعة لف الأرنب
-@export var gun_visible_time: float = 0.15  # كم ثانية السلاح يبان بعد الإطلاق
+@export var action_visible_time: float = 0.3  # كم ثانية السلاح يبان بعد الإطلاق
 @export var acceleration: float = 50.0       # سرعة التسارع عند الحركة (زيادة للاستجابة)
 @export var friction: float = 60.0           # سرعة التباطؤ عند التوقف (زيادة للاستجابة)
 
@@ -23,6 +29,7 @@ const GRAVITY: float = 9.8
 
 @export var gun_model: Node3D
 @export var grenade_model: Node3D
+@export var shovel_model: Node3D
 
 # ---------------------------
 # Dash Variables
@@ -36,15 +43,14 @@ var dash_direction: Vector3 = Vector3.ZERO
 # ---------------------------
 # Action Flags
 # ---------------------------
-var is_shooting: bool = false
-var is_throwing: bool = false
+var is_acting: bool = false  # للأكشن الحالي (شوت/رمي/حفر)
 var is_clinging: bool = false      # الأرنب ماسك في المكعب / الجدار
 
 var playback: AnimationNodeStateMachinePlayback
 var target_angle: float = PI
 
 # مؤقّت يظهر السلاح لفترة قصيرة ثم يخفيه
-var gun_timer: float = 0.0
+var action_timer: float = 0.0
 
 
 func _ready() -> void:
@@ -60,19 +66,52 @@ func _ready() -> void:
 		animation_tree.active = true
 		playback = animation_tree.get("parameters/playback")
 
-	# نخفي الأسلحة في البداية
+	# نخفي كل الأسلحة في البداية
+	hide_all_weapons()
+	# نظهر السلاح الافتراضي (Shovel)
+	switch_weapon(WeaponType.SHOVEL)
+
+
+func hide_all_weapons() -> void:
 	if gun_model:
 		gun_model.visible = false
 	if grenade_model:
 		grenade_model.visible = false
+	if shovel_model:
+		shovel_model.visible = false
+
+
+func switch_weapon(weapon: WeaponType) -> void:
+	current_weapon = weapon
+	hide_all_weapons()
+	
+	# نظهر السلاح المختار
+	match current_weapon:
+		WeaponType.GUN:
+			if gun_model:
+				gun_model.visible = true
+		WeaponType.GRENADE:
+			if grenade_model:
+				grenade_model.visible = true
+		WeaponType.SHOVEL:
+			if shovel_model:
+				shovel_model.visible = true
 
 
 func _process(delta: float) -> void:
-	# مؤقّت إظهار السلاح
-	if gun_timer > 0.0:
-		gun_timer -= delta
-		if gun_timer <= 0.0:
-			reset_weapon_state()  # يخفي السلاح ويرجع اليد للوضع الطبيعي
+	# مؤقّت الأكشن
+	if action_timer > 0.0:
+		action_timer -= delta
+		if action_timer <= 0.0:
+			reset_action_state()
+
+	# تبديل السلاح بالأرقام 1، 2، 3
+	if Input.is_action_just_pressed("gun"):
+		switch_weapon(WeaponType.GUN)
+	elif Input.is_action_just_pressed("grenade"):
+		switch_weapon(WeaponType.GRENADE)
+	elif Input.is_action_just_pressed("shovel"):
+		switch_weapon(WeaponType.SHOVEL)
 
 	# اتجاه الإدخال (WASD)
 	var input_dir: Vector2 = Input.get_vector("left", "right", "forward", "backward")
@@ -91,87 +130,82 @@ func _process(delta: float) -> void:
 			delta * rotation_speed
 		)
 
-	var can_act: bool = (not is_dashing) and (not is_throwing)
+	var can_act: bool = (not is_dashing) and (not is_acting)
 
 	# Dash (ما يندفع لو هو ماسك في الجدار)
 	if Input.is_action_just_pressed("dash") and input_dir != Vector2.ZERO and can_act and not is_clinging:
 		start_dash(input_dir)
 
-	# Shoot
+	# Left Click - يعمل الأكشن حسب السلاح المختار
 	if Input.is_action_just_pressed("shoot") and can_act:
-		start_shoot()
-
-	# Throw
-	if Input.is_action_just_pressed("throw") and can_act:
-		start_throw()
+		perform_weapon_action()
 
 
 # ---------------------------
-# SHOOT
+# WEAPON ACTION (Left Click)
 # ---------------------------
+func perform_weapon_action() -> void:
+	is_acting = true
+	action_timer = action_visible_time
+	
+	match current_weapon:
+		WeaponType.GUN:
+			start_shoot()
+		WeaponType.GRENADE:
+			start_throw()
+		WeaponType.SHOVEL:
+			start_plant()
+
+
 func start_shoot() -> void:
-	is_shooting = true
-
-	# السلاح يطلع وقت الإطلاق
-	if gun_model:
-		gun_model.visible = true
-
-	# نشغل مؤقّت صغير وبعده يختفي السلاح وترجع اليد
-	gun_timer = gun_visible_time
-
 	if animation_tree:
-		animation_tree.set("parameters/is_shooting", true)
+		animation_tree.set("parameters/conditions/is_shooting", true)
 	if playback:
 		playback.travel("Shoot")
 
 
-func reset_weapon_state() -> void:
-	# يرجع السلاح واليد للوضع الطبيعي (Idle / Run)
-	is_shooting = false
-	gun_timer = 0.0
-
-	if gun_model:
-		gun_model.visible = false
-
-	if animation_tree:
-		animation_tree.set("parameters/is_shooting", false)
-
-	if playback:
-		var input_dir: Vector2 = Input.get_vector("left", "right", "forward", "backward")
-		if input_dir != Vector2.ZERO:
-			playback.travel("Run")
-		else:
-			playback.travel("Idle")
-
-
-func _on_shoot_animation_finished() -> void:
-	# لو خلصت الأنيميشن قبل التايمر، نرجّع الوضع برضه
-	reset_weapon_state()
-
-
-# ---------------------------
-# THROW
-# ---------------------------
 func start_throw() -> void:
-	is_throwing = true
-
-	if grenade_model:
-		grenade_model.visible = true
-
 	if animation_tree:
-		animation_tree.set("parameters/is_throwing", true)
+		animation_tree.set("parameters/conditions/is_throwing", true)
 	if playback:
-		playback.travel("Throw")
+		playback.travel("Throw Grenade")
 
 
-func _on_throw_animation_finished() -> void:
-	is_throwing = false
-
-	if grenade_model:
-		grenade_model.visible = false
-
+func start_plant() -> void:
 	if animation_tree:
-		animation_tree.set("parameters/is_throwing", false)
+		animation_tree.set("parameters/conditions/is_planting", true)
+	if playback:
+		playback.travel("Plant")
+
+
+func reset_action_state() -> void:
+	is_acting = false
+	action_timer = 0.0
+	
+	# Reset all action parameters
+	if animation_tree:
+		animation_tree.set("parameters/conditions/is_shooting", false)
+		animation_tree.set("parameters/conditions/is_throwing", false)
+		animation_tree.set("parameters/conditions/is_planting", false)
+
+
+func _on_action_animation_finished() -> void:
+	reset_action_state()
+
+
+# ---------------------------
+# AnimationTree Expression Helpers
+# ---------------------------
+func is_shooting() -> bool:
+	return is_acting and current_weapon == WeaponType.GUN
+
+
+func is_throwing() -> bool:
+	return is_acting and current_weapon == WeaponType.GRENADE
+
+
+func is_planting() -> bool:
+	return is_acting and current_weapon == WeaponType.SHOVEL
 
 
 # ---------------------------
