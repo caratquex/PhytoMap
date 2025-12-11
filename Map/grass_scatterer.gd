@@ -89,16 +89,17 @@ func scatter_grass_on_gridmap(gridmap: GridMap, parent: Node3D) -> int:
 		
 		# Create grass instance
 		var grass_instance = grass_scene.instantiate()
-		grass_instance.global_position = final_world_pos
 		
 		# Random rotation for variety
 		grass_instance.rotation.y = randf() * TAU
 		
 		# Random scale for variety
-		var scale = randf_range(min_scale, max_scale)
-		grass_instance.scale = Vector3(scale, scale, scale)
+		var random_scale = randf_range(min_scale, max_scale)
+		grass_instance.scale = Vector3(random_scale, random_scale, random_scale)
 		
+		# Add to tree first, then set global_position
 		parent.add_child(grass_instance)
+		grass_instance.global_position = final_world_pos
 		
 		placed_count += 1
 	

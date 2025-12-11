@@ -16,7 +16,6 @@ const GRAVITY: float = 9.8
 @export var speed: float = 4.0
 @export var jump_velocity: float = 8.0      # نطة أقوى (غيّر الرقم لو تبغيه أقوى/أضعف)
 @export var rotation_speed: float = 5.0     # سرعة لف الأرنب
-@export var action_visible_time: float = 0.3  # كم ثانية السلاح يبان بعد الإطلاق
 @export var acceleration: float = 50.0       # سرعة التسارع عند الحركة (زيادة للاستجابة)
 @export var friction: float = 60.0           # سرعة التباطؤ عند التوقف (زيادة للاستجابة)
 
@@ -48,9 +47,6 @@ var is_clinging: bool = false      # الأرنب ماسك في المكعب / �
 
 var playback: AnimationNodeStateMachinePlayback
 var target_angle: float = PI
-
-# مؤقّت يظهر السلاح لفترة قصيرة ثم يخفيه
-var action_timer: float = 0.0
 
 
 func _ready() -> void:
@@ -99,10 +95,20 @@ func switch_weapon(weapon: WeaponType) -> void:
 
 
 func _process(delta: float) -> void:
-	# مؤقّت الأكشن
-	if action_timer > 0.0:
-		action_timer -= delta
-		if action_timer <= 0.0:
+	# نتحقق إذا الأنيميشن خلصت
+	if is_acting and playback:
+		var current_state: String = playback.get_current_node()
+		var action_states: Array = ["Plant", "Throw Grenade", "Shoot"]
+		
+		# لو الأنيميشن من الأكشنات، نتحقق إذا خلصت
+		if current_state in action_states:
+			var pos: float = playback.get_current_play_position()
+			var length: float = playback.get_current_length()
+			# لو وصلنا لآخر الأنيميشن (مع هامش صغير)
+			if length > 0 and pos >= length - 0.05:
+				reset_action_state()
+		# لو رجعنا للـ idle أو Run يعني الأنيميشن خلصت
+		elif current_state == "idle" or current_state == "Run":
 			reset_action_state()
 
 	# تبديل السلاح بالأرقام 1، 2، 3
@@ -146,7 +152,6 @@ func _process(delta: float) -> void:
 # ---------------------------
 func perform_weapon_action() -> void:
 	is_acting = true
-	action_timer = action_visible_time
 	
 	match current_weapon:
 		WeaponType.GUN:
@@ -180,7 +185,6 @@ func start_plant() -> void:
 
 func reset_action_state() -> void:
 	is_acting = false
-	action_timer = 0.0
 	
 	# Reset all action parameters
 	if animation_tree:
