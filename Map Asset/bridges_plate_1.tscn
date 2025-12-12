@@ -3,3 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://dow600snkupgc" path="res://Map Asset/Bridges plate 1.glb" id="1_uepji"]
 
 [node name="Bridges plate 1" instance=ExtResource("1_uepji")]
+
+[node name="Plane_001" parent="." index="0"]
+transform = Transform3D(0.764328, 0, 0, 0, 0.764328, 0, 0, 0, 0.764328, -0.08448948, -0.11464921, 0.1760211)

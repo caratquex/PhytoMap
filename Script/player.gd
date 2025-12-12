@@ -44,9 +44,17 @@ var dash_direction: Vector3 = Vector3.ZERO
 # ---------------------------
 var is_acting: bool = false  # للأكشن الحالي (شوت/رمي/حفر)
 var is_clinging: bool = false      # الأرنب ماسك في المكعب / الجدار
+var is_hurting: bool = false  # للأنيميشن الضرر
 
 var playback: AnimationNodeStateMachinePlayback
 var target_angle: float = PI
+
+# ---------------------------
+# Hurt Animation
+# ---------------------------
+@export var hurt_angle: float = 10.0  # درجة الميلان عند الضرر
+@export var hurt_duration: float = 0.2  # مدة الأنيميشن
+var hurt_tween: Tween
 
 
 func _ready() -> void:
@@ -145,6 +153,10 @@ func _process(delta: float) -> void:
 	# Left Click - يعمل الأكشن حسب السلاح المختار
 	if Input.is_action_just_pressed("shoot") and can_act:
 		perform_weapon_action()
+	
+	# Hurt Animation (H key)
+	if Input.is_action_just_pressed("hurt") and not is_hurting:
+		play_hurt_animation()
 
 
 # ---------------------------
@@ -210,6 +222,36 @@ func is_throwing() -> bool:
 
 func is_planting() -> bool:
 	return is_acting and current_weapon == WeaponType.SHOVEL
+
+
+# ---------------------------
+# HURT ANIMATION
+# ---------------------------
+func play_hurt_animation() -> void:
+	if not model or is_hurting:
+		return
+	
+	is_hurting = true
+	
+	# إلغاء أي tween سابق
+	if hurt_tween and hurt_tween.is_valid():
+		hurt_tween.kill()
+	
+	hurt_tween = create_tween()
+	var hurt_rad: float = deg_to_rad(hurt_angle)
+	
+	# ميل للأمام (نصف المدة)
+	hurt_tween.tween_property(model, "rotation:z", hurt_rad, hurt_duration / 2.0).set_ease(Tween.EASE_OUT)
+	# رجوع للوضع الطبيعي (نصف المدة)
+	hurt_tween.tween_property(model, "rotation:z", 0.0, hurt_duration / 2.0).set_ease(Tween.EASE_IN)
+	
+	# لما يخلص
+	hurt_tween.tween_callback(func(): is_hurting = false)
+
+
+# يمكن استدعاؤها من أي مكان (مثلاً عند التصادم مع عدو)
+func take_damage() -> void:
+	play_hurt_animation()
 
 
 # ---------------------------

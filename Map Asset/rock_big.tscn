@@ -1,20 +1,9 @@
-[gd_scene load_steps=7 format=4 uid="uid://bmkr6g26ix3ow"]
+[gd_scene load_steps=6 format=4 uid="uid://bmkr6g26ix3ow"]
 
-[ext_resource type="Texture2D" uid="uid://cdivr247x1ubp" path="res://Map Asset/NORMAL_stone.png" id="2_kh5qj"]
+[ext_resource type="Material" uid="uid://b1j826thlvcx7" path="res://Map Asset/mat_temple.tres" id="1_02b6g"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_rjosd"]
 points = PackedVector3Array(-1.84413, -7.24609, -9.21112, -4.21725, 3.49338, 8.6834, -0.250415, 11.0704, -6.81199, 5.12553, -7.35461, -1.58664, -6.10832, -10.1349, 1.63639, 1.00419, 9.52521, 7.07547, 0.14763, -10.4463, 7.93404, -4.43397, 13.2921, -0.870266, 5.1889, -1.35074, -5.47256, 1.74208, -12.437, -4.03085, -4.17058, -5.94664, -8.67179, -5.83837, -10.4505, 6.73819, 1.84022, -4.27615, 8.33249, -4.98924, 8.61768, 7.06116, 3.93314, -3.85674, -7.98291, 0.167024, 12.8727, 2.89157, -2.66544, -12.557, -4.06647, -5.27114, 9.94463, -1.28866, -3.77544, 9.72663, -6.31448, 2.13425, -11.9966, 3.9269, 1.00419, 10.3667, -7.14613, -3.17822, -0.511907, -9.23808, 4.89611, -7.59262, -6.37871, -1.06016, -12.6447, 3.60351, 0.167024, -5.53178, -9.65832, 2.13221, -10.0007, -7.58909, -5.3741, 2.29269, 8.62667, -2.24804, -9.66956, 8.34898, -3.83902, 9.89622, 7.13315, 4.15295, -1.51031, 0.67295, 1.42278, 10.3667, -1.70705, -0.250415, 13.2921, -0.451875)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_edexh"]
-albedo_color = Color(0.831373, 0.447059, 0.341176, 1)
-metallic_specular = 0.0
-roughness = 0.61
-normal_scale = 1.5
-normal_texture = ExtResource("2_kh5qj")
-rim = 0.02
-proximity_fade_distance = 0.67
-distance_fade_min_distance = 50.0
-distance_fade_max_distance = 45.96
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qpccq"]
 resource_name = "ROCK"
@@ -64,6 +53,6 @@ shape = SubResource("ConvexPolygonShape3D_rjosd")
 
 [node name="RockBiglow" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1.00097, 0, 0, 0, 1, 0, 0, 0.0534782)
-material_override = SubResource("StandardMaterial3D_edexh")
+material_override = ExtResource("1_02b6g")
 mesh = SubResource("ArrayMesh_4dxml")
 skeleton = NodePath("")
