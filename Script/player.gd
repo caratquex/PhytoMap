@@ -53,8 +53,11 @@ var target_angle: float = PI
 # Hurt Animation
 # ---------------------------
 @export var hurt_angle: float = 10.0  # درجة الميلان عند الضرر
-@export var hurt_duration: float = 0.2  # مدة الأنيميشن
+@export var hurt_duration: float = 0.3  # مدة الأنيميشن
+@export var hurt_color: Color = Color(1.0, 0.3, 0.3)  # اللون الأحمر عند الضرر
 var hurt_tween: Tween
+var color_tween: Tween
+var original_materials: Array = []  # لحفظ الماتيريال الأصلية
 
 
 func _ready() -> void:
@@ -236,7 +239,10 @@ func play_hurt_animation() -> void:
 	# إلغاء أي tween سابق
 	if hurt_tween and hurt_tween.is_valid():
 		hurt_tween.kill()
+	if color_tween and color_tween.is_valid():
+		color_tween.kill()
 	
+	# --- Rotation Tween ---
 	hurt_tween = create_tween()
 	var hurt_rad: float = deg_to_rad(hurt_angle)
 	
@@ -247,6 +253,40 @@ func play_hurt_animation() -> void:
 	
 	# لما يخلص
 	hurt_tween.tween_callback(func(): is_hurting = false)
+	
+	# --- Color Flash ---
+	flash_color_on_meshes()
+
+
+func flash_color_on_meshes() -> void:
+	var meshes: Array = get_all_mesh_instances(model)
+	
+	for mesh in meshes:
+		if mesh is MeshInstance3D:
+			# نحفظ الماتيريال الأصلية ونعمل نسخة
+			for i in range(mesh.get_surface_override_material_count()):
+				var original_mat = mesh.get_active_material(i)
+				if original_mat:
+					var mat_copy = original_mat.duplicate()
+					if mat_copy is StandardMaterial3D or mat_copy is ORMMaterial3D:
+						mesh.set_surface_override_material(i, mat_copy)
+						
+						# Color tween للماتيريال
+						color_tween = create_tween()
+						color_tween.tween_property(mat_copy, "albedo_color", hurt_color, 0.05)
+						color_tween.tween_property(mat_copy, "albedo_color", Color.WHITE, hurt_duration - 0.05)
+						color_tween.tween_callback(func(): 
+							mesh.set_surface_override_material(i, null)
+						)
+
+
+func get_all_mesh_instances(node: Node) -> Array:
+	var meshes: Array = []
+	if node is MeshInstance3D:
+		meshes.append(node)
+	for child in node.get_children():
+		meshes.append_array(get_all_mesh_instances(child))
+	return meshes
 
 
 # يمكن استدعاؤها من أي مكان (مثلاً عند التصادم مع عدو)

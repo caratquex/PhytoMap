@@ -120,6 +120,7 @@ data = PackedVector3Array(-0.0002, 2.9264998, -0.4147, 0.21579999, 6.2669997, -0
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
 
 [node name="Cylinder_002" parent="TreeRadiant2" index="0"]
+transform = Transform3D(0.639596, 0, 0, 0, 0.639596, 0, 0, 0, 0.639596, -0.011565129, 0, -0.0027453105)
 mesh = SubResource("ArrayMesh_wwf2c")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="TreeRadiant2/Cylinder_002" index="0"]
