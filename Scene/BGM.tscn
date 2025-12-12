@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwtdn0m42xiy7"]
+
+[ext_resource type="AudioStream" uid="uid://cronm86jysoro" path="res://Music/BGM/Phyto Song.wav" id="1_4xg0y"]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer"]
+stream = ExtResource("1_4xg0y")
+volume_db = -10.0
+autoplay = true

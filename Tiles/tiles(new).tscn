@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://db6fj1rttb8le"]
-
-[ext_resource type="PackedScene" uid="uid://dinofa07kkl23" path="res://Map Asset/Grass.glb" id="1_jjq7t"]
-
-[node name="Node3D" type="Node3D"]
-
-[node name="Grass" parent="." instance=ExtResource("1_jjq7t")]
