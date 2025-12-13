@@ -1,8 +1,21 @@
 [gd_scene load_steps=10 format=3 uid="uid://23qs547ruhh3"]
 
 [ext_resource type="PackedScene" uid="uid://d1ixt37a64w2y" path="res://Map/Grass.tscn" id="1_3qw4b"]
+[ext_resource type="Shader" uid="uid://bk8p6gigcqs0i" path="res://Shader/pixel_art.gdshader" id="1_ey4bj"]
 [ext_resource type="PackedScene" uid="uid://btysfti3q7qg6" path="res://Map/RadiantGrass.tscn" id="2_ey4bj"]
-[ext_resource type="Shader" uid="uid://d37vms16a2t5l" path="res://Shader/edge_detection.gdshader" id="3_ey4bj"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_ja7ja"]
+custom_aabb = AABB(0, 0.09, 0, 0, 0, 0)
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yiutf"]
+render_priority = 0
+shader = ExtResource("1_ey4bj")
+shader_parameter/target_resolution = Vector2(320, 180)
+shader_parameter/colors_per_channel = 64.0
+shader_parameter/depth_outline_strength = 0.8
+shader_parameter/normal_outline_strength = 0.5
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ey4bj"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -19,20 +32,16 @@ tonemap_mode = 2
 [sub_resource type="PlaneMesh" id="PlaneMesh_hyme3"]
 size = Vector2(10, 10)
 
-[sub_resource type="QuadMesh" id="QuadMesh_ja7ja"]
-custom_aabb = AABB(0, 0.09, 0, 0, 0, 0)
-flip_faces = true
-size = Vector2(2, 2)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yiutf"]
-render_priority = 0
-shader = ExtResource("3_ey4bj")
-shader_parameter/edge_threshold = 1.50000007055148
-shader_parameter/outline_color = Color(0, 0, 0, 1)
-shader_parameter/outline_strength = 1.0
-shader_parameter/pixel_size = 1.0
-
 [node name="Node3D" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.6199023, -0.3923395, 0.67955196, -2.1855694e-08, 0.8660254, 0.5, -0.784679, -0.30995116, 0.5368511, 4, 4, 4.1320014)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Camera3D"]
+transform = Transform3D(1.0000002, 1.4901161e-08, -8.940697e-08, -5.9604645e-08, 1, -4.4703484e-08, -5.9604645e-08, 0, 1.0000002, 0, 0, 0)
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_ja7ja")
+surface_material_override/0 = SubResource("ShaderMaterial_yiutf")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_yiutf")
@@ -67,11 +76,3 @@ snap_2d_transforms_to_pixel = true
 snap_2d_vertices_to_pixel = true
 size = Vector2i(230, 129)
 render_target_update_mode = 4
-
-[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport"]
-transform = Transform3D(0.6199023, -0.3923395, 0.67955196, -2.1855694e-08, 0.8660254, 0.5, -0.784679, -0.30995116, 0.5368511, 4, 4, 4.1320014)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Camera3D"]
-extra_cull_margin = 16384.0
-mesh = SubResource("QuadMesh_ja7ja")
-surface_material_override/0 = SubResource("ShaderMaterial_yiutf")

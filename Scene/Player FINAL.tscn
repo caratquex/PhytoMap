@@ -7,8 +7,20 @@
 [ext_resource type="PackedScene" uid="uid://1kd3n6lutq8d" path="res://Scene/Grenade.tscn" id="5_3smsa"]
 [ext_resource type="PackedScene" uid="uid://c3b8l6xx3pvli" path="res://Scene/Shovel.tscn" id="6_8erm5"]
 [ext_resource type="Script" uid="uid://b7ecepo30kucs" path="res://Scene/pixelated_camera_sync.gd" id="7_ab448"]
-[ext_resource type="Shader" uid="uid://d37vms16a2t5l" path="res://Shader/edge_detection.gdshader" id="8_w2wfd"]
+[ext_resource type="Shader" uid="uid://bk8p6gigcqs0i" path="res://Shader/pixel_art.gdshader" id="8_w2wfd"]
 [ext_resource type="PackedScene" uid="uid://r5hp1q65lxx3" path="res://Scene/Gameplay UI.tscn" id="9_w2wfd"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_qbspr"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i8abf"]
+render_priority = 1
+shader = ExtResource("8_w2wfd")
+shader_parameter/target_resolution = Vector2(320, 180)
+shader_parameter/colors_per_channel = 8.0
+shader_parameter/depth_outline_strength = 0.8
+shader_parameter/normal_outline_strength = 0.5
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_b6fju"]
 radius = 0.5839844
@@ -158,18 +170,6 @@ states/idle/position = Vector2(353, 100)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_3smsa"), "idle", "Run", SubResource("AnimationNodeStateMachineTransition_8erm5"), "Run", "idle", SubResource("AnimationNodeStateMachineTransition_f1ek2"), "idle", "Jump", SubResource("AnimationNodeStateMachineTransition_6t5aa"), "Jump", "idle", SubResource("AnimationNodeStateMachineTransition_vgqql"), "Jump", "Run", SubResource("AnimationNodeStateMachineTransition_fkybt"), "Run", "Jump", SubResource("AnimationNodeStateMachineTransition_x3wgy"), "Run", "Dash", SubResource("AnimationNodeStateMachineTransition_tx1dd"), "Dash", "Run", SubResource("AnimationNodeStateMachineTransition_gymyn"), "Jump", "Dash", SubResource("AnimationNodeStateMachineTransition_pu2lt"), "Dash", "Jump", SubResource("AnimationNodeStateMachineTransition_ukyrk"), "idle", "Shoot", SubResource("AnimationNodeStateMachineTransition_7dp3o"), "Shoot", "idle", SubResource("AnimationNodeStateMachineTransition_fd4e3"), "Run", "Shoot", SubResource("AnimationNodeStateMachineTransition_h4iuc"), "Shoot", "Run", SubResource("AnimationNodeStateMachineTransition_qqcod"), "idle", "Plant", SubResource("AnimationNodeStateMachineTransition_qbspr"), "Plant", "idle", SubResource("AnimationNodeStateMachineTransition_i8abf"), "Run", "Plant", SubResource("AnimationNodeStateMachineTransition_spjao"), "Plant", "Run", SubResource("AnimationNodeStateMachineTransition_bm0vs"), "idle", "Throw Grenade", SubResource("AnimationNodeStateMachineTransition_dysgi"), "Throw Grenade", "idle", SubResource("AnimationNodeStateMachineTransition_p6mbt"), "Run", "Throw Grenade", SubResource("AnimationNodeStateMachineTransition_o1myj"), "Throw Grenade", "Run", SubResource("AnimationNodeStateMachineTransition_g37qm")]
 graph_offset = Vector2(196, -182)
 
-[sub_resource type="QuadMesh" id="QuadMesh_qbspr"]
-flip_faces = true
-size = Vector2(2, 2)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_i8abf"]
-render_priority = 0
-shader = ExtResource("8_w2wfd")
-shader_parameter/edge_threshold = 1.50000007055148
-shader_parameter/outline_color = Color(0, 0, 0, 1)
-shader_parameter/outline_strength = 1.0
-shader_parameter/pixel_size = 1.0
-
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera", "model", "animation_tree", "gun_model", "grenade_model", "shovel_model")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.016795158)
 script = ExtResource("1_6t5aa")
@@ -182,6 +182,12 @@ animation_tree = NodePath("Rabid (FINAL 2)/AnimationPlayer/AnimationTree")
 gun_model = NodePath("Rabid (FINAL 2)/Armature_001/Skeleton3D/RightHandAttachment/Gun")
 grenade_model = NodePath("Rabid (FINAL 2)/Armature_001/Skeleton3D/LeftHandAttachment/Grenade")
 shovel_model = NodePath("Rabid (FINAL 2)/Armature_001/Skeleton3D/RightHandAttachment2/Shovel")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.016795158)
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_qbspr")
+surface_material_override/0 = SubResource("ShaderMaterial_i8abf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.006883204, 0.7943978, 0)
@@ -203,34 +209,34 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9199089, 0)
 [node name="Skeleton3D" parent="Rabid (FINAL 2)/Armature_001" index="0"]
 bones/0/position = Vector3(1.61892e-18, 0.62902445, -0.041790847)
 bones/0/rotation = Quaternion(0.005797819, 4.799599e-24, -1.2873678e-18, 0.9999832)
-bones/1/rotation = Quaternion(-0.04394375, -9.872283e-05, -0.0022444432, 0.9990315)
-bones/2/rotation = Quaternion(-0.10075199, -0.019528603, -0.1098079, 0.9886404)
+bones/1/rotation = Quaternion(-0.0947808, -0.0002129343, -0.0022364997, 0.9954957)
+bones/2/rotation = Quaternion(0.04419447, 0.0052867346, -0.019512856, 0.99881846)
 bones/3/position = Vector3(-0.24255474, 1.1011194, -0.0061287847)
-bones/3/rotation = Quaternion(0.036408033, 0.008923664, 0.08094346, 0.9960135)
+bones/3/rotation = Quaternion(-0.106603466, -0.0009262113, 0.0002442484, 0.9943012)
 bones/4/position = Vector3(0.29179165, 0.39892906, -0.00046257576)
-bones/4/rotation = Quaternion(-0.022313822, -0.16501303, 0.9496198, -0.26550916)
-bones/5/position = Vector3(-0.29781514, 0.42064515, -0.009375641)
-bones/5/rotation = Quaternion(-0.016316066, -0.07679201, 0.9579112, 0.27612153)
-bones/5/scale = Vector3(0.9910881, 0.9910869, 0.99108696)
+bones/4/rotation = Quaternion(-0.39424285, -0.38183188, 0.75832605, -0.35173666)
+bones/5/position = Vector3(-0.30205688, 0.41847205, -0.006005573)
+bones/5/rotation = Quaternion(-0.06019426, -0.20005552, 0.8595071, 0.46647826)
+bones/5/scale = Vector3(0.99445814, 0.99445707, 0.994457)
 bones/6/rotation = Quaternion(0.7071037, 0.0033670387, 0.7070939, -0.0033670848)
-bones/7/position = Vector3(0.0049156044, 0.16792665, -0.15256865)
-bones/7/rotation = Quaternion(0.20480107, 0.97877824, -0.006874605, -0.0015719561)
+bones/7/position = Vector3(0.004547785, 0.1711032, -0.15478647)
+bones/7/rotation = Quaternion(0.18963292, 0.9818295, -0.0069421567, -0.0014560691)
 bones/7/scale = Vector3(1, 0.99999994, 0.99999994)
-bones/8/position = Vector3(0.0027086611, 0.18877578, 0.16892152)
-bones/8/rotation = Quaternion(-0.0112023, -0.00010427256, 0.06513763, 0.99781346)
+bones/8/position = Vector3(0.007047145, 0.15088417, 0.14383131)
+bones/8/rotation = Quaternion(-0.01106399, -0.0002812738, 0.16900021, 0.985554)
 bones/8/scale = Vector3(1, 0.9999999, 0.99999994)
 
 [node name="Bone" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="0"]
-transform = Transform3D(-0.8580151, 0.51162964, 0.045245647, -0.49536112, -0.8010004, -0.33617884, -0.13575745, -0.31085908, 0.94071066, 0.29179165, 1.027932, -0.037627634)
+transform = Transform3D(-0.44170853, 0.8345312, -0.3293207, -0.22232994, -0.45744148, -0.86099774, -0.86917543, -0.30709168, 0.38759637, 0.29179165, 1.027932, -0.037627634)
 
 [node name="Hand_R" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="1"]
-transform = Transform3D(-0.8394332, -0.5218012, -0.07300994, 0.52660537, -0.826421, -0.14821966, 0.017157184, -0.16433243, 0.9772174, -0.29781514, 1.0497501, -0.04628829)
+transform = Transform3D(-0.55445963, -0.7734872, -0.28850982, 0.82037556, -0.47741932, -0.2966501, 0.09222625, -0.40340245, 0.90427077, -0.30205688, 1.047538, -0.04294365)
 
 [node name="Leg_R" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="2"]
-transform = Transform3D(0.004066825, -0.0053715035, -0.9999772, -0.39026082, -0.9206979, 0.0033584824, -0.9206951, 0.3902383, -0.0058405455, -0.15096244, 0.45960683, -0.03883741)
+transform = Transform3D(0.0037598556, -0.0053409217, -0.9999786, -0.36158898, -0.93233025, 0.0036200555, -0.93233, 0.36156765, -0.0054365858, -0.1531499, 0.4564138, -0.039242253)
 
 [node name="Leg_L" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="3"]
-transform = Transform3D(5.036127e-07, -0.012929809, 0.9999163, -0.14148705, -0.9898571, -0.01279966, 0.98994, -0.14147519, -0.0018299589, 0.17071168, 0.44184718, -0.041254934)
+transform = Transform3D(4.92204e-07, -0.012929966, 0.9999163, -0.34404963, -0.93887264, -0.012140431, 0.9389514, -0.34402087, -0.004449072, 0.14526181, 0.47944528, -0.03647981)
 
 [node name="Hip" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="4"]
 transform = Transform3D(1.388788e-05, 0.009523379, 0.99995464, -0.011595441, -0.9998872, 0.009522901, 0.99993265, -0.011595046, 9.648126e-05, 1.6189199e-18, 0.62902445, -0.041790847)
@@ -239,7 +245,7 @@ transform = Transform3D(1.388788e-05, 0.009523379, 0.99995464, -0.011595441, -0.
 transform = Transform3D(1, 2.5746923e-18, -1.4918251e-20, -2.5746923e-18, 0.99993277, -0.011595443, -1.493745e-20, 0.011595443, 0.99993277, 1.61892e-18, 0.62902445, -0.041790847)
 
 [node name="RightHandAttachment2" type="BoneAttachment3D" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="7"]
-transform = Transform3D(-0.8394332, -0.5218012, -0.07300994, 0.52660537, -0.826421, -0.14821966, 0.017157184, -0.16433243, 0.9772174, -0.29781514, 1.0497501, -0.04628829)
+transform = Transform3D(-0.55445963, -0.7734872, -0.28850982, 0.82037556, -0.47741932, -0.2966501, 0.09222625, -0.40340245, 0.90427077, -0.30205688, 1.047538, -0.04294365)
 bone_name = "Hand.R"
 bone_idx = 5
 
@@ -249,7 +255,7 @@ bone_idx = 5
 transform = Transform3D(1.1081386, -0.856379, 0.8456599, 1.1896943, 0.60551023, -0.94577, 0.18207932, 1.2555751, 1.032896, 0.06369302, 0.58201265, 0.18524697)
 
 [node name="RightHandAttachment" type="BoneAttachment3D" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="8"]
-transform = Transform3D(-0.8394332, -0.5218012, -0.07300994, 0.52660537, -0.826421, -0.14821966, 0.017157184, -0.16433243, 0.9772174, -0.29781514, 1.0497501, -0.04628829)
+transform = Transform3D(-0.55445963, -0.7734872, -0.28850982, 0.82037556, -0.47741932, -0.2966501, 0.09222625, -0.40340245, 0.90427077, -0.30205688, 1.047538, -0.04294365)
 bone_name = "Hand.R"
 bone_idx = 5
 
@@ -259,7 +265,7 @@ bone_idx = 5
 transform = Transform3D(0.20723814, 0.6326301, -0.7462115, -0.9623189, -0.0054449365, -0.2718714, -0.17605713, 0.7744351, 0.60766345, -0.025303334, 0.7964385, 0.1432237)
 
 [node name="LeftHandAttachment" type="BoneAttachment3D" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="9"]
-transform = Transform3D(-0.8580151, 0.51162964, 0.045245647, -0.49536112, -0.8010004, -0.33617884, -0.13575745, -0.31085908, 0.94071066, 0.29179165, 1.027932, -0.037627634)
+transform = Transform3D(-0.44170853, 0.8345312, -0.3293207, -0.22232994, -0.45744148, -0.86099774, -0.86917543, -0.30709168, 0.38759637, 0.29179165, 1.027932, -0.037627634)
 bone_name = "Bone"
 bone_idx = 4
 
@@ -306,12 +312,6 @@ pixelated_camera = NodePath("Camera3D")
 current = true
 fov = 70.0
 size = 5.0
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/CameraSync/Camera3D"]
-extra_cull_margin = 16384.0
-mesh = SubResource("QuadMesh_qbspr")
-skeleton = NodePath("../../../../..")
-surface_material_override/0 = SubResource("ShaderMaterial_i8abf")
 
 [node name="Control" parent="." instance=ExtResource("9_w2wfd")]
 visible = false

@@ -3,7 +3,7 @@
 [ext_resource type="Shader" uid="uid://cjlb6wl8x5ees" path="res://Shader/water.tres" id="1_67tdd"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rcftm"]
-render_priority = 0
+render_priority = -10
 shader = ExtResource("1_67tdd")
 shader_parameter/ColorParameter = Color(0.2952, 0.71504, 0.82, 1)
 

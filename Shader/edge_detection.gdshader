@@ -7,7 +7,7 @@ uniform sampler2D screen_texture : hint_screen_texture, filter_nearest;
 uniform float edge_threshold : hint_range(0.01, 2.0) = 0.4;
 uniform vec3 outline_color : source_color = vec3(0.0, 0.0, 0.0);
 uniform float outline_strength : hint_range(0.0, 1.0) = 1.0;
-uniform float pixel_size : hint_range(1.0, 4.0) = 1.0;
+uniform float pixel_size : hint_range(0.1, 4.0) = 1.0;
 
 float luma(vec3 c) {
 	return dot(c, vec3(0.299, 0.587, 0.114));
