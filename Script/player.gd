@@ -12,9 +12,10 @@ var current_weapon: WeaponType = WeaponType.SHOVEL  # Default is Shovel (Plant)
 # ---------------------------
 # Movement
 # ---------------------------
-const GRAVITY: float = 9.8
+@export var gravity: float = 12.0  # جاذبية أسرع قليلاً من الأصل
+@export var fall_multiplier: float = 1.2  # تسريع السقوط خفيف جداً
 @export var speed: float = 4.0
-@export var jump_velocity: float = 8.0      # نطة أقوى (غيّر الرقم لو تبغيه أقوى/أضعف)
+@export var jump_velocity: float = 8.5      # نطة قريبة من الأصل
 @export var rotation_speed: float = 5.0     # سرعة لف الأرنب
 @export var acceleration: float = 50.0       # سرعة التسارع عند الحركة (زيادة للاستجابة)
 @export var friction: float = 60.0           # سرعة التباطؤ عند التوقف (زيادة للاستجابة)
@@ -354,7 +355,11 @@ func _physics_process(delta: float) -> void:
 
 	# ----- GRAVITY -----
 	if not is_on_floor():
-		velocity.y -= GRAVITY * delta
+		# سقوط أسرع لما ينزل (fall_multiplier)
+		if velocity.y < 0:
+			velocity.y -= gravity * fall_multiplier * delta
+		else:
+			velocity.y -= gravity * delta
 
 	# ----- JUMP (Space / ui_accept) -----
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():

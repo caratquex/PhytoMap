@@ -1,15 +1,20 @@
-[gd_scene load_steps=8 format=4 uid="uid://dsnriolqk2lo8"]
+[gd_scene load_steps=10 format=4 uid="uid://dsnriolqk2lo8"]
 
 [ext_resource type="PackedScene" uid="uid://b17os87mldhvo" path="res://Map Asset/GrassRadiant3.glb" id="1_38ayj"]
 [ext_resource type="Texture2D" uid="uid://drs6drjlpnde7" path="res://Map Asset/GrassRadiant3_Soil_texture.png" id="2_cqo0q"]
+[ext_resource type="Shader" uid="uid://buwh68bwlnndp" path="res://Shader/random_uv.gdshader" id="2_ix1c2"]
+[ext_resource type="Texture2D" uid="uid://cu7vxnm285f4d" path="res://Map Asset/grassRadiant1_albedo.tres" id="3_yef3g"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_38ayj"]
 size = Vector3(2.25, 2.25, 2.25)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mc1r3"]
-resource_name = "Material.004"
-cull_mode = 2
-albedo_color = Color(1, 0.61863685, 0.30949214, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pj8po"]
+render_priority = 0
+shader = ExtResource("2_ix1c2")
+shader_parameter/albedo_texture = ExtResource("3_yef3g")
+shader_parameter/cell_size = 1.0
+shader_parameter/random_strength = 0.5
+shader_parameter/random_rotation = 0.25
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ccn1m"]
 resource_name = "Soil Base"
@@ -51,7 +56,7 @@ _surfaces = [{
 "index_count": 282,
 "index_data": PackedByteArray("VABHAFUAVABWAEcAVABXAFYAVQBYAFQAVABZAFcAVQBaAFgAWQBUAFgAWABaAEgAWQBJAFcAWQBbAEkAWABIAFwAXQBbAFkAWQBYAF4AXQBZAF4AXgBYAFwAXgBKAF0AXgBcAF8AXgBfAEoAAAABAAIAAQADAAIABAABAAAAAQAFAAMABgAEAAcAAQAEAAYABQAIAAkAAQAIAAUACAABAAoACAAKAAsACgABAAwAAQAGAA0ADQAGAA4AAQANAA8AEAARABIAEwARABAAEQATABQAFAATABUAEQAUABYAFgAUABcAEQAWAGAAFgAYAGAAGQAYABYAGQAWABoAGAAZABsAGwAZABwAGAAbAB0AGAAdAB4AHwAgACEAIAAiACEAIwAgAB8AIAAkACIAJQAjACYAIAAjACUAJAAnACgAIAAnACQAJwAgACkAJwApACoAKQAgACsAIAAlACwALAAlAC0AIAAsAC4ALwAwADEALwAyADAALwAzADIAMgAzADQAMwAvADUAMwA1ADYANQAvAGEANwA1AGEANwA4ADUANQA4ADkANwA6ADgAOAA6ADsAOgA3ADwAPAA3AD0APgBiAGMAPgBjAEAAPgBAAEIAYgA+AEEAYgBBAD8AZABlAGYASwBlAGQASwBMAGUATQBmAGUATQBOAGYAZwBoAGkARQBnAGkARQBGAGcAQwBoAGcAQwBEAGgAagBPAGsATwBqAFAATwBQAFEAawBPAFMAawBTAFIA"),
 "lods": [0.0009531214, PackedByteArray("AAABAAIAAQADAAIABAABAAAAAQAFAAMABgAEAAcAAQAEAAYABQAIAAkAAQAIAAUACAABAAoACAAKAAsACgABAAwAAQAGAA0ADQAGAA4AAQANAA8AEAARABIAEwARABAAEQATABQAFAATABUAEQAUABYAFgAUABcAEQAWABgAGQAYABYAGQAWABoAGAAZABsAGwAZABwAGAAbAB0AGAAdAB4AHwAgACEAIAAiACEAIwAgAB8AIAAkACIAJQAjACYAIAAjACUAJAAnACgAIAAnACQAJwAgACkAJwApACoAKQAgACsAIAAlACwALAAlAC0AIAAsAC4ALwAwADEALwAyADAALwAzADIAMgAzADQAMwAvADUAMwA1ADYANwA1AC8ANwA4ADUANQA4ADkANwA6ADgAOAA6ADsAOgA3ADwAPAA3AD0APgA/AEAAPwA+AEEAPgBAAEIAQwBEAEUARQBGAEMARwBIAEkASgBJAEgASwBMAE0ATQBOAEsATwBQAFEATwBSAFAAUgBPAFMA")],
-"material": SubResource("StandardMaterial3D_mc1r3"),
+"material": SubResource("ShaderMaterial_pj8po"),
 "name": "Material.004",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),

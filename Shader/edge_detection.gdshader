@@ -1,113 +1,43 @@
 shader_type spatial;
-render_mode specular_disabled, ambient_light_disabled;
+render_mode unshaded;
 
-uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, filter_linear_mipmap;
-uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_nearest;
-uniform sampler2D NORMAL_TEXTURE : hint_normal_roughness_texture, filter_nearest;
+uniform sampler2D screen_texture : hint_screen_texture, filter_nearest;
 
-uniform float lightIntensity = 1.25;
-uniform float lineAlpha = 0.7;
-uniform bool useLighting = true;
-uniform float lineHighlight = 0.2;
-uniform float lineShadow = 0.55;
+// Edge Settings
+uniform float edge_threshold : hint_range(0.01, 2.0) = 0.4;
+uniform vec3 outline_color : source_color = vec3(0.0, 0.0, 0.0);
+uniform float outline_strength : hint_range(0.0, 1.0) = 1.0;
+uniform float pixel_size : hint_range(1.0, 4.0) = 1.0;
 
-varying vec2 screenUV;
-varying float lineMask;
-
-
-float GetLinearDepth(vec2 sUV, sampler2D depthTexture, mat4 invProjectionMat, float mask){
-	// Raw depth to linear depth code from:
-	// https://docs.godotengine.org/en/latest/tutorials/shaders/advanced_postprocessing.html
-	float depth = texture(depthTexture, sUV).x * mask;
-	vec3 ndc = vec3(sUV * 2.0 - 1.0, depth);
-    vec4 view = invProjectionMat * vec4(ndc, 1.0);
-	view.xyz /= view.w;
-	return -view.z;
+float luma(vec3 c) {
+	return dot(c, vec3(0.299, 0.587, 0.114));
 }
 
-vec3 GetNormal(vec2 uv, sampler2D normalTexture, float mask){
-	vec3 normal = texture(normalTexture, uv).rgb;
-	normal = normal * 2.0 - 1.0 * mask;
-	return normal;
-}
-
-float NormalEdgeIndicator(vec3 normalEdgeBias, vec3 normal, vec3 neighborNormal, float depthDifference){
-	//From Kody King: https://threejs.org/examples/webgl_postprocessing_pixel.html
-	float normalDifference = dot(normal - neighborNormal, normalEdgeBias);
-	float normalIndicator = clamp(smoothstep(-.01, .01, normalDifference), 0.0, 1.0);
-	float depthIndicator = clamp(sign(depthDifference * .25 + .0025), 0.0, 1.0);
-	return (1.0 - dot(normal, neighborNormal)) * depthIndicator * normalIndicator;
-}
-
-void vertex(){
-  POSITION = vec4(VERTEX.xy, 1.0, 1.0);
+void vertex() {
+	POSITION = vec4(VERTEX.xy, 1.0, 1.0);
 }
 
 void fragment() {
-	vec2 texelSize = 1.0 / VIEWPORT_SIZE.xy;
-	screenUV = SCREEN_UV;
-
-	// UV offsets
-	vec2 UVOffsets[4];
-	UVOffsets[0] = SCREEN_UV + vec2(0.0, -1.0) * texelSize;
-	UVOffsets[1] = SCREEN_UV + vec2(0.0, 1.0) * texelSize;
-	UVOffsets[2] = SCREEN_UV + vec2(1.0, 0.0) * texelSize;
-	UVOffsets[3] = SCREEN_UV + vec2(-1.0, 0.0) * texelSize;
-
-	// Using alpha channel (screen roughness) to mask objects to not receive outlines
-	float outlineMask = texture(NORMAL_TEXTURE, SCREEN_UV).a;
-	outlineMask = ceil(outlineMask); // Objects with Roughness = 0 will not have and outline
-
-	// Edge detection with Depth
-	float depthDifference = 0.0;
-	float invDepthDifference = 0.5;
-	float depth = GetLinearDepth(SCREEN_UV, DEPTH_TEXTURE, INV_PROJECTION_MATRIX, outlineMask);
-
-	for (int i = 0; i < UVOffsets.length(); i++){
-		float dOff = GetLinearDepth(UVOffsets[i],DEPTH_TEXTURE, INV_PROJECTION_MATRIX, outlineMask);
-		depthDifference += clamp(dOff - depth, 0.0, 1.0);
-		invDepthDifference += depth - dOff;
-	}
-	invDepthDifference = clamp(invDepthDifference, 0.0, 1.0);
-	invDepthDifference = clamp(smoothstep(0.9, 0.9, invDepthDifference) * 10.0 , 0.0, 1.0);
-	depthDifference = smoothstep(0.25, 0.3, depthDifference);
-
-	// Edge detection with Normals
-	float normalDifference = 0.;
-	vec3 normalEdgeBias = vec3(1.0, 1.0, 1.0);
-	vec3 normal = GetNormal(SCREEN_UV, NORMAL_TEXTURE, outlineMask);
-
-	for (int i = 0; i < UVOffsets.length(); i++){
-		vec3 nOff = GetNormal(UVOffsets[i],NORMAL_TEXTURE, outlineMask);
-		normalDifference += NormalEdgeIndicator(normalEdgeBias, normal, nOff, depthDifference);
-	}
-	normalDifference = smoothstep(0.2, 0.2, normalDifference);
-	normalDifference = clamp(normalDifference - invDepthDifference, 0.0, 1.0);
-
-
-	ALBEDO = texture(SCREEN_TEXTURE, SCREEN_UV).rgb;
-	lineMask = clamp(0.1, lineAlpha, (depthDifference + normalDifference * 5.0));
-
-
-	if (!useLighting){
-		ALBEDO += clamp((normalDifference - depthDifference), 0.0, 1.0) * lineHighlight;
-		ALBEDO -= ALBEDO * depthDifference * lineShadow;
-	}
-}
-
-void light (){
-	if (useLighting){
-		vec4 normal = texture(NORMAL_TEXTURE, screenUV);
-		normal = normal * 2.0 - 1.0;
-
-		// Calculate light direction
-		float dotNL = dot(normal.rgb, LIGHT);
-		dotNL = pow(dotNL, 2.5);
-		dotNL = clamp(dotNL, 0.0, 1.0);
-
-		if(LIGHT_IS_DIRECTIONAL)
-			DIFFUSE_LIGHT += mix(vec3(1.0), dotNL * LIGHT_COLOR * lightIntensity, lineMask);
-	}
-	else
-		DIFFUSE_LIGHT = vec3(1.0);
+	vec2 texel = pixel_size / VIEWPORT_SIZE;
+	
+	// Sobel edge detection (color-based)
+	vec3 tl = texture(screen_texture, SCREEN_UV + vec2(-texel.x, -texel.y)).rgb;
+	vec3 t  = texture(screen_texture, SCREEN_UV + vec2(0.0, -texel.y)).rgb;
+	vec3 tr = texture(screen_texture, SCREEN_UV + vec2(texel.x, -texel.y)).rgb;
+	vec3 l  = texture(screen_texture, SCREEN_UV + vec2(-texel.x, 0.0)).rgb;
+	vec3 c  = texture(screen_texture, SCREEN_UV).rgb;
+	vec3 r  = texture(screen_texture, SCREEN_UV + vec2(texel.x, 0.0)).rgb;
+	vec3 bl = texture(screen_texture, SCREEN_UV + vec2(-texel.x, texel.y)).rgb;
+	vec3 b  = texture(screen_texture, SCREEN_UV + vec2(0.0, texel.y)).rgb;
+	vec3 br = texture(screen_texture, SCREEN_UV + vec2(texel.x, texel.y)).rgb;
+	
+	// Sobel operator
+	float gx = luma(tl) + 2.0*luma(l) + luma(bl) - luma(tr) - 2.0*luma(r) - luma(br);
+	float gy = luma(tl) + 2.0*luma(t) + luma(tr) - luma(bl) - 2.0*luma(b) - luma(br);
+	float edge = sqrt(gx*gx + gy*gy);
+	
+	// Sharp pixel art edge
+	edge = step(edge_threshold, edge);
+	
+	ALBEDO = mix(c, outline_color, edge * outline_strength);
 }
