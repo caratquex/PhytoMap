@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b2jepp8pt3wji"
+path="res://.godot/imported/got hurt.wav-44ed2dae7dd45f7e5a8b3ed7ea9a3c0a.sample"
+
+[deps]
+
+source_file="res://Map/Sfx/got hurt.wav"
+dest_files=["res://.godot/imported/got hurt.wav-44ed2dae7dd45f7e5a8b3ed7ea9a3c0a.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

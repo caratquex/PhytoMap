@@ -60,6 +60,14 @@ var hurt_tween: Tween
 var color_tween: Tween
 var original_materials: Array = []  # لحفظ الماتيريال الأصلية
 
+# ---------------------------
+# SFX
+# ---------------------------
+@onready var walking_on_grass_ver_1_: AudioStreamPlayer = $"../SFX/WalkingOnGrass(ver1)"
+@onready var jump: AudioStreamPlayer = $"../SFX/Jump"
+@onready var dash: AudioStreamPlayer = $"../SFX/dash"
+@onready var drop: AudioStreamPlayer = $"../SFX/drop"
+
 
 func _ready() -> void:
 	# Singleton بسيط
@@ -392,3 +400,5 @@ func _physics_process(delta: float) -> void:
 	velocity.z = current_velocity_xz.y
 
 	move_and_slide()
+	
+	

@@ -25,6 +25,14 @@ const GRAVITY: float = 9.8
 @export var grenade_model: Node3D
 
 # ---------------------------
+# SFX
+# ---------------------------
+var walking_on_grass_ver_1_: AudioStreamPlayer
+var jump: AudioStreamPlayer
+var dash: AudioStreamPlayer
+var drop: AudioStreamPlayer
+
+# ---------------------------
 # Dash Variables
 # ---------------------------
 const DASH_SPEED: float = 15.0
@@ -46,6 +54,9 @@ var target_angle: float = PI
 # مؤقّت يظهر السلاح لفترة قصيرة ثم يخفيه
 var gun_timer: float = 0.0
 
+# SFX state tracking
+var prev_on_floor: bool = false
+
 
 func _ready() -> void:
 	# Singleton بسيط
@@ -65,6 +76,12 @@ func _ready() -> void:
 		gun_model.visible = false
 	if grenade_model:
 		grenade_model.visible = false
+	
+	# Initialize SFX nodes (safe - won't error if missing)
+	walking_on_grass_ver_1_ = get_node_or_null("../SFX/WalkingOnGrass(ver1)")
+	jump = get_node_or_null("../SFX/Jump")
+	dash = get_node_or_null("../SFX/dash")
+	drop = get_node_or_null("../SFX/drop")
 
 
 func _process(delta: float) -> void:
@@ -267,3 +284,24 @@ func _physics_process(delta: float) -> void:
 	velocity.z = current_velocity_xz.y
 
 	move_and_slide()
+	
+	# -------- LANDING SOUND (state-change-based) --------
+	var on_floor := is_on_floor()
+
+	if on_floor and not prev_on_floor:
+		if drop and is_instance_valid(drop) and not drop.playing:
+			drop.play()
+
+	prev_on_floor = on_floor
+
+	# ----- FOOTSTEP SFX -----
+	if is_instance_valid(walking_on_grass_ver_1_):
+		var on_ground := is_on_floor()
+		var is_moving := input_dir != Vector2.ZERO or abs(velocity.x) > 0.1 or abs(velocity.z) > 0.1
+		
+		if on_ground and is_moving:
+			if not walking_on_grass_ver_1_.playing:
+				walking_on_grass_ver_1_.play()
+		else:
+			if walking_on_grass_ver_1_.playing:
+				walking_on_grass_ver_1_.stop()

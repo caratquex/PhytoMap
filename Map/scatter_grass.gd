@@ -9,7 +9,6 @@ const GRASS_DENSITY = 0.3  # Probability of placing grass on each cell (0.0 to 1
 const GRASS_HEIGHT_OFFSET = 0.5  # Height offset above the cell
 
 func _run():
-	print("Starting grass scattering...")
 	
 	# Get the currently edited scene
 	var scene = EditorInterface.get_edited_scene_root()

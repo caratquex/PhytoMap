@@ -51,3 +51,7 @@ void fragment() {
 	// Output the final color
 	ALBEDO = texture(albedo_texture, final_uv).rgb;
 }
+
+
+
+

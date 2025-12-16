@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://domj80wn4y1np"
+path="res://.godot/imported/Walking on Grass (Ver1).wav-153fc7846c95b77ec0d4caa05110c64b.sample"
+
+[deps]
+
+source_file="res://Map/Sfx/Walking on Grass (Ver1).wav"
+dest_files=["res://.godot/imported/Walking on Grass (Ver1).wav-153fc7846c95b77ec0d4caa05110c64b.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
