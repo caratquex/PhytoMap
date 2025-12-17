@@ -15,6 +15,7 @@ var current_weapon: WeaponType = WeaponType.SHOVEL  # Default is Shovel (Plant)
 var sunflower_scene: PackedScene = null
 @export var plant_ray_length: float = 100.0
 @export var ground_collision_mask: int = 1  # Set to match your ground/gridmap collision layer
+@export var plant_height_offset: float = 0.0  # Adjust if flowers float above ground
 
 # ---------------------------
 # Movement
@@ -31,6 +32,7 @@ var sunflower_scene: PackedScene = null
 # Nodes (عيّنها من الـ Inspector)
 # ---------------------------
 @export var camera: Camera3D
+@export var raycast_camera: Camera3D  # Camera for raycasting (use SpringArm3D/Camera3D)
 @export var model: Node3D
 @export var animation_tree: AnimationTree
 
@@ -96,12 +98,9 @@ func _ready() -> void:
 	switch_weapon(WeaponType.SHOVEL)
 	
 	# Load sunflower scene for planting
-	print("Player _ready() called - loading sunflower scene...")
-	sunflower_scene = load("res://Scene/Sunflower1_Simple.tscn")
-	if sunflower_scene:
-		print("Sunflower scene loaded successfully!")
-	else:
-		push_error("Failed to load sunflower scene!")
+	sunflower_scene = load("res://Scene/Sunflower1.tscn")
+	if not sunflower_scene:
+		push_error("Failed to load Sunflower1.tscn!")
 
 
 func hide_all_weapons() -> void:
@@ -446,10 +445,11 @@ func _physics_process(delta: float) -> void:
 # FLOWER PLANTING
 # ---------------------------
 func plant_flower_at_cursor() -> void:
-	print("plant_flower_at_cursor() called")
+	# Use raycast_camera if available, otherwise use regular camera
+	var cam: Camera3D = raycast_camera if raycast_camera else camera
 	
-	if not camera:
-		push_error("Camera not assigned for planting!")
+	if not cam:
+		push_error("No camera assigned for planting! Set raycast_camera to SpringArm3D/Camera3D")
 		return
 	
 	if sunflower_scene == null:
@@ -458,26 +458,29 @@ func plant_flower_at_cursor() -> void:
 	
 	# Get mouse position on screen
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
-	print("Mouse position: ", mouse_pos)
 	
 	# Raycast to find ground position
-	var ground_pos: Vector3 = raycast_to_ground(mouse_pos)
-	print("Ground position from raycast: ", ground_pos)
+	var result: Dictionary = raycast_to_ground(mouse_pos, cam)
 	
-	if ground_pos != Vector3.INF:
+	if not result.is_empty():
+		# Get the hit position
+		var ground_pos: Vector3 = result.position
+		
+		# Apply height offset
+		ground_pos.y += plant_height_offset
+		
 		# Create and place the flower
 		var flower: Node3D = sunflower_scene.instantiate()
 		get_tree().current_scene.add_child(flower)
 		flower.global_position = ground_pos
-		print("SUCCESS: Planted flower at: ", ground_pos)
 	else:
-		print("No ground found at click position - check ground_collision_mask (current: ", ground_collision_mask, ")")
+		print("No ground found at click position")
 
 
-func raycast_to_ground(screen_pos: Vector2) -> Vector3:
+func raycast_to_ground(screen_pos: Vector2, cam: Camera3D) -> Dictionary:
 	# Project ray from camera through mouse position
-	var ray_origin: Vector3 = camera.project_ray_origin(screen_pos)
-	var ray_dir: Vector3 = camera.project_ray_normal(screen_pos)
+	var ray_origin: Vector3 = cam.project_ray_origin(screen_pos)
+	var ray_dir: Vector3 = cam.project_ray_normal(screen_pos)
 	var ray_end: Vector3 = ray_origin + ray_dir * plant_ray_length
 	
 	# Perform raycast using physics space
@@ -487,9 +490,4 @@ func raycast_to_ground(screen_pos: Vector2) -> Vector3:
 	query.collide_with_bodies = true
 	query.collide_with_areas = false
 	
-	var result: Dictionary = space_state.intersect_ray(query)
-	
-	if result.is_empty():
-		return Vector3.INF
-	
-	return result.position
+	return space_state.intersect_ray(query)

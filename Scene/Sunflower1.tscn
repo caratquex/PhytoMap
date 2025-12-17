@@ -1,11 +1,10 @@
-[gd_scene load_steps=21 format=4 uid="uid://b5jc8ahp7hn07"]
+[gd_scene load_steps=19 format=4 uid="uid://b5jc8ahp7hn07"]
 
 [ext_resource type="PackedScene" uid="uid://bhe6uyygmjigi" path="res://Map Asset/Sunflower1.glb" id="1_eiou4"]
 [ext_resource type="Texture2D" uid="uid://b1fsp5cnfj1fn" path="res://Map Asset/Sunflower1_disk floret_texture.png" id="2_sjuj7"]
 [ext_resource type="Texture2D" uid="uid://begiu3hys55y0" path="res://Map Asset/Sunflower1_petal_texture2.png" id="3_r5yh2"]
 [ext_resource type="Texture2D" uid="uid://csc0ve26lag34" path="res://Map Asset/Sunflower1_Leaf_texture.png" id="4_rrrsj"]
 [ext_resource type="Texture2D" uid="uid://iyb2euqwf4jw" path="res://Map Asset/Sunflower1_petal1under_texture.png" id="5_n5y1a"]
-[ext_resource type="Shader" path="res://Shader/sunflowershadertres.res" id="6_e81v4"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sjuj7"]
 load_path = "res://.godot/imported/Sunflower1_petalunder2_texture.png-bb85e427b21a98d8db7e6973a07fa7bf.s3tc.ctex"
@@ -20,36 +19,50 @@ albedo_texture = SubResource("CompressedTexture2D_sjuj7")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sinbm"]
 resource_name = "Disk Floret"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
 cull_mode = 2
 albedo_texture = ExtResource("2_sjuj7")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y5ty6"]
 resource_name = "stem"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
 cull_mode = 2
 albedo_color = Color(0.37188154, 0.19424689, 0.1236114, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ov2na"]
 resource_name = "Material.002"
-transparency = 4
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
 cull_mode = 2
 albedo_texture = ExtResource("3_r5yh2")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bcbvg"]
 resource_name = "Material"
-transparency = 4
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
 cull_mode = 2
 albedo_texture = ExtResource("4_rrrsj")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eqex1"]
 resource_name = "Material.004"
-transparency = 4
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
 cull_mode = 2
 albedo_texture = ExtResource("4_rrrsj")
 roughness = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m4541"]
 resource_name = "Material.005"
-transparency = 4
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
 cull_mode = 2
 albedo_texture = ExtResource("4_rrrsj")
 roughness = 0.5
@@ -63,7 +76,7 @@ cull_mode = 2
 albedo_texture = ExtResource("5_n5y1a")
 roughness = 0.5
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_c2jcj"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_60rgl"]
 _surfaces = [{
 "aabb": AABB(-1.4129074, 1.0147169, -1.4050245, 2.8258147, 0.19549274, 2.8258147),
 "format": 34896613377,
@@ -154,7 +167,7 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_8dlnt"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_ivcnj"]
 resource_name = "Sunflower1_Plane_007"
 _surfaces = [{
 "aabb": AABB(-1.4129074, 1.0147169, -1.4050245, 2.8258147, 0.19549274, 2.8258147),
@@ -261,11 +274,7 @@ _surfaces = [{
 "vertex_data": PackedByteArray("RPMAALKVFNf//wAAorMb1g7iAABcwNLVHsQAABbNIcyK5gAAwXdv2RbNAADgO+jY0NkAANFZhdjRWQAALiZt1FzAAADwHUbYwXcAAHQZjdGylQAAugzz0aKzAAAAAN/X8B0AAKI/rdngOwAA6DIu2QAAAABcTPHOugwAAExqCMR0GQAAPYjuwC4mAAAtppzBPYgAAIrmtr0tpgAA0NmsxKI/AAAO4sC/6DIAAB7EjMFMagAARPNgulxMAAD//6rAaeY9uFCpq9N6tf//kpXhzGxq//96tZPMkpX//4RK58v/f6FX/3+azIRK//9sagXNZkf1qH3Cw8WuVj24aeZKvpUZPbiuVo7OYYX1qNgoR89QqT24lRkb0X3C9aiYuM7MJtf1qGGFQtSEnoKQzMfHyPePyrqRpeLMzMeCkHphz9ORpcq6B3BUzJi49aiBPa7TB3DKum1ah8x6YYKQMjju0YE99ahmRynV2Cj1qJ16h8VtWsq694/dzDI4gpCEnqvFnXr1qCbXHsVduzmaILHgnXqn6aAyq5meGr3zmuC8TJrlvOuaq7zeq8G+3psxyJSm78tyobS9C6PrqRG257JFse2smbP+sM6wx6/kr32wm6+3viSURLRgmrix1awssIuwHsF5llmxEKUcsnifdbYSpea3GqSMtymkFrdzpIe2bKRes0mrnrwRoTGvJrDDvjino8W1nUyuDaKiusWe0rNAnwG3vaTFunGe9raupMa6HJ7RtlakvLgFqhCz3azFsvaqPrc1pD6z/qqguQ+c")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_c2jcj")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jwil4"]
-render_priority = 0
-shader = ExtResource("6_e81v4")
+shadow_mesh = SubResource("ArrayMesh_60rgl")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fk86k"]
 lifetime_randomness = 0.5
@@ -294,11 +303,10 @@ anim_offset_max = 0.29999998
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.024255753, 0, -0.0420115)
 
 [node name="Plane_003" parent="Sunflower1" index="0"]
-mesh = SubResource("ArrayMesh_8dlnt")
+mesh = SubResource("ArrayMesh_ivcnj")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="Sunflower1/Plane_003" index="0"]
 transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 1.4475231, 0)
-material_override = SubResource("ShaderMaterial_jwil4")
 amount = 40
 amount_ratio = 0.447
 lifetime = 3.0
