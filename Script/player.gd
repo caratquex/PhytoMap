@@ -10,6 +10,13 @@ enum WeaponType { GUN = 1, GRENADE = 2, SHOVEL = 3 }
 var current_weapon: WeaponType = WeaponType.SHOVEL  # Default is Shovel (Plant)
 
 # ---------------------------
+# Flower Planting
+# ---------------------------
+var sunflower_scene: PackedScene = null
+@export var plant_ray_length: float = 100.0
+@export var ground_collision_mask: int = 1  # Set to match your ground/gridmap collision layer
+
+# ---------------------------
 # Movement
 # ---------------------------
 @export var gravity: float = 12.0  # جاذبية أسرع قليلاً من الأصل
@@ -87,6 +94,14 @@ func _ready() -> void:
 	hide_all_weapons()
 	# نظهر السلاح الافتراضي (Shovel)
 	switch_weapon(WeaponType.SHOVEL)
+	
+	# Load sunflower scene for planting
+	print("Player _ready() called - loading sunflower scene...")
+	sunflower_scene = load("res://Scene/Sunflower1_Simple.tscn")
+	if sunflower_scene:
+		print("Sunflower scene loaded successfully!")
+	else:
+		push_error("Failed to load sunflower scene!")
 
 
 func hide_all_weapons() -> void:
@@ -202,10 +217,14 @@ func start_throw() -> void:
 
 
 func start_plant() -> void:
+	# Play animation
 	if animation_tree:
 		animation_tree.set("parameters/conditions/is_planting", true)
 	if playback:
 		playback.travel("Plant")
+	
+	# Actually plant the flower
+	plant_flower_at_cursor()
 
 
 func reset_action_state() -> void:
@@ -421,3 +440,56 @@ func _physics_process(delta: float) -> void:
 	else:
 		if walking_on_grass_ver_1_ and walking_on_grass_ver_1_.playing:
 			walking_on_grass_ver_1_.stop()
+
+
+# ---------------------------
+# FLOWER PLANTING
+# ---------------------------
+func plant_flower_at_cursor() -> void:
+	print("plant_flower_at_cursor() called")
+	
+	if not camera:
+		push_error("Camera not assigned for planting!")
+		return
+	
+	if sunflower_scene == null:
+		push_error("Sunflower scene not loaded!")
+		return
+	
+	# Get mouse position on screen
+	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+	print("Mouse position: ", mouse_pos)
+	
+	# Raycast to find ground position
+	var ground_pos: Vector3 = raycast_to_ground(mouse_pos)
+	print("Ground position from raycast: ", ground_pos)
+	
+	if ground_pos != Vector3.INF:
+		# Create and place the flower
+		var flower: Node3D = sunflower_scene.instantiate()
+		get_tree().current_scene.add_child(flower)
+		flower.global_position = ground_pos
+		print("SUCCESS: Planted flower at: ", ground_pos)
+	else:
+		print("No ground found at click position - check ground_collision_mask (current: ", ground_collision_mask, ")")
+
+
+func raycast_to_ground(screen_pos: Vector2) -> Vector3:
+	# Project ray from camera through mouse position
+	var ray_origin: Vector3 = camera.project_ray_origin(screen_pos)
+	var ray_dir: Vector3 = camera.project_ray_normal(screen_pos)
+	var ray_end: Vector3 = ray_origin + ray_dir * plant_ray_length
+	
+	# Perform raycast using physics space
+	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
+	query.collision_mask = ground_collision_mask  # Only hit ground/gridmap
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
+	
+	var result: Dictionary = space_state.intersect_ray(query)
+	
+	if result.is_empty():
+		return Vector3.INF
+	
+	return result.position

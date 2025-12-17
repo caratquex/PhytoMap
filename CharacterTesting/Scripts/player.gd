@@ -4,6 +4,19 @@ extends CharacterBody3D
 static var instance: CharacterBody3D
 
 # ---------------------------
+# Tool Selection
+# ---------------------------
+enum ToolType { DEFAULT, GUN, GRENADE, SHOVEL }
+var current_tool: ToolType = ToolType.DEFAULT
+
+# ---------------------------
+# Flower Planting
+# ---------------------------
+var sunflower_scene: PackedScene = null
+@export var plant_ray_length: float = 100.0
+@export var ground_collision_mask: int = 1  # Set this to match your ground's collision layer
+
+# ---------------------------
 # Movement
 # ---------------------------
 const GRAVITY: float = 9.8
@@ -82,6 +95,9 @@ func _ready() -> void:
 	jump = get_node_or_null("../SFX/Jump")
 	dash = get_node_or_null("../SFX/dash")
 	drop = get_node_or_null("../SFX/drop")
+	
+	# Load sunflower scene
+	sunflower_scene = load("res://Scenes/Sunflower1.tscn")
 
 
 func _process(delta: float) -> void:
@@ -90,6 +106,14 @@ func _process(delta: float) -> void:
 		gun_timer -= delta
 		if gun_timer <= 0.0:
 			reset_weapon_state()  # يخفي السلاح ويرجع اليد للوضع الطبيعي
+
+	# Tool switching - Numpad 1, 2, 3 or regular 1, 2, 3
+	if Input.is_physical_key_pressed(KEY_KP_1) or Input.is_action_just_pressed("gun"):
+		current_tool = ToolType.GUN
+	elif Input.is_physical_key_pressed(KEY_KP_2) or Input.is_action_just_pressed("grenade"):
+		current_tool = ToolType.GRENADE
+	elif Input.is_physical_key_pressed(KEY_KP_3) or Input.is_action_just_pressed("shovel"):
+		current_tool = ToolType.SHOVEL
 
 	# اتجاه الإدخال (WASD)
 	var input_dir: Vector2 = Input.get_vector("left", "right", "forward", "backward")
@@ -114,13 +138,14 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("dash") and input_dir != Vector2.ZERO and can_act and not is_clinging:
 		start_dash(input_dir)
 
-	# Shoot
+	# Left Click - Plant flower in DEFAULT or SHOVEL mode, otherwise shoot
 	if Input.is_action_just_pressed("shoot") and can_act:
-		start_shoot()
-
-	# Throw
-	if Input.is_action_just_pressed("throw") and can_act:
-		start_throw()
+		if current_tool == ToolType.DEFAULT or current_tool == ToolType.SHOVEL:
+			plant_flower()
+		elif current_tool == ToolType.GUN:
+			start_shoot()
+		elif current_tool == ToolType.GRENADE:
+			start_throw()
 
 
 # ---------------------------
@@ -304,7 +329,7 @@ func _physics_process(delta: float) -> void:
 	# ----- FOOTSTEP SFX -----
 	if is_instance_valid(walking_on_grass_ver_1_):
 		var on_ground := is_on_floor()
-		var is_moving := input_dir != Vector2.ZERO or abs(velocity.x) > 0.1 or abs(velocity.z) > 0.1
+		var is_moving: bool = input_dir != Vector2.ZERO or abs(velocity.x) > 0.1 or abs(velocity.z) > 0.1
 		
 		if on_ground and is_moving:
 			if not walking_on_grass_ver_1_.playing:
@@ -312,3 +337,52 @@ func _physics_process(delta: float) -> void:
 		else:
 			if walking_on_grass_ver_1_.playing:
 				walking_on_grass_ver_1_.stop()
+
+
+# ---------------------------
+# FLOWER PLANTING
+# ---------------------------
+func plant_flower() -> void:
+	if not camera:
+		push_error("Camera not assigned!")
+		return
+	
+	if sunflower_scene == null:
+		push_error("Sunflower scene not loaded!")
+		return
+	
+	# Get mouse position
+	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+	
+	# Raycast to find ground position
+	var ground_pos: Vector3 = raycast_to_ground(mouse_pos)
+	
+	if ground_pos != Vector3.INF:
+		# Create and place the flower
+		var flower: Node3D = sunflower_scene.instantiate()
+		get_tree().current_scene.add_child(flower)
+		flower.global_position = ground_pos
+		print("Planted flower at: ", ground_pos)
+	else:
+		print("No ground found at click position")
+
+
+func raycast_to_ground(screen_pos: Vector2) -> Vector3:
+	# Project ray from camera through mouse position
+	var ray_origin: Vector3 = camera.project_ray_origin(screen_pos)
+	var ray_dir: Vector3 = camera.project_ray_normal(screen_pos)
+	var ray_end: Vector3 = ray_origin + ray_dir * plant_ray_length
+	
+	# Perform raycast
+	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
+	query.collision_mask = ground_collision_mask
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
+	
+	var result: Dictionary = space_state.intersect_ray(query)
+	
+	if result.is_empty():
+		return Vector3.INF
+	
+	return result.position
