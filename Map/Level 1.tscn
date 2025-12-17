@@ -421,7 +421,7 @@ transform = Transform3D(0.27095288, 0.22193608, -0.9366584, 0.44319585, 0.835022
 [node name="WalkingOnGrass(ver1)" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("30_dn7vj")
 
-[node name="dash" type="AudioStreamPlayer" parent="SFX"]
+[node name="Dash" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("31_dqcyf")
 volume_db = -8.0
 
@@ -432,7 +432,7 @@ stream = ExtResource("32_s8enn")
 stream = ExtResource("33_dtlt3")
 volume_db = 24.0
 
-[node name="drop" type="AudioStreamPlayer" parent="SFX"]
+[node name="Drop" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("34_erdtx")
 volume_db = 24.0
 

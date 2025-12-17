@@ -4,9 +4,9 @@
 [ext_resource type="Script" uid="uid://ffhgjc7pnh2g" path="res://Script/camera_controller.gd" id="2_6t5aa"]
 [ext_resource type="Shader" uid="uid://d37vms16a2t5l" path="res://Shader/edge_detection.gdshader" id="3_2sw5t"]
 [ext_resource type="PackedScene" uid="uid://dfd8oc0mv7kbi" path="res://Character Assets/Rabid (FINAL).glb" id="3_6t5aa"]
-[ext_resource type="PackedScene" path="res://Scene/Gun.tscn" id="4_x3wgy"]
-[ext_resource type="PackedScene" path="res://Scene/Grenade.tscn" id="5_3smsa"]
-[ext_resource type="PackedScene" path="res://Scene/Shovel.tscn" id="6_8erm5"]
+[ext_resource type="PackedScene" uid="uid://dkt7f471fy326" path="res://Scene/Gun.tscn" id="4_x3wgy"]
+[ext_resource type="PackedScene" uid="uid://1kd3n6lutq8d" path="res://Scene/Grenade.tscn" id="5_3smsa"]
+[ext_resource type="PackedScene" uid="uid://c3b8l6xx3pvli" path="res://Scene/Shovel.tscn" id="6_8erm5"]
 [ext_resource type="Script" uid="uid://b7ecepo30kucs" path="res://Scene/pixelated_camera_sync.gd" id="7_camera_sync"]
 [ext_resource type="PackedScene" uid="uid://r5hp1q65lxx3" path="res://Scene/Gameplay UI.tscn" id="9_c68nv"]
 
@@ -17,6 +17,10 @@ size = Vector2(2, 2)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2sw5t"]
 render_priority = 0
 shader = ExtResource("3_2sw5t")
+shader_parameter/edge_threshold = 0.4
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_strength = 1.0
+shader_parameter/pixel_size = 1.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_b6fju"]
 radius = 0.5839844

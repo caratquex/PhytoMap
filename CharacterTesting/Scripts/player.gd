@@ -197,6 +197,10 @@ func _on_throw_animation_finished() -> void:
 func start_dash(input_dir: Vector2) -> void:
 	is_dashing = true
 	dash_timer = DASH_DURATION
+	
+	# Play dash SFX
+	if dash and is_instance_valid(dash):
+		dash.play()
 
 	var direction: Vector3 = (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
 	if camera:
@@ -256,6 +260,9 @@ func _physics_process(delta: float) -> void:
 	# ----- JUMP (Space / ui_accept) -----
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = jump_velocity
+		# Play jump SFX
+		if jump and is_instance_valid(jump):
+			jump.play()
 
 	# ----- MOVEMENT (WASD) -----
 	var direction: Vector3 = (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
