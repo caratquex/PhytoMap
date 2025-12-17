@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3 uid="uid://c0v3jhk23ut6e"]
+
+[ext_resource type="PackedScene" uid="uid://mhamjyw6l88y" path="res://Map Asset/Sunflower2.glb" id="1_aycms"]
+[ext_resource type="Shader" path="res://Shader/sunflowershadertres.res" id="6_oypo1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jwil4"]
+render_priority = 0
+shader = ExtResource("6_oypo1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fk86k"]
+lifetime_randomness = 0.5
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 1)
+emission_ring_height = 0.0
+emission_ring_radius = 3.0
+emission_ring_inner_radius = 0.0
+emission_ring_cone_angle = 90.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.0
+scale_max = 0.099999994
+hue_variation_min = -1.0
+hue_variation_max = 0.99999994
+anim_speed_max = 1.0
+anim_offset_max = 0.29999998
+
+[sub_resource type="QuadMesh" id="QuadMesh_e2gde"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Sunflower2" parent="." instance=ExtResource("1_aycms")]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Sunflower2/Plane_009" index="0"]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 1.4475231, 0)
+material_override = SubResource("ShaderMaterial_jwil4")
+amount = 40
+amount_ratio = 0.447
+lifetime = 3.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_fk86k")
+draw_pass_1 = SubResource("QuadMesh_e2gde")
+
+[editable path="Sunflower2"]

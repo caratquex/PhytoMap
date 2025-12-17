@@ -1,12 +1,11 @@
-[gd_scene load_steps=47 format=4 uid="uid://sl5ib4d0b7c6"]
+[gd_scene load_steps=48 format=4 uid="uid://sl5ib4d0b7c6"]
 
+[ext_resource type="MeshLibrary" uid="uid://ctlg4t84uuu0u" path="res://Tiles/Tiles11.tres" id="2_dn7vj"]
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="2_e1aag"]
-[ext_resource type="MeshLibrary" uid="uid://cpgksoq802twj" path="res://Tiles/Tiles10.tres" id="2_oou65"]
 [ext_resource type="PackedScene" uid="uid://d1ixt37a64w2y" path="res://Map/Grass.tscn" id="3_uvnbp"]
 [ext_resource type="PackedScene" uid="uid://nhc71q5iss6n" path="res://Map Asset/bridge.tscn" id="5_hv6ql"]
-[ext_resource type="PackedScene" uid="uid://dsnriolqk2lo8" path="res://Map/RadiantGrass2.tscn" id="6_ao60k"]
 [ext_resource type="PackedScene" uid="uid://dmv2jux5vhuwh" path="res://Map Asset/soil.tscn" id="8_kdk6c"]
-[ext_resource type="PackedScene" uid="uid://btysfti3q7qg6" path="res://Map/RadiantGrass.tscn" id="9_dn38a"]
+[ext_resource type="PackedScene" uid="uid://bb0lp6bawb4q" path="res://Map Asset/RadiantGrass.tscn" id="9_dn38a"]
 [ext_resource type="PackedScene" uid="uid://djfyn1h86ae1b" path="res://Map Asset/TreeRadiant1.tscn" id="11_8rwr0"]
 [ext_resource type="PackedScene" uid="uid://i7rvwskvhtnd" path="res://Map Asset/TreeRadiant2.tscn" id="12_we51m"]
 [ext_resource type="PackedScene" uid="uid://b0kn7qtngdbnk" path="res://Map Asset/ToxicBarrel.tscn" id="13_oou65"]
@@ -21,6 +20,7 @@
 [ext_resource type="Shader" uid="uid://bi3o8elbtqoni" path="res://addons/simplegrasstextured/shaders/grass.gdshader" id="23_dn38a"]
 [ext_resource type="Texture2D" uid="uid://dl8f5gv3lg6ei" path="res://addons/simplegrasstextured/textures/Grass Green.png" id="24_8rwr0"]
 [ext_resource type="Script" uid="uid://2juaclm8gc1n" path="res://addons/simplegrasstextured/grass.gd" id="25_8rwr0"]
+[ext_resource type="PackedScene" uid="uid://dsnriolqk2lo8" path="res://Map/RadiantGrass2.tscn" id="25_s8enn"]
 [ext_resource type="PackedScene" uid="uid://bqn01vvlql12f" path="res://Map Asset/templearc_top.tscn" id="26_oou65"]
 [ext_resource type="Texture2D" uid="uid://qjm7jmewl6c1" path="res://addons/simplegrasstextured/textures/Grass Grey.png" id="26_we51m"]
 [ext_resource type="PackedScene" uid="uid://df44qbjskigqv" path="res://Map Asset/temple_debris_1.tscn" id="27_8rwr0"]
@@ -34,6 +34,7 @@
 [ext_resource type="AudioStream" uid="uid://1um444oa8145" path="res://Map/Sfx/Jump.wav" id="32_s8enn"]
 [ext_resource type="AudioStream" uid="uid://ppyi62cfq2ym" path="res://Map/Sfx/NPC Appear.wav" id="33_dtlt3"]
 [ext_resource type="AudioStream" uid="uid://drhufjmvlvkiw" path="res://Map/Sfx/Drop (latest).wav" id="34_erdtx"]
+[ext_resource type="PackedScene" uid="uid://btysfti3q7qg6" path="res://Map/RadiantGrass.tscn" id="36_dtlt3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hv6ql"]
 sky_top_color = Color(0.8607597, 0.86076635, 0.75704783, 1)
@@ -208,7 +209,7 @@ transform = Transform3D(1, 0, 0, 0, -0.9982543, -0.05906257, 0, 0.05906257, -0.9
 
 [node name="GridMap2" type="GridMap" parent="GrassBlock"]
 transform = Transform3D(1, 0, 0, 0, -0.9982543, 0.05906257, 0, -0.05906257, -0.9982543, 3.5573506, 0.123977944, 3.1970057)
-mesh_library = ExtResource("2_oou65")
+mesh_library = ExtResource("2_dn7vj")
 cell_scale = 1.15
 data = {
 "cells": PackedInt32Array(65535, 12, 0, 0, 12, 0, 65535, 11, 0, 0, 11, 0, 0, 10, 0, 0, 9, 0, 65535, 9, 0, 65535, 10, 0, 65534, 10, 0, 65534, 9, 0, 1, 10, 0, 1, 9, 0, 1, 8, 0, 0, 8, 0, 65535, 8, 0, 65534, 8, 0, 1, 4, 0, 0, 4, 0, 65535, 4, 0, 65535, 3, 0, 65534, 4, 0, 65534, 3, 0, 1, 3, 0, 0, 3, 0, 65534, 2, 0, 65535, 2, 0, 0, 2, 0, 1, 2, 0, 2, 2, 4, 65533, 1, 4, 65532, 1, 4, 65532, 0, 4, 65533, 0, 4, 65534, 1, 1, 65535, 1, 1, 65535, 0, 1, 65534, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 2, 1, 4, 0, 1, 1, 2, 0, 1, 3, 0, 4, 3, 1, 4, 4, 0, 4, 131070, 1, 0, 131071, 1, 0, 65536, 1, 0, 65537, 1, 0, 131069, 1, 0, 131068, 0, 0, 131069, 0, 0, 131070, 0, 4, 131071, 0, 0, 65536, 0, 0, 65537, 0, 0, 65538, 0, 0, 65539, 0, 0, 65538, 1, 0, 65539, 65535, 0, 65538, 65535, 0, 65537, 65535, 0, 65536, 65535, 0, 65536, 65534, 0, 131071, 65534, 0, 131070, 65534, 0, 131069, 65534, 0, 131069, 65535, 4, 131070, 65535, 0, 131071, 65535, 4, 65537, 65534, 0, 65538, 65534, 0, 65539, 65534, 0, 65539, 65533, 0, 131068, 65535, 0, 131068, 65534, 0, 131067, 65535, 0, 131067, 65534, 0, 131067, 65533, 0, 131067, 65532, 0, 131068, 65532, 0, 131068, 65533, 0, 131069, 65533, 0, 131070, 65533, 0, 131071, 65533, 0, 65536, 65533, 0, 65537, 65533, 0, 65538, 65533, 0, 65530, 65535, 4, 65529, 65535, 4, 65529, 65534, 4, 65530, 65534, 4, 4, 1, 4, 5, 0, 4, 5, 65535, 4, 4, 65535, 4, 5, 65534, 4, 131069, 65532, 0, 131070, 65532, 0, 131071, 65532, 0, 65536, 65532, 0, 65537, 65532, 0, 65538, 65532, 0, 65539, 65532, 4, 65540, 65535, 0, 65540, 65533, 0, 65540, 65532, 0, 65533, 2, 4, 65531, 1, 4, 65531, 0, 4, 65530, 0, 4, 65531, 65535, 4, 3, 65535, 4, 5, 65533, 4, 65529, 65533, 4, 65530, 65533, 4, 65530, 65532, 4, 65540, 65531, 0, 65539, 65531, 0, 65538, 65531, 4, 65538, 65530, 0, 65537, 65530, 0, 65536, 65530, 0, 65539, 65530, 0, 65540, 65530, 0, 65537, 65531, 0, 65536, 65531, 0, 131071, 65531, 0, 131070, 65531, 0, 131069, 65531, 0, 131068, 65531, 0, 131067, 65531, 0, 131067, 65530, 0, 131068, 65530, 0, 131069, 65530, 0, 131070, 65530, 0, 131071, 65530, 0, 131068, 65529, 0, 131069, 65529, 0, 131070, 65529, 0, 131071, 65529, 0, 65536, 65529, 0, 65537, 65529, 0, 65538, 65529, 0, 65539, 65529, 0, 131069, 65528, 0, 131070, 65528, 0, 131071, 65528, 0, 65536, 65528, 0, 65537, 65528, 0, 65538, 65528, 0, 65529, 65532, 4, 65530, 65531, 4, 65530, 65530, 4, 65529, 65531, 4, 65530, 65529, 4, 65531, 65529, 4, 65531, 65528, 4, 65532, 65528, 4, 65533, 65527, 4, 65534, 65527, 4, 65535, 65527, 4, 0, 65527, 4, 1, 65527, 4, 2, 65527, 4, 3, 65528, 4, 4, 65529, 4, 2, 65528, 4, 4, 65528, 4, 5, 65529, 4, 5, 65530, 4, 5, 65531, 4, 5, 65532, 4, 6, 65535, 4, 6, 65534, 4, 6, 65533, 4, 6, 65532, 4, 6, 65531, 4, 65521, 65535, 2, 65522, 65535, 2, 65523, 65535, 2, 65524, 65535, 2, 65524, 65534, 2, 65524, 65533, 2, 65524, 65532, 2, 65524, 65531, 2, 65525, 65530, 2, 65520, 0, 2, 0, 65524, 0, 1, 65524, 0, 65535, 65524, 0, 65534, 65524, 0, 1, 65519, 0, 0, 65519, 0, 65535, 65519, 0, 65534, 65519, 0, 65534, 65518, 0, 65535, 65518, 0, 0, 65518, 0, 1, 65518, 0, 1, 65517, 0, 0, 65517, 0, 65535, 65517, 0, 65534, 65517, 0, 65535, 65516, 0, 0, 65516, 0, 0, 65515, 0, 65535, 65515, 0, 65535, 65512, 0, 0, 65512, 0, 0, 65511, 0, 65535, 65511, 0, 65533, 10, 1441803, 2, 10, 1441803, 18, 65532, 1, 19, 65532, 1, 20, 65532, 1, 21, 65532, 1, 22, 65531, 1, 22, 65530, 1, 21, 65530, 1, 21, 65529, 1, 21, 65531, 1, 22, 65529, 1, 22, 65528, 1, 22, 65527, 1, 21, 65528, 1, 21, 65527, 1, 21, 65526, 1, 20, 65527, 1, 19, 65527, 1, 18, 65527, 1, 20, 65526, 1, 19, 65526, 1, 18, 65526, 1, 20, 65525, 1, 19, 65525, 1, 16, 65528, 1, 16, 65529, 1, 65540, 65534, 0, 4, 65534, 4)
@@ -236,12 +237,6 @@ transform = Transform3D(0.38079366, -0.13889657, -0.9141685, 0.0012062341, -0.98
 [node name="bridge_physic2" parent="GrassBlock" instance=ExtResource("5_hv6ql")]
 transform = Transform3D(1, 0, 0, 0, -0.9837475, -0.17955765, 0, 0.17955765, -0.9837475, 3.7403529, -5.8084674, 10.607615)
 
-[node name="Node3D2" parent="GrassBlock" instance=ExtResource("6_ao60k")]
-transform = Transform3D(5, 0, 0, 0, -4.9912715, 0.29531285, 0, -0.29531285, -4.9912715, 34.86437, 1.2166022, 9.766232)
-
-[node name="Node3D3" parent="GrassBlock" instance=ExtResource("6_ao60k")]
-transform = Transform3D(5, 0, 0, 0, -4.9912715, 0.29531285, 0, -0.29531285, -4.9912715, -25.223448, 1.2166022, 9.766232)
-
 [node name="Node3D4" parent="GrassBlock" instance=ExtResource("8_kdk6c")]
 transform = Transform3D(3.43, 0, 0, 0, -3.4240124, 0.20258462, 0, -0.20258462, -3.4240124, -13.064413, 1.963837, 8.628006)
 
@@ -251,12 +246,6 @@ transform = Transform3D(3.43, 0, 0, 0, -3.4240124, 0.20258462, 0, -0.20258462, -
 [node name="Node3D5" parent="GrassBlock" instance=ExtResource("8_kdk6c")]
 transform = Transform3D(3.43, 0, 0, 0, -3.4240124, 0.20258462, 0, -0.20258462, -3.4240124, 3.5757794, 1.0636927, 23.841923)
 
-[node name="Node3D7" parent="GrassBlock" instance=ExtResource("9_dn38a")]
-transform = Transform3D(4.305, 0, 0, 0, -4.2974844, 0.25426435, 0, -0.25426435, -4.2974844, 51.145676, -2.1038043, 34.700653)
-
-[node name="Node3D8" parent="GrassBlock" instance=ExtResource("9_dn38a")]
-transform = Transform3D(4.305, 0, 0, 0, -4.2974844, 0.25426435, 0, -0.25426435, -4.2974844, 42.152092, -0.9351267, 14.948084)
-
 [node name="Grass2" parent="GrassBlock" instance=ExtResource("3_uvnbp")]
 transform = Transform3D(1, 0, 0, 0, -0.9982543, 0.05906257, 0, -0.05906257, -0.9982543, -1.6714182, 0.6500098, -17.928677)
 
@@ -265,7 +254,7 @@ transform = Transform3D(1, 0, 0, 0, -0.9982543, 0.05906257, 0, -0.05906257, -0.9
 
 [node name="GridMap" type="GridMap" parent="GrassBlock"]
 transform = Transform3D(1, 0, 0, 0, -0.9982543, 0.05906257, 0, -0.05906257, -0.9982543, 3.5573506, 0.123977974, 3.1970053)
-mesh_library = ExtResource("2_oou65")
+mesh_library = ExtResource("2_dn7vj")
 data = {
 "cells": PackedInt32Array(0, 65531, 7, 65532, 65530, 0, 65535, 65531, 0, 5, 65533, 0)
 }
@@ -318,6 +307,12 @@ transform = Transform3D(1, 0, 0, 0, -0.9982543, 0.05906257, 0, -0.05906257, -0.9
 
 [node name="Node3D24" parent="GrassBlock" instance=ExtResource("17_dqsk1")]
 transform = Transform3D(1, 0, 0, 0, -0.9982543, 0.05906257, 0, -0.05906257, -0.9982543, 8.8419, -3.6918516, -0.034008026)
+
+[node name="Node3D" parent="GrassBlock" instance=ExtResource("36_dtlt3")]
+transform = Transform3D(4.675, 0, 0, 0, -4.66684, 0.2761176, 0, -0.2761176, -4.66684, 41.286125, -0.5260354, 15.228146)
+
+[node name="Node3D2" parent="GrassBlock" instance=ExtResource("36_dtlt3")]
+transform = Transform3D(4.675, 0, 0, 0, -4.6668415, 0.27611768, 0, -0.27611768, -4.6668415, 50.340477, -1.6481501, 34.193726)
 
 [node name="Player" parent="." instance=ExtResource("19_uvnbp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4658775, 8.262121, -6.157093)
@@ -431,6 +426,9 @@ sgt_tool_shape = {
 metadata/_custom_type_script = "uid://2juaclm8gc1n"
 metadata/SimpleGrassTextured = "2.0.5"
 
+[node name="Node3D" parent="Grass" instance=ExtResource("25_s8enn")]
+transform = Transform3D(4.805, 0, 0, 0, 1.725, 0, 0, 0, 4.665, -28.0527, 2.2170439, -7.3121347)
+
 [node name="Debris" type="Node3D" parent="."]
 
 [node name="templearc_top" parent="Debris" instance=ExtResource("26_oou65")]
@@ -485,3 +483,6 @@ volume_db = 24.0
 [node name="drop" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("34_erdtx")
 volume_db = 24.0
+
+[node name="Node3D" parent="." instance=ExtResource("25_s8enn")]
+transform = Transform3D(5.22, 0, 0, 0, 3.41, 0, 0, 0, 5.57, 30.514086, 0.44818544, -6.422171)
