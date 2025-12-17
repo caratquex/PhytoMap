@@ -65,9 +65,10 @@ var original_materials: Array = []  # لحفظ الماتيريال الأصلي
 # ---------------------------
 @onready var walking_on_grass_ver_1_: AudioStreamPlayer = $"../SFX/WalkingOnGrass(ver1)"
 @onready var jump: AudioStreamPlayer = $"../SFX/Jump"
-@onready var dash: AudioStreamPlayer = $"../SFX/dash"
-@onready var drop: AudioStreamPlayer = $"../SFX/drop"
+@onready var dash: AudioStreamPlayer = $"../SFX/Dash"
+@onready var drop: AudioStreamPlayer = $"../SFX/Drop"
 
+var prev_on_floor: bool = false
 
 func _ready() -> void:
 	# Singleton بسيط
@@ -401,4 +402,22 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	
+	# -------- LANDING SOUND (state-change-based) --------
+	var on_floor := is_on_floor()
+
+	if on_floor and not prev_on_floor:
+		if drop and not drop.playing:
+			drop.play()
+
+	prev_on_floor = on_floor
+
+	# ----- FOOTSTEP SFX -----
+	var on_ground: bool = is_on_floor()
+	var is_moving: bool = input_dir != Vector2.ZERO or abs(velocity.x) > 0.1 or abs(velocity.z) > 0.1
 	
+	if on_ground and is_moving:
+		if walking_on_grass_ver_1_ and not walking_on_grass_ver_1_.playing:
+			walking_on_grass_ver_1_.play()
+	else:
+		if walking_on_grass_ver_1_ and walking_on_grass_ver_1_.playing:
+			walking_on_grass_ver_1_.stop()
