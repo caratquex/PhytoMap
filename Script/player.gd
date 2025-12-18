@@ -15,7 +15,7 @@ var current_weapon: WeaponType = WeaponType.SHOVEL  # Default is Shovel (Plant)
 var sunflower_scene: PackedScene = null
 @export var plant_ray_length: float = 100.0
 @export var ground_collision_mask: int = 1  # Set to match your ground/gridmap collision layer
-@export var flower_height_offset: float = 0.0  # Adjust if flowers are too high/low (negative = lower)
+@export var flower_y_offset: float = 0.0  # Fine-tune flower height (0 = exactly at player's floor level)
 
 # ---------------------------
 # Movement
@@ -445,7 +445,7 @@ func _physics_process(delta: float) -> void:
 # FLOWER PLANTING
 # ---------------------------
 func plant_flower_at_cursor() -> void:
-	# Use raycast_camera if available, otherwise use regular camera
+	# Use raycast_camera (SpringArm3D/Camera3D) if available, otherwise use main camera
 	var cam: Camera3D = raycast_camera if raycast_camera else camera
 	
 	if not cam:
@@ -456,85 +456,79 @@ func plant_flower_at_cursor() -> void:
 		push_error("Sunflower scene not loaded!")
 		return
 	
-	# Get mouse position on screen
+	# Get mouse position and viewport info
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
 	
-	# Raycast to find ground position
-	var plant_result: Dictionary = raycast_to_ground(mouse_pos, cam)
+	# Cast ray from camera to find the floor surface
+	var floor_hit: Dictionary = raycast_to_floor(mouse_pos, viewport_size, cam)
 	
-	if plant_result.is_empty():
-		print("No ground found at click position")
+	if floor_hit.is_empty():
+		print("No floor found at click position")
 		return
 	
-	var ground_pos: Vector3 = plant_result.floor_position
+	# Get the floor surface position and apply offset
+	var ground_pos: Vector3 = floor_hit.position
+	ground_pos.y += flower_y_offset
 	
-	# Apply height offset (adjust in Inspector if flowers appear too high/low)
-	ground_pos.y += flower_height_offset
+	# Debug: Show what was hit and positions
+	var collider_name: String = floor_hit.collider.name if floor_hit.collider else "unknown"
+	print("=== FLOWER PLANT DEBUG ===")
+	print("  Raycast hit collider: ", collider_name)
+	print("  Hit position: ", floor_hit.position)
+	print("  Camera position: ", cam.global_position)
+	print("  Final flower Y: ", ground_pos.y)
+	print("==========================")
 	
-	# Create and place the flower
+	# Create and place the flower - snaps to the actual floor block
 	var flower: Node3D = sunflower_scene.instantiate()
 	get_tree().current_scene.add_child(flower)
 	flower.global_position = ground_pos
+
+
+func raycast_to_floor(mouse_pos: Vector2, viewport_size: Vector2, cam: Camera3D) -> Dictionary:
+	# Always use manual ray calculation - more reliable with SpringArm3D setup
+	# The camera's project_ray functions don't work well when camera isn't "current"
 	
-	print("Planted flower at: ", ground_pos, " (offset: ", flower_height_offset, ")")
-
-
-func raycast_to_ground(screen_pos: Vector2, cam: Camera3D) -> Dictionary:
-	# Project ray from camera through mouse position
-	var ray_origin: Vector3 = cam.project_ray_origin(screen_pos)
-	var ray_dir: Vector3 = cam.project_ray_normal(screen_pos)
+	var ray_origin: Vector3 = cam.global_position
+	
+	# Normalize mouse position to -1 to 1 range (NDC - Normalized Device Coordinates)
+	var ndc: Vector2 = (mouse_pos / viewport_size) * 2.0 - Vector2.ONE
+	ndc.y = -ndc.y  # Flip Y axis (screen Y is inverted from 3D Y)
+	
+	# Calculate ray direction based on camera's perspective projection
+	var fov_rad: float = deg_to_rad(cam.fov)
+	var aspect: float = viewport_size.x / viewport_size.y
+	
+	# Direction in camera local space (pointing forward into the scene)
+	var local_dir: Vector3 = Vector3(
+		ndc.x * tan(fov_rad * 0.5) * aspect,
+		ndc.y * tan(fov_rad * 0.5),
+		-1.0  # Camera looks down -Z axis
+	).normalized()
+	
+	# Transform to world space using camera's rotation
+	var ray_dir: Vector3 = cam.global_transform.basis * local_dir
+	
+	# Perform physics raycast to find the floor
 	var ray_end: Vector3 = ray_origin + ray_dir * plant_ray_length
-	
-	# Perform raycast using physics space
 	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
 	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
-	query.collision_mask = ground_collision_mask  # Only hit ground/gridmap
+	query.collision_mask = ground_collision_mask  # Only hit ground/gridmap layers
 	query.collide_with_bodies = true
 	query.collide_with_areas = false
+	query.exclude = [self.get_rid()]  # Exclude the player from raycast
 	
 	var result: Dictionary = space_state.intersect_ray(query)
 	
 	if result.is_empty():
 		return {}
 	
-	var hit_pos: Vector3 = result.position
-	var hit_normal: Vector3 = result.normal
-	var collider: Object = result.collider
-	var floor_pos: Vector3 = hit_pos
-	
-	# Check if we hit a GridMap - calculate cell top surface
-	if collider is GridMap:
-		var gridmap: GridMap = collider as GridMap
-		var cell_size: Vector3 = gridmap.cell_size
-		
-		# Convert hit position to GridMap local space
-		var local_hit: Vector3 = gridmap.to_local(hit_pos)
-		
-		# Get the cell coordinates at the hit position
-		var cell_coords: Vector3i = gridmap.local_to_map(local_hit)
-		
-		# Get the cell's center position in local space
-		var cell_center_local: Vector3 = gridmap.map_to_local(cell_coords)
-		
-		# Calculate the cell top surface in local Y
-		# The cell center Y + half cell height = top surface
-		var cell_top_y: float = cell_center_local.y + (cell_size.y * 0.5)
-		
-		# Create floor position: use hit X/Z, use calculated cell top for Y
-		var floor_local: Vector3 = Vector3(local_hit.x, cell_top_y, local_hit.z)
-		
-		# Convert back to global position (respects GridMap transform/rotation)
-		floor_pos = gridmap.to_global(floor_local)
-		
-		print("GridMap: cell=", cell_coords, " cell_size=", cell_size, " floor_pos=", floor_pos, " hit_pos=", hit_pos)
-	else:
-		# For non-GridMap colliders, use raycast hit position directly
-		floor_pos = hit_pos
-		print("Floor hit: ", floor_pos, " collider=", collider.name if collider else "unknown")
+	# Debug: print the actual hit position
+	print("Raycast hit at Y=", result.position.y, " collider=", result.collider.name if result.collider else "unknown")
 	
 	return {
-		"floor_position": floor_pos,
-		"hit_position": hit_pos,
-		"normal": hit_normal,
-		"collider": collider
+		"position": result.position,
+		"normal": result.normal,
+		"collider": result.collider
 	}
