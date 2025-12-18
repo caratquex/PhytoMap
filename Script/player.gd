@@ -15,7 +15,7 @@ var current_weapon: WeaponType = WeaponType.SHOVEL  # Default is Shovel (Plant)
 var sunflower_scene: PackedScene = null
 @export var plant_ray_length: float = 100.0
 @export var ground_collision_mask: int = 1  # Set to match your ground/gridmap collision layer
-@export var plant_height_offset: float = 0.0  # Adjust if flowers float above ground
+@export var flower_height_offset: float = 0.0  # Adjust if flowers are too high/low (negative = lower)
 
 # ---------------------------
 # Movement
@@ -460,21 +460,23 @@ func plant_flower_at_cursor() -> void:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
 	
 	# Raycast to find ground position
-	var result: Dictionary = raycast_to_ground(mouse_pos, cam)
+	var plant_result: Dictionary = raycast_to_ground(mouse_pos, cam)
 	
-	if not result.is_empty():
-		# Get the hit position
-		var ground_pos: Vector3 = result.position
-		
-		# Apply height offset
-		ground_pos.y += plant_height_offset
-		
-		# Create and place the flower
-		var flower: Node3D = sunflower_scene.instantiate()
-		get_tree().current_scene.add_child(flower)
-		flower.global_position = ground_pos
-	else:
+	if plant_result.is_empty():
 		print("No ground found at click position")
+		return
+	
+	var ground_pos: Vector3 = plant_result.floor_position
+	
+	# Apply height offset (adjust in Inspector if flowers appear too high/low)
+	ground_pos.y += flower_height_offset
+	
+	# Create and place the flower
+	var flower: Node3D = sunflower_scene.instantiate()
+	get_tree().current_scene.add_child(flower)
+	flower.global_position = ground_pos
+	
+	print("Planted flower at: ", ground_pos, " (offset: ", flower_height_offset, ")")
 
 
 func raycast_to_ground(screen_pos: Vector2, cam: Camera3D) -> Dictionary:
@@ -490,4 +492,49 @@ func raycast_to_ground(screen_pos: Vector2, cam: Camera3D) -> Dictionary:
 	query.collide_with_bodies = true
 	query.collide_with_areas = false
 	
-	return space_state.intersect_ray(query)
+	var result: Dictionary = space_state.intersect_ray(query)
+	
+	if result.is_empty():
+		return {}
+	
+	var hit_pos: Vector3 = result.position
+	var hit_normal: Vector3 = result.normal
+	var collider: Object = result.collider
+	var floor_pos: Vector3 = hit_pos
+	
+	# Check if we hit a GridMap - calculate cell top surface
+	if collider is GridMap:
+		var gridmap: GridMap = collider as GridMap
+		var cell_size: Vector3 = gridmap.cell_size
+		
+		# Convert hit position to GridMap local space
+		var local_hit: Vector3 = gridmap.to_local(hit_pos)
+		
+		# Get the cell coordinates at the hit position
+		var cell_coords: Vector3i = gridmap.local_to_map(local_hit)
+		
+		# Get the cell's center position in local space
+		var cell_center_local: Vector3 = gridmap.map_to_local(cell_coords)
+		
+		# Calculate the cell top surface in local Y
+		# The cell center Y + half cell height = top surface
+		var cell_top_y: float = cell_center_local.y + (cell_size.y * 0.5)
+		
+		# Create floor position: use hit X/Z, use calculated cell top for Y
+		var floor_local: Vector3 = Vector3(local_hit.x, cell_top_y, local_hit.z)
+		
+		# Convert back to global position (respects GridMap transform/rotation)
+		floor_pos = gridmap.to_global(floor_local)
+		
+		print("GridMap: cell=", cell_coords, " cell_size=", cell_size, " floor_pos=", floor_pos, " hit_pos=", hit_pos)
+	else:
+		# For non-GridMap colliders, use raycast hit position directly
+		floor_pos = hit_pos
+		print("Floor hit: ", floor_pos, " collider=", collider.name if collider else "unknown")
+	
+	return {
+		"floor_position": floor_pos,
+		"hit_position": hit_pos,
+		"normal": hit_normal,
+		"collider": collider
+	}
