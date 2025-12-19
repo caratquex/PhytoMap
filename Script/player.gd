@@ -59,12 +59,23 @@ var current_shoot_target: Vector3  # Current target position for shooting
 # ---------------------------
 @export var camera: Camera3D
 @export var raycast_camera: Camera3D  # Camera for raycasting (use SpringArm3D/Camera3D)
+@export var spring_arm: SpringArm3D  # SpringArm3D camera controller for shoulder shift
 @export var model: Node3D
 @export var animation_tree: AnimationTree
 
 @export var gun_model: Node3D
 @export var grenade_model: Node3D
 @export var shovel_model: Node3D
+
+# ---------------------------
+# Shoulder Camera Shift
+# ---------------------------
+@export var shoulder_offset_x: float = 2.5  # Horizontal offset to the right
+@export var shoulder_offset_y: float = 0.0  # Vertical offset (if needed)
+@export var shoulder_transition_speed: float = 5.0  # Speed of smooth transition
+var default_spring_arm_position: Vector3  # Store default SpringArm3D position
+var target_spring_arm_position: Vector3  # Target position for smooth transition
+var camera_tween: Tween  # Tween for smooth camera movement
 
 # ---------------------------
 # Dash Variables
@@ -161,6 +172,19 @@ func _ready() -> void:
 	_create_plant_cursor()
 	# Create shooting cursor UI
 	_create_shoot_cursor()
+	
+	# Store default SpringArm3D position for shoulder camera shift
+	if spring_arm:
+		default_spring_arm_position = spring_arm.position
+		target_spring_arm_position = default_spring_arm_position
+	else:
+		# Try to find SpringArm3D automatically if not assigned
+		spring_arm = get_node_or_null("SpringArm3D") as SpringArm3D
+		if spring_arm:
+			default_spring_arm_position = spring_arm.position
+			target_spring_arm_position = default_spring_arm_position
+		else:
+			push_warning("SpringArm3D not found! Shoulder camera shift will not work.")
 
 
 func hide_all_weapons() -> void:
@@ -187,6 +211,44 @@ func switch_weapon(weapon: WeaponType) -> void:
 		WeaponType.SHOVEL:
 			if shovel_model:
 				shovel_model.visible = true
+	
+	# Update camera position based on weapon
+	_update_camera_position()
+
+
+func _update_camera_position() -> void:
+	if not spring_arm:
+		return
+	
+	# Calculate target position based on current weapon
+	# SpringArm3D is a child of player, so position is in local space
+	if current_weapon == WeaponType.GUN:
+		# Shift to right shoulder position (positive X is right in local space)
+		target_spring_arm_position = Vector3(
+			default_spring_arm_position.x + shoulder_offset_x,
+			default_spring_arm_position.y + shoulder_offset_y,
+			default_spring_arm_position.z
+		)
+	else:
+		# Return to default position
+		target_spring_arm_position = default_spring_arm_position
+	
+	# Kill existing tween if it exists
+	if camera_tween and camera_tween.is_valid():
+		camera_tween.kill()
+	
+	# Create new tween for smooth transition
+	camera_tween = create_tween()
+	camera_tween.set_ease(Tween.EASE_IN_OUT)
+	camera_tween.set_trans(Tween.TRANS_SINE)
+	
+	# Calculate transition duration based on distance and speed
+	var distance: float = spring_arm.position.distance_to(target_spring_arm_position)
+	var duration: float = distance / shoulder_transition_speed
+	duration = clamp(duration, 0.1, 1.0)  # Clamp between 0.1 and 1.0 seconds
+	
+	# Tween the position
+	camera_tween.tween_property(spring_arm, "position", target_spring_arm_position, duration)
 
 
 func _process(delta: float) -> void:
