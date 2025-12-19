@@ -18,6 +18,16 @@ var sunflower_scene: PackedScene = null
 @export var flower_y_offset: float = 0.0  # Fine-tune flower height (0 = exactly at player's floor level)
 
 # ---------------------------
+# Floor Indicator (3D square outline snapped to grid)
+# ---------------------------
+@export var show_floor_indicator: bool = true
+@export var indicator_color: Color = Color(1.0, 1.0, 0.0, 1.0)  # Yellow like in the image
+@export var indicator_line_width: float = 0.05  # Width of the outline
+var floor_indicator: Node3D  # Parent node for the outline
+var floor_indicator_material: StandardMaterial3D
+var current_grid_cell: Vector3i = Vector3i(-99999, -99999, -99999)  # Track current cell
+
+# ---------------------------
 # Movement
 # ---------------------------
 @export var gravity: float = 12.0  # جاذبية أسرع قليلاً من الأصل
@@ -101,6 +111,9 @@ func _ready() -> void:
 	sunflower_scene = load("res://Scene/Sunflower1.tscn")
 	if not sunflower_scene:
 		push_error("Failed to load Sunflower1.tscn!")
+	
+	# Create planting cursor UI
+	_create_plant_cursor()
 
 
 func hide_all_weapons() -> void:
@@ -184,6 +197,9 @@ func _process(delta: float) -> void:
 	# Hurt Animation (H key)
 	if Input.is_action_just_pressed("hurt") and not is_hurting:
 		play_hurt_animation()
+	
+	# Update planting cursor position
+	_update_plant_cursor()
 
 
 # ---------------------------
@@ -439,6 +455,148 @@ func _physics_process(delta: float) -> void:
 	else:
 		if walking_on_grass_ver_1_ and walking_on_grass_ver_1_.playing:
 			walking_on_grass_ver_1_.stop()
+
+
+# ---------------------------
+# FLOOR INDICATOR (3D square outline snapped to grid)
+# ---------------------------
+func _create_plant_cursor() -> void:
+	if not show_floor_indicator:
+		return
+	
+	# Use call_deferred to ensure scene tree is ready
+	call_deferred("_create_floor_indicator_deferred")
+
+
+func _create_floor_indicator_deferred() -> void:
+	# Create material for the outline
+	floor_indicator_material = StandardMaterial3D.new()
+	floor_indicator_material.albedo_color = indicator_color
+	floor_indicator_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	floor_indicator_material.no_depth_test = true  # Always render on top
+	
+	# Create parent node for the outline
+	floor_indicator = Node3D.new()
+	floor_indicator.name = "FloorIndicator"
+	
+	# Create 4 box meshes to form a square outline
+	var cell_size: float = 1.0  # Default cell size, will be updated based on GridMap
+	_create_outline_boxes(cell_size)
+	
+	# Add to scene root
+	var scene_root = get_tree().current_scene
+	if scene_root:
+		scene_root.add_child(floor_indicator)
+		floor_indicator.visible = false
+		print("Floor indicator created successfully")
+	else:
+		push_error("Could not create floor indicator - no scene root")
+
+
+func _create_outline_boxes(cell_size: float) -> void:
+	# Clear existing children
+	for child in floor_indicator.get_children():
+		child.queue_free()
+	
+	var line_width: float = indicator_line_width
+	var line_height: float = 0.03  # Very thin outline
+	# Y = 0 means the center of the box is at floor level
+	# So we need to offset by half height so BOTTOM of box is at floor level
+	var y_offset: float = line_height * 0.5
+	
+	# Create 4 sides of the square outline
+	var sides: Array = [
+		# [position_offset, size] for each side
+		{"pos": Vector3(0, y_offset, -cell_size/2 + line_width/2), "size": Vector3(cell_size, line_height, line_width)},  # Front
+		{"pos": Vector3(0, y_offset, cell_size/2 - line_width/2), "size": Vector3(cell_size, line_height, line_width)},   # Back
+		{"pos": Vector3(-cell_size/2 + line_width/2, y_offset, 0), "size": Vector3(line_width, line_height, cell_size)},  # Left
+		{"pos": Vector3(cell_size/2 - line_width/2, y_offset, 0), "size": Vector3(line_width, line_height, cell_size)},   # Right
+	]
+	
+	for side in sides:
+		var box_mesh: BoxMesh = BoxMesh.new()
+		box_mesh.size = side.size
+		
+		var mesh_instance: MeshInstance3D = MeshInstance3D.new()
+		mesh_instance.mesh = box_mesh
+		mesh_instance.material_override = floor_indicator_material
+		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mesh_instance.position = side.pos
+		
+		floor_indicator.add_child(mesh_instance)
+
+
+func _update_plant_cursor() -> void:
+	if not show_floor_indicator:
+		return
+	
+	# Wait for indicator to be created
+	if not floor_indicator or not is_instance_valid(floor_indicator):
+		return
+	
+	# Only show indicator when shovel (planting tool) is equipped
+	var show_indicator: bool = current_weapon == WeaponType.SHOVEL
+	
+	if not show_indicator:
+		floor_indicator.visible = false
+		return
+	
+	# Get camera for raycasting
+	var cam: Camera3D = raycast_camera if raycast_camera else camera
+	if not cam:
+		floor_indicator.visible = false
+		return
+	
+	# Get mouse position and viewport info
+	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	
+	# Cast ray to find floor position
+	var floor_hit: Dictionary = raycast_to_floor(mouse_pos, viewport_size, cam)
+	
+	if floor_hit.is_empty():
+		# No floor found - hide indicator
+		floor_indicator.visible = false
+		return
+	
+	# Check if we hit a GridMap - snap to cell
+	var collider = floor_hit.collider
+	var hit_y: float = floor_hit.position.y  # Use the exact floor Y from raycast
+	
+	if collider is GridMap:
+		var gridmap: GridMap = collider as GridMap
+		var cell_size: Vector3 = gridmap.cell_size
+		
+		# Convert hit position to GridMap local space
+		var local_hit: Vector3 = gridmap.to_local(floor_hit.position)
+		
+		# Get the cell coordinates
+		var cell_coords: Vector3i = gridmap.local_to_map(local_hit)
+		
+		# Only update if cell changed (optimization)
+		if cell_coords != current_grid_cell:
+			current_grid_cell = cell_coords
+			# Rebuild outline with correct cell size
+			_create_outline_boxes(cell_size.x)
+		
+		# Get the cell center position in local space (for X and Z only)
+		var cell_center_local: Vector3 = gridmap.map_to_local(cell_coords)
+		
+		# Convert cell center to global for X and Z
+		var cell_center_global: Vector3 = gridmap.to_global(cell_center_local)
+		
+		# Use raycast hit Y (exact floor surface) with cell center X/Z
+		floor_indicator.global_position = Vector3(cell_center_global.x, hit_y, cell_center_global.z)
+		floor_indicator.global_rotation = gridmap.global_rotation
+		floor_indicator.visible = true
+	else:
+		# Non-GridMap floor - position exactly at hit point
+		floor_indicator.visible = true
+		floor_indicator.global_position = floor_hit.position
+		floor_indicator.rotation = Vector3.ZERO
+	
+	# Set color
+	floor_indicator_material.albedo_color = indicator_color
 
 
 # ---------------------------
