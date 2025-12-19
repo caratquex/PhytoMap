@@ -165,12 +165,13 @@ size = Vector2(2, 2)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i8abf"]
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera", "raycast_camera", "model", "animation_tree", "gun_model", "grenade_model", "shovel_model")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8142428, -0.49018192, -1.8673282)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.028423548, -0.49018192, -1.8673282)
 script = ExtResource("1_6t5aa")
 indicator_color = Color(0.42740825, 0.77147937, 0.27623197, 1)
+gravity = 13.0
 fall_multiplier = 1.5
 speed = 10.0
-jump_velocity = 6.7
+jump_velocity = 6.8
 camera = NodePath("SubViewportContainer/SubViewport/CameraSync/ViewportCamera3D")
 raycast_camera = NodePath("SpringArm3D/Camera3D")
 model = NodePath("Rabid (FINAL 2)")
@@ -204,34 +205,34 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9199089, 0)
 [node name="Skeleton3D" parent="Rabid (FINAL 2)/Armature_001" index="0"]
 bones/0/position = Vector3(1.61892e-18, 0.62902445, -0.041790847)
 bones/0/rotation = Quaternion(0.005797819, 4.799599e-24, -1.2873678e-18, 0.9999832)
-bones/1/rotation = Quaternion(-0.031876553, -7.16124e-05, -0.0022454718, 0.9994893)
-bones/2/rotation = Quaternion(0.053922698, 0.0028556222, -0.02621644, 0.9981968)
+bones/1/rotation = Quaternion(-0.06290208, -0.00014131493, -0.0022421647, 0.99801725)
+bones/2/rotation = Quaternion(-0.07551837, -0.01410377, -0.09073977, 0.9929071)
 bones/3/position = Vector3(-0.24255474, 1.1011194, -0.0061287847)
-bones/3/rotation = Quaternion(-0.06682677, 0.0006923149, 0.023297468, 0.9974923)
+bones/3/rotation = Quaternion(0.0046946625, 0.0068051275, 0.063185416, 0.9979676)
 bones/4/position = Vector3(0.29179165, 0.39892906, -0.00046257576)
-bones/4/rotation = Quaternion(-0.10607209, -0.1311471, 0.95783865, -0.23258185)
-bones/5/position = Vector3(-0.30733192, 0.4157695, -0.0018145099)
-bones/5/rotation = Quaternion(-0.01693386, -0.068778366, 0.96185696, 0.2642234)
-bones/5/scale = Vector3(0.99864924, 0.99864805, 0.9986481)
+bones/4/rotation = Quaternion(-0.06351527, -0.24427001, 0.9154857, -0.31334335)
+bones/5/position = Vector3(-0.29719552, 0.42096254, -0.009867944)
+bones/5/rotation = Quaternion(-0.027100585, -0.12154026, 0.9302272, 0.34521148)
+bones/5/scale = Vector3(0.9905958, 0.9905947, 0.9905947)
 bones/6/rotation = Quaternion(0.7071037, 0.0033670387, 0.7070939, -0.0033670848)
-bones/7/position = Vector3(0.0012045978, 0.19997558, -0.1749447)
-bones/7/rotation = Quaternion(0.05012416, 0.9987149, -0.007478115, -0.00039012602)
+bones/7/position = Vector3(0.0063533834, 0.15550974, -0.14389938)
+bones/7/rotation = Quaternion(0.26323703, 0.96470654, -0.0065966756, -0.0020183956)
 bones/7/scale = Vector3(1, 0.99999994, 0.99999994)
-bones/8/position = Vector3(0.0027854652, 0.18810499, 0.16847731)
-bones/8/rotation = Quaternion(-0.011201011, -0.000107426546, 0.06698889, 0.99769086)
+bones/8/position = Vector3(0.0039356174, 0.17805976, 0.16182582)
+bones/8/rotation = Quaternion(-0.011175505, -0.00015462154, 0.09468637, 0.9954444)
 bones/8/scale = Vector3(1, 0.9999999, 0.99999994)
 
 [node name="Bone" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="0"]
-transform = Transform3D(-0.86930984, 0.47337383, -0.14219502, -0.4146385, -0.85501343, -0.3114918, -0.2690311, -0.2118231, 0.93954957, 0.29179165, 1.027932, -0.037627634)
+transform = Transform3D(-0.79556453, 0.60475236, 0.036786124, -0.53953356, -0.6795256, -0.49714088, -0.27565038, -0.41535452, 0.8668897, 0.29179165, 1.027932, -0.037627634)
 
 [node name="Hand_R" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="1"]
-transform = Transform3D(-0.85863715, -0.50527686, -0.068828434, 0.50985193, -0.8480679, -0.13464977, 0.009677321, -0.15091144, 0.9871323, -0.30733192, 1.044787, -0.038784202)
+transform = Transform3D(-0.7530401, -0.62968385, -0.1330701, 0.64230794, -0.7223671, -0.21657479, 0.040630363, -0.25092128, 0.9574265, -0.29719552, 1.0500731, -0.04677688)
 
 [node name="Leg_R" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="2"]
-transform = Transform3D(0.0009692928, -0.00549959, -0.99998444, -0.088576585, -0.99605453, 0.0053921156, -0.99606884, 0.08856998, -0.0014525433, -0.1730323, 0.42739147, -0.042921934)
+transform = Transform3D(0.0052464684, -0.0055799363, -0.9999707, -0.49786994, -0.86724854, 0.0022271955, -0.8672357, 0.4978436, -0.0073280153, -0.14241178, 0.47208822, -0.03725492)
 
 [node name="Leg_L" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="3"]
-transform = Transform3D(4.8964284e-07, -0.0129300095, 0.9999163, -0.14515936, -0.9893252, -0.012792981, 0.9894082, -0.1451472, -0.0018774567, 0.1702611, 0.44251275, -0.0411704)
+transform = Transform3D(5.04544e-07, -0.012929839, 0.9999164, -0.19989698, -0.97973466, -0.01266877, 0.9798168, -0.19988023, -0.0025851906, 0.16351426, 0.4524802, -0.039904494)
 
 [node name="Hip" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="4"]
 transform = Transform3D(1.388788e-05, 0.009523379, 0.99995464, -0.011595441, -0.9998872, 0.009522901, 0.99993265, -0.011595046, 9.648126e-05, 1.6189199e-18, 0.62902445, -0.041790847)
@@ -240,7 +241,7 @@ transform = Transform3D(1.388788e-05, 0.009523379, 0.99995464, -0.011595441, -0.
 transform = Transform3D(1, 2.5746923e-18, -1.4918251e-20, -2.5746923e-18, 0.99993277, -0.011595443, -1.493745e-20, 0.011595443, 0.99993277, 1.61892e-18, 0.62902445, -0.041790847)
 
 [node name="RightHandAttachment2" type="BoneAttachment3D" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="7"]
-transform = Transform3D(-0.85863715, -0.50527686, -0.068828434, 0.50985193, -0.8480679, -0.13464977, 0.009677321, -0.15091144, 0.9871323, -0.30733192, 1.044787, -0.038784202)
+transform = Transform3D(-0.7530401, -0.62968385, -0.1330701, 0.64230794, -0.7223671, -0.21657479, 0.040630363, -0.25092128, 0.9574265, -0.29719552, 1.0500731, -0.04677688)
 bone_name = "Hand.R"
 bone_idx = 5
 
@@ -250,7 +251,7 @@ bone_idx = 5
 transform = Transform3D(1.1081386, -0.856379, 0.8456599, 1.1896943, 0.60551023, -0.94577, 0.18207932, 1.2555751, 1.032896, 0.06369302, 0.58201265, 0.18524697)
 
 [node name="RightHandAttachment" type="BoneAttachment3D" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="8"]
-transform = Transform3D(-0.85863715, -0.50527686, -0.068828434, 0.50985193, -0.8480679, -0.13464977, 0.009677321, -0.15091144, 0.9871323, -0.30733192, 1.044787, -0.038784202)
+transform = Transform3D(-0.7530401, -0.62968385, -0.1330701, 0.64230794, -0.7223671, -0.21657479, 0.040630363, -0.25092128, 0.9574265, -0.29719552, 1.0500731, -0.04677688)
 bone_name = "Hand.R"
 bone_idx = 5
 
@@ -260,7 +261,7 @@ bone_idx = 5
 transform = Transform3D(0.20723814, 0.6326301, -0.7462115, -0.9623189, -0.0054449365, -0.2718714, -0.17605713, 0.7744351, 0.60766345, -0.025303334, 0.7964385, 0.1432237)
 
 [node name="LeftHandAttachment" type="BoneAttachment3D" parent="Rabid (FINAL 2)/Armature_001/Skeleton3D" index="9"]
-transform = Transform3D(-0.86930984, 0.47337383, -0.14219502, -0.4146385, -0.85501343, -0.3114918, -0.2690311, -0.2118231, 0.93954957, 0.29179165, 1.027932, -0.037627634)
+transform = Transform3D(-0.79556453, 0.60475236, 0.036786124, -0.53953356, -0.6795256, -0.49714088, -0.27565038, -0.41535452, 0.8668897, 0.29179165, 1.027932, -0.037627634)
 bone_name = "Bone"
 bone_idx = 4
 
