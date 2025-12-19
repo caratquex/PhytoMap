@@ -415,7 +415,7 @@ stream = ExtResource("18_0gw8r")
 [node name="WalkingOnGrass(ver1)" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("17_mo4ux")
 
-[node name="Dash" type="AudioStreamPlayer" parent="SFX"]
+[node name="Dash1" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("19_w70v4")
 volume_db = -8.0
 
