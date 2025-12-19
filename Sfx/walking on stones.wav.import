@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c13xddhtiy2q4"
+path="res://.godot/imported/walking on stones.wav-a86ef5c989b292cff144b9a76f8713bb.sample"
+
+[deps]
+
+source_file="res://Sfx/walking on stones.wav"
+dest_files=["res://.godot/imported/walking on stones.wav-a86ef5c989b292cff144b9a76f8713bb.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

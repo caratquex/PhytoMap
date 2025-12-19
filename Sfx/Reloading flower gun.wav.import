@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c0hutk4pfukr3"
+path="res://.godot/imported/Reloading flower gun.wav-6189528072ba959e06457186fc7f8e3f.sample"
+
+[deps]
+
+source_file="res://Sfx/Reloading flower gun.wav"
+dest_files=["res://.godot/imported/Reloading flower gun.wav-6189528072ba959e06457186fc7f8e3f.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

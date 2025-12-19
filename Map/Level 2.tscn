@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=4 uid="uid://j57p8ed70c7i"]
+[gd_scene load_steps=56 format=4 uid="uid://j57p8ed70c7i"]
 
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_ibaua"]
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="2_754fx"]
@@ -13,18 +13,24 @@
 [ext_resource type="PackedScene" uid="uid://cxd3h5sfc328h" path="res://Map Asset/Tree1Radiant.glb" id="15_6dy7n"]
 [ext_resource type="PackedScene" uid="uid://b0kn7qtngdbnk" path="res://Map Asset/ToxicBarrel.tscn" id="16_hlkp1"]
 [ext_resource type="PackedScene" uid="uid://bx7uroifmtbyt" path="res://Map Asset/StoneRadiant.tscn" id="16_ibaua"]
-[ext_resource type="AudioStream" uid="uid://domj80wn4y1np" path="res://Map/Sfx/Walking on Grass (Ver1).wav" id="17_mo4ux"]
+[ext_resource type="AudioStream" uid="uid://domj80wn4y1np" path="res://Sfx/Walking on Grass (Ver1).wav" id="17_mo4ux"]
 [ext_resource type="PackedScene" uid="uid://djfyn1h86ae1b" path="res://Map Asset/TreeRadiant1.tscn" id="17_s1l2u"]
+[ext_resource type="AudioStream" uid="uid://cab5f3xjf5t6k" path="res://Sfx/shovel sfx.wav" id="18_0gw8r"]
 [ext_resource type="PackedScene" uid="uid://i7rvwskvhtnd" path="res://Map Asset/TreeRadiant2.tscn" id="18_sapnw"]
-[ext_resource type="AudioStream" uid="uid://1um444oa8145" path="res://Map/Sfx/Jump.wav" id="19_fdsc7"]
-[ext_resource type="AudioStream" uid="uid://byjtyc43yml7b" path="res://Map/Sfx/dash 1.wav" id="19_w70v4"]
-[ext_resource type="AudioStream" uid="uid://drhufjmvlvkiw" path="res://Map/Sfx/Drop (latest).wav" id="21_52s5m"]
+[ext_resource type="AudioStream" uid="uid://1um444oa8145" path="res://Sfx/Jump.wav" id="19_fdsc7"]
+[ext_resource type="AudioStream" uid="uid://byjtyc43yml7b" path="res://Sfx/dash 1.wav" id="19_w70v4"]
+[ext_resource type="AudioStream" uid="uid://drhufjmvlvkiw" path="res://Sfx/Drop (latest).wav" id="21_52s5m"]
 [ext_resource type="PackedScene" uid="uid://c7e2vn7a0gikw" path="res://Scene/Player FINAL.tscn" id="21_jrhep"]
-[ext_resource type="AudioStream" uid="uid://ppyi62cfq2ym" path="res://Map/Sfx/NPC Appear.wav" id="21_lmc8q"]
+[ext_resource type="AudioStream" uid="uid://ppyi62cfq2ym" path="res://Sfx/NPC Appear.wav" id="21_lmc8q"]
 [ext_resource type="PackedScene" uid="uid://btysfti3q7qg6" path="res://Map/RadiantGrass.tscn" id="22_52s5m"]
+[ext_resource type="AudioStream" uid="uid://cqn2vmsrifyxg" path="res://Sfx/planting seed.wav" id="23_awp4g"]
 [ext_resource type="PackedScene" uid="uid://dsnriolqk2lo8" path="res://Map/RadiantGrass2.tscn" id="24_4j2ao"]
+[ext_resource type="AudioStream" uid="uid://dgdu6wrgoacsi" path="res://Sfx/shoot out flower.wav" id="24_ywkyo"]
+[ext_resource type="AudioStream" uid="uid://bksqa2otderuc" path="res://Sfx/Hotbar_Switching2.wav" id="25_p3yci"]
 [ext_resource type="PackedScene" uid="uid://bmkr6g26ix3ow" path="res://Map Asset/rock_big.tscn" id="26_ibaua"]
+[ext_resource type="AudioStream" uid="uid://b2jepp8pt3wji" path="res://Sfx/got hurt.wav" id="26_ywkyo"]
 [ext_resource type="PackedScene" uid="uid://bc1l4deuw25a0" path="res://Map Asset/rock_small.tscn" id="27_hlkp1"]
+[ext_resource type="AudioStream" uid="uid://bmpdyihcbhqkc" path="res://Sfx/throw plant grenade.mp3" id="28_nbbt7"]
 [ext_resource type="PackedScene" uid="uid://dsawqaqh01xgv" path="res://Map Asset/Tree1.tscn" id="30_ri6tb"]
 [ext_resource type="PackedScene" uid="uid://dy46unlunoric" path="res://Map Asset/Tree2.tscn" id="32_vdh4u"]
 [ext_resource type="PackedScene" uid="uid://df44qbjskigqv" path="res://Map Asset/temple_debris_1.tscn" id="33_vdh4u"]
@@ -36,6 +42,9 @@
 [ext_resource type="PackedScene" uid="uid://bk7xiwbaknp4w" path="res://Map Asset/bridges_plate_1.tscn" id="38_f14xn"]
 [ext_resource type="PackedScene" uid="uid://nhc71q5iss6n" path="res://Map Asset/bridge.tscn" id="39_awp4g"]
 [ext_resource type="Texture2D" uid="uid://qjm7jmewl6c1" path="res://addons/simplegrasstextured/textures/Grass Grey.png" id="39_p3yci"]
+
+[sub_resource type="Animation" id="Animation_81gk7"]
+resource_name = "Moving Platform 2"
 
 [sub_resource type="Animation" id="Animation_lreuq"]
 resource_name = "Moving platform"
@@ -97,9 +106,6 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector3(11.720803, 4.775494, -14.797598)]
 }
-
-[sub_resource type="Animation" id="Animation_81gk7"]
-resource_name = "Moving Platform 2"
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_oql6e"]
 _data = {
@@ -403,6 +409,9 @@ transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, 11.720803, 4.775494, -1
 
 [node name="SFX" type="Node3D" parent="."]
 
+[node name="ShovelSfx" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("18_0gw8r")
+
 [node name="WalkingOnGrass(ver1)" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("17_mo4ux")
 
@@ -421,8 +430,23 @@ volume_db = 24.0
 stream = ExtResource("21_52s5m")
 volume_db = 24.0
 
+[node name="PlantingSeed" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("23_awp4g")
+
+[node name="ShootOutFlower" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("24_ywkyo")
+
+[node name="HotbarSwitching2" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("25_p3yci")
+
+[node name="GotHurt" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("26_ywkyo")
+
+[node name="ThrowPlantGrenade" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("28_nbbt7")
+
 [node name="Player" parent="." instance=ExtResource("21_jrhep")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 109.23834, 36.932957, -39.729004)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.355988, 5.609909, 22.489065)
 
 [node name="GrassBlock" type="Node3D" parent="."]
 

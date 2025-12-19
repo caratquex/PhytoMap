@@ -82,12 +82,38 @@ var original_materials: Array = []  # لحفظ الماتيريال الأصلي
 # ---------------------------
 # SFX
 # ---------------------------
-@onready var walking_on_grass_ver_1_: AudioStreamPlayer = $"../SFX/WalkingOnGrass(ver1)"
-@onready var jump: AudioStreamPlayer = $"../SFX/Jump"
-@onready var dash: AudioStreamPlayer = $"../SFX/Dash"
 @onready var drop: AudioStreamPlayer = $"../SFX/Drop"
-
+@onready var jump: AudioStreamPlayer = $"../SFX/Jump"
+@onready var walking_on_grass_ver_1_: AudioStreamPlayer = $"../SFX/WalkingOnGrass(ver1)"
+@onready var dash_1: AudioStreamPlayer = $"../SFX/Dash1"
+@onready var planting_seed: AudioStreamPlayer = $"../SFX/PlantingSeed"
+@onready var shoot_out_flower: AudioStreamPlayer = $"../SFX/ShootOutFlower"
+@onready var throw_plant_grenade: AudioStreamPlayer = $"../SFX/ThrowPlantGrenade"
+@onready var shovel_sfx: AudioStreamPlayer = $"../SFX/ShovelSfx"
+@onready var hotbar_switching_2: AudioStreamPlayer = $"../SFX/HotbarSwitching2"
+@onready var got_hurt: AudioStreamPlayer = $"../SFX/GotHurt"
 var prev_on_floor: bool = false
+
+# ---------------------------
+# Timer Function for SFX
+# ---------------------------
+func play_sfx_delayed(
+	player: AudioStreamPlayer,
+	delay: float = 0.0,
+	restart: bool = true
+) -> void:
+	if not player:
+		return
+
+	if restart and player.playing:
+		player.stop()
+
+	if delay > 0.0:
+		await get_tree().create_timer(delay).timeout
+
+	player.play()
+
+# ---------------------------
 
 func _ready() -> void:
 	# Singleton بسيط
@@ -162,10 +188,13 @@ func _process(delta: float) -> void:
 	# تبديل السلاح بالأرقام 1، 2، 3
 	if Input.is_action_just_pressed("gun"):
 		switch_weapon(WeaponType.GUN)
+		if hotbar_switching_2: hotbar_switching_2.play()
 	elif Input.is_action_just_pressed("grenade"):
 		switch_weapon(WeaponType.GRENADE)
+		if hotbar_switching_2: hotbar_switching_2.play()
 	elif Input.is_action_just_pressed("shovel"):
 		switch_weapon(WeaponType.SHOVEL)
+		if hotbar_switching_2: hotbar_switching_2.play()
 
 	# اتجاه الإدخال (WASD)
 	var input_dir: Vector2 = Input.get_vector("left", "right", "forward", "backward")
@@ -189,6 +218,7 @@ func _process(delta: float) -> void:
 	# Dash (ما يندفع لو هو ماسك في الجدار)
 	if Input.is_action_just_pressed("dash") and input_dir != Vector2.ZERO and can_act and not is_clinging:
 		start_dash(input_dir)
+		if dash_1: dash_1.play()
 
 	# Left Click - يعمل الأكشن حسب السلاح المختار
 	if Input.is_action_just_pressed("shoot") and can_act:
@@ -197,6 +227,7 @@ func _process(delta: float) -> void:
 	# Hurt Animation (H key)
 	if Input.is_action_just_pressed("hurt") and not is_hurting:
 		play_hurt_animation()
+		if got_hurt: got_hurt.play()
 	
 	# Update planting cursor position
 	_update_plant_cursor()
@@ -222,6 +253,7 @@ func start_shoot() -> void:
 		animation_tree.set("parameters/conditions/is_shooting", true)
 	if playback:
 		playback.travel("Shoot")
+		play_sfx_delayed(shoot_out_flower,0.4)
 
 
 func start_throw() -> void:
@@ -229,7 +261,7 @@ func start_throw() -> void:
 		animation_tree.set("parameters/conditions/is_throwing", true)
 	if playback:
 		playback.travel("Throw Grenade")
-
+		play_sfx_delayed(throw_plant_grenade,0.5)
 
 func start_plant() -> void:
 	# Play animation
@@ -238,8 +270,13 @@ func start_plant() -> void:
 	if playback:
 		playback.travel("Plant")
 	
+	# Play shovel sound effect
+	if shovel_sfx:
+		shovel_sfx.play()
+	
 	# Actually plant the flower
 	plant_flower_at_cursor()
+	
 
 
 func reset_action_state() -> void:
@@ -355,6 +392,7 @@ func start_dash(input_dir: Vector2) -> void:
 	velocity.y = 0.0
 
 
+
 # ---------------------------
 # PHYSICS: MOVE / JUMP / DASH / WALL-CLING
 # ---------------------------
@@ -407,6 +445,7 @@ func _physics_process(delta: float) -> void:
 	# ----- JUMP (Space / ui_accept) -----
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = jump_velocity
+		if jump: jump.play()
 
 	# ----- MOVEMENT (WASD) -----
 	var direction: Vector3 = Vector3.ZERO
@@ -642,6 +681,9 @@ func plant_flower_at_cursor() -> void:
 	var flower: Node3D = sunflower_scene.instantiate()
 	get_tree().current_scene.add_child(flower)
 	flower.global_position = ground_pos
+	
+	# Play planting seed sound effect
+	if planting_seed: planting_seed.play()
 
 
 func raycast_to_floor(mouse_pos: Vector2, viewport_size: Vector2, cam: Camera3D) -> Dictionary:
