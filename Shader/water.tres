@@ -196,7 +196,7 @@ void fragment() {
 "
 nodes/vertex/0/position = Vector2(1100, 260)
 nodes/vertex/2/node = SubResource("VisualShaderNodeInput_5qjys")
-nodes/vertex/2/position = Vector2(-60, 280)
+nodes/vertex/2/position = Vector2(-100, 300)
 nodes/vertex/3/node = SubResource("VisualShaderNodeUVFunc_p5ioc")
 nodes/vertex/3/position = Vector2(220, 260)
 nodes/vertex/4/node = SubResource("VisualShaderNodeTexture_iouv4")

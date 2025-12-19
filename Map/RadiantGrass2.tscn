@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=4 uid="uid://dsnriolqk2lo8"]
+[gd_scene load_steps=22 format=4 uid="uid://dsnriolqk2lo8"]
 
 [ext_resource type="PackedScene" uid="uid://b17os87mldhvo" path="res://Map Asset/GrassRadiant3.glb" id="1_38ayj"]
 [ext_resource type="Texture2D" uid="uid://drs6drjlpnde7" path="res://Map Asset/GrassRadiant3_Soil_texture.png" id="2_cqo0q"]
 [ext_resource type="Shader" uid="uid://buwh68bwlnndp" path="res://Shader/random_uv.gdshader" id="2_ix1c2"]
 [ext_resource type="Texture2D" uid="uid://cu7vxnm285f4d" path="res://Map Asset/grassRadiant1_albedo.tres" id="3_yef3g"]
+[ext_resource type="Shader" uid="uid://d12tejsfkk0k5" path="res://Shader/sunflowershadertres.res" id="5_yef3g"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_38ayj"]
 size = Vector3(2.25, 2.25, 2.25)
@@ -78,6 +79,63 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_5aij6")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ivmho"]
+render_priority = 0
+shader = ExtResource("5_yef3g")
+
+[sub_resource type="Gradient" id="Gradient_84mqt"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2sp7w"]
+gradient = SubResource("Gradient_84mqt")
+
+[sub_resource type="Gradient" id="Gradient_ernxc"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_d5np6"]
+gradient = SubResource("Gradient_ernxc")
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_7viee"]
+_data = [Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveTexture" id="CurveTexture_04ivb"]
+curve = SubResource("Curve_7viee")
+
+[sub_resource type="Curve" id="Curve_atgab"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_81rbe"]
+texture_mode = 1
+curve = SubResource("Curve_atgab")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_l4ef5"]
+lifetime_randomness = 0.5
+emission_shape_offset = Vector3(0.11, -0.05, 0)
+emission_shape_scale = Vector3(1.09, 1, 1)
+emission_shape = 3
+emission_box_extents = Vector3(3.16, 2.34, 2.88)
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+orbit_velocity_min = -0.46599993
+orbit_velocity_max = 2.16
+gravity = Vector3(0, 0, 0)
+scale_min = 0.0
+scale_max = 0.099999994
+color = Color(0, 0, 0, 0.969)
+color_ramp = SubResource("GradientTexture1D_d5np6")
+color_initial_ramp = SubResource("GradientTexture1D_2sp7w")
+emission_curve = SubResource("CurveTexture_04ivb")
+hue_variation_min = 0.99999994
+hue_variation_max = 0.99999994
+hue_variation_curve = SubResource("CurveTexture_81rbe")
+anim_speed_max = 1.0
+anim_offset_max = 0.29999998
+
+[sub_resource type="QuadMesh" id="QuadMesh_lj1u7"]
+
 [node name="Node3D" type="StaticBody3D"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -87,5 +145,17 @@ shape = SubResource("BoxShape3D_38ayj")
 
 [node name="Cube_025" parent="CollisionShape3D/GrassRadiant3" index="0"]
 mesh = SubResource("ArrayMesh_fwkyi")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="CollisionShape3D/GrassRadiant3/Cube_025" index="0"]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 1.9071302, 0)
+material_override = SubResource("ShaderMaterial_ivmho")
+amount = 110
+amount_ratio = 0.1616
+lifetime = 3.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_l4ef5")
+draw_passes = 2
+draw_pass_1 = SubResource("QuadMesh_lj1u7")
+draw_pass_2 = null
 
 [editable path="CollisionShape3D/GrassRadiant3"]

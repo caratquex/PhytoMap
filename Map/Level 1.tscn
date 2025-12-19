@@ -1,6 +1,8 @@
-[gd_scene load_steps=47 format=4 uid="uid://sl5ib4d0b7c6"]
+[gd_scene load_steps=46 format=4 uid="uid://sl5ib4d0b7c6"]
 
+[ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_s8enn"]
 [ext_resource type="MeshLibrary" uid="uid://ctlg4t84uuu0u" path="res://Tiles/Tiles11.tres" id="2_dn7vj"]
+[ext_resource type="PackedScene" uid="uid://p6nnonr03ork" path="res://Scene/directional_light_3d.tscn" id="2_dtlt3"]
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="2_e1aag"]
 [ext_resource type="PackedScene" uid="uid://d1ixt37a64w2y" path="res://Map/Grass.tscn" id="3_uvnbp"]
 [ext_resource type="PackedScene" uid="uid://nhc71q5iss6n" path="res://Map Asset/bridge.tscn" id="5_hv6ql"]
@@ -34,27 +36,6 @@
 [ext_resource type="AudioStream" uid="uid://ppyi62cfq2ym" path="res://Map/Sfx/NPC Appear.wav" id="33_dtlt3"]
 [ext_resource type="AudioStream" uid="uid://drhufjmvlvkiw" path="res://Map/Sfx/Drop (latest).wav" id="34_erdtx"]
 [ext_resource type="PackedScene" uid="uid://btysfti3q7qg6" path="res://Map/RadiantGrass.tscn" id="36_dtlt3"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hv6ql"]
-sky_top_color = Color(0.8607597, 0.86076635, 0.75704783, 1)
-energy_multiplier = 0.7
-
-[sub_resource type="Sky" id="Sky_ao60k"]
-sky_material = SubResource("ProceduralSkyMaterial_hv6ql")
-
-[sub_resource type="Environment" id="Environment_uhwpd"]
-background_mode = 2
-sky = SubResource("Sky_ao60k")
-ambient_light_source = 3
-tonemap_mode = 2
-ssao_enabled = true
-ssao_radius = 1.45
-ssao_horizon = 0.0
-ssil_radius = 0.01
-fog_enabled = true
-fog_mode = 1
-fog_light_energy = 0.81
-fog_density = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_we51m"]
 resource_local_to_scene = true
@@ -236,14 +217,10 @@ _data = {
 
 [node name="Node3D" type="Node3D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_uhwpd")
+[node name="WorldEnvironment" parent="." instance=ExtResource("1_s8enn")]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.5208011, 0.8536781, 0, -0.8536781, 0.5208011, 0, 0, 0)
-light_color = Color(0.8338262, 0.69501317, 0.21293268, 1)
-shadow_enabled = true
-sky_mode = 1
+[node name="DirectionalLight3D" parent="." instance=ExtResource("2_dtlt3")]
+transform = Transform3D(1, 0, 0, 0, 0.52080107, 0.85367805, 0, -0.85367805, 0.52080107, 0, 0, 0)
 
 [node name="GrassBlock" parent="." instance=ExtResource("2_e1aag")]
 transform = Transform3D(1, 0, 0, 0, -0.9982543, -0.05906257, 0, 0.05906257, -0.9982543, -3.5573506, 0.31258488, 3.1841016)
