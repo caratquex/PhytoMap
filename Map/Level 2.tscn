@@ -447,7 +447,6 @@ stream = ExtResource("28_nbbt7")
 
 [node name="Player" parent="." instance=ExtResource("21_jrhep")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.355988, 5.609909, 22.489065)
-shoot_cursor_size = 0.6
 projectile_speed = 15.0
 
 [node name="GrassBlock" type="Node3D" parent="."]
@@ -471,6 +470,9 @@ transform = Transform3D(2.53772, 0, -2.6442769, 0, 3.6649997, 0, 2.6442769, 0, 2
 
 [node name="rock_big" parent="Rock" instance=ExtResource("26_ibaua")]
 transform = Transform3D(-0.6863771, 0, 0.7272458, 0, 0.83, 0, -0.7272458, 0, -0.6863771, 103.02817, 5.2515383, -7.088167)
+
+[node name="rock_big5" parent="Rock" instance=ExtResource("26_ibaua")]
+transform = Transform3D(-0.94873774, 0.022491872, 0.22357544, 0.06206559, 0.4991393, 0.0055104587, -0.51229376, 0.018818282, -0.41338086, 107.07998, -3.2803326, -19.371153)
 
 [node name="rock_big2" parent="Rock" instance=ExtResource("26_ibaua")]
 transform = Transform3D(-1.9698591, 0, -0.9782344, 0, 1.954, 0, 1.2906119, 0, -1.4930782, 102.370735, 6.1969357, -55.11475)
@@ -637,4 +639,4 @@ transform = Transform3D(0.69, 0, 0, 0, 0.69, 0, 0, 0, 0.69, 54.165886, 1.9420886
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59.13897, 5.869309, -69.000626)
 
 [node name="Stone3" parent="." instance=ExtResource("12_52s5m")]
-transform = Transform3D(0.8403225, 0, -1.3261818, 0, 1.5699998, 0, 1.3261818, 0, 0.8403225, 54.024757, 2.019075, -77.79501)
+transform = Transform3D(0.8403225, 0, -1.3261818, 0, 1.5699998, 0, 1.3261818, 0, 0.8403225, 54.024757, 2.019075, -77.39042)

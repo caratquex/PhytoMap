@@ -70,7 +70,7 @@ var current_shoot_target: Vector3  # Current target position for shooting
 # First-Person Camera Mode
 # ---------------------------
 @export var spring_arm: SpringArm3D  # Reference to SpringArm3D node (set in Inspector)
-@export var first_person_height: float = 1.6  # Height offset for first-person (head/eye level)
+@export var first_person_height: float = 0.8  # Height offset for first-person (lowered to avoid character blocking)
 @export var camera_transition_speed: float = 5.0  # Speed of smooth transition
 var default_spring_arm_position: Vector3  # Store default SpringArm3D position
 var default_spring_length: float = 5.0  # Store default spring length
@@ -201,14 +201,23 @@ func switch_weapon(weapon: WeaponType) -> void:
 	# نظهر السلاح المختار
 	match current_weapon:
 		WeaponType.GUN:
+			# Hide character model and gun model in first-person mode to avoid blocking camera
+			if model:
+				model.visible = false
 			if gun_model:
-				gun_model.visible = true
+				gun_model.visible = false  # Hide gun model in first-person to avoid blocking
 		WeaponType.GRENADE:
 			if grenade_model:
 				grenade_model.visible = true
+			# Show character model in third-person mode
+			if model:
+				model.visible = true
 		WeaponType.SHOVEL:
 			if shovel_model:
 				shovel_model.visible = true
+			# Show character model in third-person mode
+			if model:
+				model.visible = true
 	
 	# Update camera position based on weapon
 	_update_camera_position()
@@ -819,17 +828,23 @@ func _update_shoot_cursor() -> void:
 	# Cast ray to find floor position
 	var floor_hit: Dictionary = raycast_to_floor(mouse_pos, viewport_size, cam)
 	
-	if floor_hit.is_empty():
-		shoot_cursor.visible = false
-		current_shoot_target = Vector3.ZERO
-		return
+	var cursor_pos: Vector3
+	if not floor_hit.is_empty():
+		# Store target position from floor hit
+		current_shoot_target = floor_hit.position
+		# Position crosshair at hit point (slightly above floor for visibility)
+		cursor_pos = floor_hit.position
+		cursor_pos.y += 0.1  # Slight offset above floor
+	else:
+		# No floor hit - calculate position in air based on camera ray direction
+		var ray_origin: Vector3 = cam.global_position
+		var ray_dir: Vector3 = cam.project_ray_normal(mouse_pos)
+		# Position cursor at a fixed distance in front of camera (e.g., 10 units)
+		var air_distance: float = 10.0
+		cursor_pos = ray_origin + ray_dir * air_distance
+		# Store target position for shooting
+		current_shoot_target = cursor_pos
 	
-	# Store target position
-	current_shoot_target = floor_hit.position
-	
-	# Position crosshair at hit point (slightly above floor for visibility)
-	var cursor_pos: Vector3 = floor_hit.position
-	cursor_pos.y += 0.1  # Slight offset above floor
 	shoot_cursor.global_position = cursor_pos
 	
 	# Align crosshair to face camera (billboard effect)
@@ -848,7 +863,7 @@ func shoot_flower_projectile() -> void:
 	
 	# Check if we have a valid target
 	if current_shoot_target == Vector3.ZERO:
-		# Try to get current target from cursor
+		# Try to get current target from cursor or calculate from camera ray
 		var cam: Camera3D = raycast_camera if raycast_camera else camera
 		if cam:
 			var mouse_pos: Vector2 = get_viewport().get_mouse_position()
@@ -857,8 +872,12 @@ func shoot_flower_projectile() -> void:
 			if not floor_hit.is_empty():
 				current_shoot_target = floor_hit.position
 			else:
-				print("No valid target for shooting")
-				return
+				# No floor hit - calculate target in air based on camera ray direction
+				var ray_origin: Vector3 = cam.global_position
+				var ray_dir: Vector3 = cam.project_ray_normal(mouse_pos)
+				# Target at a fixed distance in front of camera (e.g., 20 units)
+				var air_distance: float = 20.0
+				current_shoot_target = ray_origin + ray_dir * air_distance
 		else:
 			print("No camera for shooting")
 			return
