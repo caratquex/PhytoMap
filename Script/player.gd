@@ -67,15 +67,17 @@ var current_shoot_target: Vector3  # Current target position for shooting
 @export var shovel_model: Node3D
 
 # ---------------------------
-# Shoulder Camera Shift
+# First-Person Camera Mode
 # ---------------------------
 @export var spring_arm: SpringArm3D  # Reference to SpringArm3D node (set in Inspector)
-@export var shoulder_offset_x: float = 2.5  # Horizontal offset to the right
-@export var shoulder_offset_y: float = 0.0  # Vertical offset (if needed)
-@export var shoulder_transition_speed: float = 5.0  # Speed of smooth transition
+@export var first_person_height: float = 1.6  # Height offset for first-person (head/eye level)
+@export var camera_transition_speed: float = 5.0  # Speed of smooth transition
 var default_spring_arm_position: Vector3  # Store default SpringArm3D position
+var default_spring_length: float = 5.0  # Store default spring length
 var target_spring_arm_position: Vector3  # Target position for smooth transition
+var target_spring_length: float  # Target spring length for smooth transition
 var camera_tween: Tween  # Tween for smooth camera movement
+var spring_length_tween: Tween  # Tween for spring length transition
 
 # ---------------------------
 # Dash Variables
@@ -165,15 +167,17 @@ func _ready() -> void:
 	if not sunflower_scene:
 		push_error("Failed to load Sunflower1.tscn!")
 	
-	# Initialize SpringArm3D for shoulder camera shift
+	# Initialize SpringArm3D for first-person camera mode
 	if not spring_arm:
 		# Try to find SpringArm3D automatically if not assigned
 		spring_arm = get_node_or_null("SpringArm3D") as SpringArm3D
 	if spring_arm:
 		default_spring_arm_position = spring_arm.position
+		default_spring_length = spring_arm.spring_length
 		target_spring_arm_position = default_spring_arm_position
+		target_spring_length = default_spring_length
 	else:
-		push_warning("SpringArm3D not found! Shoulder camera shift will not work.")
+		push_warning("SpringArm3D not found! First-person camera mode will not work.")
 	
 	# Create planting cursor UI
 	_create_plant_cursor()
@@ -214,35 +218,46 @@ func _update_camera_position() -> void:
 	if not spring_arm:
 		return
 	
-	# Calculate target position based on current weapon
-	# SpringArm3D is a child of player, so position is in local space
+	# Calculate target position and spring length based on current weapon
 	if current_weapon == WeaponType.GUN:
-		# Shift to right shoulder position (positive X is right in local space)
+		# First-person mode: camera at head/eye level, centered
 		target_spring_arm_position = Vector3(
-			default_spring_arm_position.x + shoulder_offset_x,
-			default_spring_arm_position.y + shoulder_offset_y,
-			default_spring_arm_position.z
+			default_spring_arm_position.x,  # Keep X centered
+			default_spring_arm_position.y + first_person_height,  # Raise to head/eye level
+			default_spring_arm_position.z  # Keep Z centered
 		)
+		target_spring_length = 0.0  # Disable spring physics for locked first-person view
 	else:
-		# Return to default position
+		# Third-person mode: return to default position and spring length
 		target_spring_arm_position = default_spring_arm_position
+		target_spring_length = default_spring_length
 	
-	# Kill existing tween if it exists
+	# Kill existing tweens if they exist
 	if camera_tween and camera_tween.is_valid():
 		camera_tween.kill()
+	if spring_length_tween and spring_length_tween.is_valid():
+		spring_length_tween.kill()
 	
-	# Create new tween for smooth transition
+	# Create new tween for smooth position transition
 	camera_tween = create_tween()
 	camera_tween.set_ease(Tween.EASE_IN_OUT)
 	camera_tween.set_trans(Tween.TRANS_SINE)
 	
 	# Calculate transition duration based on distance and speed
 	var distance: float = spring_arm.position.distance_to(target_spring_arm_position)
-	var duration: float = distance / shoulder_transition_speed
+	var duration: float = distance / camera_transition_speed
 	duration = clamp(duration, 0.1, 1.0)  # Clamp between 0.1 and 1.0 seconds
 	
 	# Tween the position
 	camera_tween.tween_property(spring_arm, "position", target_spring_arm_position, duration)
+	
+	# Create new tween for smooth spring length transition
+	spring_length_tween = create_tween()
+	spring_length_tween.set_ease(Tween.EASE_IN_OUT)
+	spring_length_tween.set_trans(Tween.TRANS_SINE)
+	
+	# Tween the spring length
+	spring_length_tween.tween_property(spring_arm, "spring_length", target_spring_length, duration)
 
 
 func _process(delta: float) -> void:
@@ -289,7 +304,6 @@ func _process(delta: float) -> void:
 			target_angle,
 			delta * rotation_speed
 		)
-	
 
 	var can_act: bool = (not is_dashing) and (not is_acting)
 
