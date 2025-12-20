@@ -767,7 +767,7 @@ func _create_shoot_cursor_deferred() -> void:
 	shoot_cursor = Node3D.new()
 	shoot_cursor.name = "ShootCursor"
 	
-	# Create 2 intersecting lines (horizontal + vertical) to form crosshair
+	# Create "+" sign crosshair (two intersecting lines)
 	var line_length: float = shoot_cursor_size
 	var line_width: float = shoot_cursor_line_width
 	var line_height: float = 0.1  # Thick crosshair for visibility
