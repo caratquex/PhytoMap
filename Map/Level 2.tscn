@@ -447,6 +447,8 @@ stream = ExtResource("28_nbbt7")
 
 [node name="Player" parent="." instance=ExtResource("21_jrhep")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.355988, 5.609909, 22.489065)
+shoot_cursor_size = 0.6
+projectile_speed = 15.0
 
 [node name="GrassBlock" type="Node3D" parent="."]
 
