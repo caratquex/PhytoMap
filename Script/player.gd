@@ -28,22 +28,6 @@ var floor_indicator_material: StandardMaterial3D
 var current_grid_cell: Vector3i = Vector3i(-99999, -99999, -99999)  # Track current cell
 
 # ---------------------------
-# Shooting Cursor (Crosshair)
-# ---------------------------
-@export var show_shoot_cursor: bool = true
-@export var shoot_cursor_color: Color = Color(1.0, 0.0, 0.0, 1.0)  # Red crosshair
-@export var shoot_cursor_size: float = 0.6  # Size of crosshair (larger for visibility)
-@export var shoot_cursor_line_width: float = 0.08  # Width of crosshair lines (thicker for visibility)
-var shoot_cursor: Node3D  # Parent node for the crosshair
-var shoot_cursor_material: StandardMaterial3D
-var current_shoot_target: Vector3  # Current target position for shooting
-
-# ---------------------------
-# Projectile System
-# ---------------------------
-@export var projectile_speed: float = 15.0  # Projectile travel speed
-
-# ---------------------------
 # Movement
 # ---------------------------
 @export var gravity: float = 12.0  # جاذبية أسرع قليلاً من الأصل
@@ -56,7 +40,7 @@ var current_shoot_target: Vector3  # Current target position for shooting
 
 # ---------------------------
 # Nodes (عيّنها من الـ Inspector)
-# ---------------------------
+# ---------------------------w
 @export var camera: Camera3D
 @export var raycast_camera: Camera3D  # Camera for raycasting (use SpringArm3D/Camera3D)
 @export var model: Node3D
@@ -65,19 +49,6 @@ var current_shoot_target: Vector3  # Current target position for shooting
 @export var gun_model: Node3D
 @export var grenade_model: Node3D
 @export var shovel_model: Node3D
-
-# ---------------------------
-# First-Person Camera Mode
-# ---------------------------
-@export var spring_arm: SpringArm3D  # Reference to SpringArm3D node (set in Inspector)
-@export var first_person_height: float = 0.8  # Height offset for first-person (lowered to avoid character blocking)
-@export var camera_transition_speed: float = 5.0  # Speed of smooth transition
-var default_spring_arm_position: Vector3  # Store default SpringArm3D position
-var default_spring_length: float = 5.0  # Store default spring length
-var target_spring_arm_position: Vector3  # Target position for smooth transition
-var target_spring_length: float  # Target spring length for smooth transition
-var camera_tween: Tween  # Tween for smooth camera movement
-var spring_length_tween: Tween  # Tween for spring length transition
 
 # ---------------------------
 # Dash Variables
@@ -167,22 +138,8 @@ func _ready() -> void:
 	if not sunflower_scene:
 		push_error("Failed to load Sunflower1.tscn!")
 	
-	# Initialize SpringArm3D for first-person camera mode
-	if not spring_arm:
-		# Try to find SpringArm3D automatically if not assigned
-		spring_arm = get_node_or_null("SpringArm3D") as SpringArm3D
-	if spring_arm:
-		default_spring_arm_position = spring_arm.position
-		default_spring_length = spring_arm.spring_length
-		target_spring_arm_position = default_spring_arm_position
-		target_spring_length = default_spring_length
-	else:
-		push_warning("SpringArm3D not found! First-person camera mode will not work.")
-	
 	# Create planting cursor UI
 	_create_plant_cursor()
-	# Create shooting cursor UI
-	_create_shoot_cursor()
 
 
 func hide_all_weapons() -> void:
@@ -201,72 +158,14 @@ func switch_weapon(weapon: WeaponType) -> void:
 	# نظهر السلاح المختار
 	match current_weapon:
 		WeaponType.GUN:
-			# Hide character model and gun model in first-person mode to avoid blocking camera
-			if model:
-				model.visible = false
 			if gun_model:
-				gun_model.visible = false  # Hide gun model in first-person to avoid blocking
+				gun_model.visible = true
 		WeaponType.GRENADE:
 			if grenade_model:
 				grenade_model.visible = true
-			# Show character model in third-person mode
-			if model:
-				model.visible = true
 		WeaponType.SHOVEL:
 			if shovel_model:
 				shovel_model.visible = true
-			# Show character model in third-person mode
-			if model:
-				model.visible = true
-	
-	# Update camera position based on weapon
-	_update_camera_position()
-
-
-func _update_camera_position() -> void:
-	if not spring_arm:
-		return
-	
-	# Calculate target position and spring length based on current weapon
-	if current_weapon == WeaponType.GUN:
-		# First-person mode: camera at head/eye level, centered
-		target_spring_arm_position = Vector3(
-			default_spring_arm_position.x,  # Keep X centered
-			default_spring_arm_position.y + first_person_height,  # Raise to head/eye level
-			default_spring_arm_position.z  # Keep Z centered
-		)
-		target_spring_length = 0.0  # Disable spring physics for locked first-person view
-	else:
-		# Third-person mode: return to default position and spring length
-		target_spring_arm_position = default_spring_arm_position
-		target_spring_length = default_spring_length
-	
-	# Kill existing tweens if they exist
-	if camera_tween and camera_tween.is_valid():
-		camera_tween.kill()
-	if spring_length_tween and spring_length_tween.is_valid():
-		spring_length_tween.kill()
-	
-	# Create new tween for smooth position transition
-	camera_tween = create_tween()
-	camera_tween.set_ease(Tween.EASE_IN_OUT)
-	camera_tween.set_trans(Tween.TRANS_SINE)
-	
-	# Calculate transition duration based on distance and speed
-	var distance: float = spring_arm.position.distance_to(target_spring_arm_position)
-	var duration: float = distance / camera_transition_speed
-	duration = clamp(duration, 0.1, 1.0)  # Clamp between 0.1 and 1.0 seconds
-	
-	# Tween the position
-	camera_tween.tween_property(spring_arm, "position", target_spring_arm_position, duration)
-	
-	# Create new tween for smooth spring length transition
-	spring_length_tween = create_tween()
-	spring_length_tween.set_ease(Tween.EASE_IN_OUT)
-	spring_length_tween.set_trans(Tween.TRANS_SINE)
-	
-	# Tween the spring length
-	spring_length_tween.tween_property(spring_arm, "spring_length", target_spring_length, duration)
 
 
 func _process(delta: float) -> void:
@@ -332,8 +231,6 @@ func _process(delta: float) -> void:
 	
 	# Update planting cursor position
 	_update_plant_cursor()
-	# Update shooting cursor position
-	_update_shoot_cursor()
 
 
 # ---------------------------
@@ -357,9 +254,6 @@ func start_shoot() -> void:
 	if playback:
 		playback.travel("Shoot")
 		play_sfx_delayed(shoot_out_flower,0.4)
-	
-	# Launch projectile
-	shoot_flower_projectile()
 
 
 func start_throw() -> void:
@@ -742,304 +636,6 @@ func _update_plant_cursor() -> void:
 	
 	# Set color
 	floor_indicator_material.albedo_color = indicator_color
-
-
-# ---------------------------
-# SHOOTING CURSOR (Crosshair)
-# ---------------------------
-func _create_shoot_cursor() -> void:
-	if not show_shoot_cursor:
-		return
-	
-	call_deferred("_create_shoot_cursor_deferred")
-
-
-func _create_shoot_cursor_deferred() -> void:
-	# Create material for the crosshair
-	shoot_cursor_material = StandardMaterial3D.new()
-	shoot_cursor_material.albedo_color = shoot_cursor_color
-	shoot_cursor_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	shoot_cursor_material.no_depth_test = true  # Always render on top
-	shoot_cursor_material.emission_enabled = true  # Enable emission for glow
-	shoot_cursor_material.emission = shoot_cursor_color
-	
-	# Create parent node
-	shoot_cursor = Node3D.new()
-	shoot_cursor.name = "ShootCursor"
-	
-	# Create "+" sign crosshair (two intersecting lines)
-	var line_length: float = shoot_cursor_size
-	var line_width: float = shoot_cursor_line_width
-	var line_height: float = 0.1  # Thick crosshair for visibility
-	
-	# Horizontal line
-	var horizontal_box: BoxMesh = BoxMesh.new()
-	horizontal_box.size = Vector3(line_length, line_height, line_width)
-	var horizontal_mesh: MeshInstance3D = MeshInstance3D.new()
-	horizontal_mesh.mesh = horizontal_box
-	horizontal_mesh.material_override = shoot_cursor_material
-	horizontal_mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	horizontal_mesh.position = Vector3(0, line_height * 0.5, 0)
-	shoot_cursor.add_child(horizontal_mesh)
-	
-	# Vertical line
-	var vertical_box: BoxMesh = BoxMesh.new()
-	vertical_box.size = Vector3(line_width, line_height, line_length)
-	var vertical_mesh: MeshInstance3D = MeshInstance3D.new()
-	vertical_mesh.mesh = vertical_box
-	vertical_mesh.material_override = shoot_cursor_material
-	vertical_mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	vertical_mesh.position = Vector3(0, line_height * 0.5, 0)
-	shoot_cursor.add_child(vertical_mesh)
-	
-	# Add to scene root
-	var scene_root = get_tree().current_scene
-	if scene_root:
-		scene_root.add_child(shoot_cursor)
-		shoot_cursor.visible = false
-	else:
-		push_error("Could not create shooting cursor - no scene root")
-
-
-func _update_shoot_cursor() -> void:
-	if not show_shoot_cursor:
-		return
-	
-	if not shoot_cursor or not is_instance_valid(shoot_cursor):
-		return
-	
-	# Only show cursor when gun is equipped
-	var show_cursor: bool = current_weapon == WeaponType.GUN
-	
-	if not show_cursor:
-		shoot_cursor.visible = false
-		return
-	
-	# Get camera for raycasting
-	var cam: Camera3D = raycast_camera if raycast_camera else camera
-	if not cam:
-		shoot_cursor.visible = false
-		return
-	
-	# Get mouse position and viewport info
-	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
-	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	
-	# Cast ray to find floor position
-	var floor_hit: Dictionary = raycast_to_floor(mouse_pos, viewport_size, cam)
-	
-	var cursor_pos: Vector3
-	if not floor_hit.is_empty():
-		# Store target position from floor hit
-		current_shoot_target = floor_hit.position
-		# Position crosshair at hit point (slightly above floor for visibility)
-		cursor_pos = floor_hit.position
-		cursor_pos.y += 0.1  # Slight offset above floor
-	else:
-		# No floor hit - calculate position in air based on camera ray direction
-		var ray_origin: Vector3 = cam.global_position
-		var ray_dir: Vector3 = cam.project_ray_normal(mouse_pos)
-		# Position cursor at a fixed distance in front of camera (e.g., 10 units)
-		var air_distance: float = 10.0
-		cursor_pos = ray_origin + ray_dir * air_distance
-		# Store target position for shooting
-		current_shoot_target = cursor_pos
-	
-	shoot_cursor.global_position = cursor_pos
-	
-	# Align crosshair to face camera (billboard effect)
-	if cam:
-		var look_dir: Vector3 = (cam.global_position - shoot_cursor.global_position).normalized()
-		shoot_cursor.look_at(shoot_cursor.global_position + look_dir, Vector3.UP)
-	
-	shoot_cursor.visible = true
-	shoot_cursor_material.albedo_color = shoot_cursor_color
-
-
-func shoot_flower_projectile() -> void:
-	if sunflower_scene == null:
-		push_error("Sunflower scene not loaded!")
-		return
-	
-	# Check if we have a valid target
-	if current_shoot_target == Vector3.ZERO:
-		# Try to get current target from cursor or calculate from camera ray
-		var cam: Camera3D = raycast_camera if raycast_camera else camera
-		if cam:
-			var mouse_pos: Vector2 = get_viewport().get_mouse_position()
-			var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-			var floor_hit: Dictionary = raycast_to_floor(mouse_pos, viewport_size, cam)
-			if not floor_hit.is_empty():
-				current_shoot_target = floor_hit.position
-			else:
-				# No floor hit - calculate target in air based on camera ray direction
-				var ray_origin: Vector3 = cam.global_position
-				var ray_dir: Vector3 = cam.project_ray_normal(mouse_pos)
-				# Target at a fixed distance in front of camera (e.g., 20 units)
-				var air_distance: float = 20.0
-				current_shoot_target = ray_origin + ray_dir * air_distance
-		else:
-			print("No camera for shooting")
-			return
-	
-	# Get spawn position (from gun model or player position)
-	var spawn_pos: Vector3 = global_position
-	if gun_model:
-		spawn_pos = gun_model.global_position
-	else:
-		# Spawn slightly above player
-		spawn_pos.y += 1.0
-	
-	# Calculate direction to target
-	var direction: Vector3 = (current_shoot_target - spawn_pos).normalized()
-	
-	# Create projectile wrapper (RigidBody3D)
-	var projectile: RigidBody3D = RigidBody3D.new()
-	projectile.name = "FlowerProjectile"
-	projectile.gravity_scale = 1.0
-	projectile.linear_damp = 0.0  # No air resistance
-	
-	# Create collision shape for projectile
-	var collision_shape: CollisionShape3D = CollisionShape3D.new()
-	var sphere_shape: SphereShape3D = SphereShape3D.new()
-	sphere_shape.radius = 0.1  # Small collision sphere
-	collision_shape.shape = sphere_shape
-	projectile.add_child(collision_shape)
-	
-	# Instantiate flower and add as child (visible during flight as projectile)
-	var flower: Node3D = sunflower_scene.instantiate()
-	flower.name = "Flower"
-	
-	projectile.add_child(flower)
-	
-	# Add to scene first (must be in tree before setting global_position)
-	get_tree().current_scene.add_child(projectile)
-	
-	# Set initial position and velocity
-	projectile.global_position = spawn_pos
-	projectile.linear_velocity = direction * projectile_speed
-	
-	# Check for floor collision using area detection
-	var area: Area3D = Area3D.new()
-	area.name = "ProjectileArea"
-	var area_shape: CollisionShape3D = CollisionShape3D.new()
-	var area_sphere: SphereShape3D = SphereShape3D.new()
-	area_sphere.radius = 0.15
-	area_shape.shape = area_sphere
-	area.add_child(area_shape)
-	projectile.add_child(area)
-	
-	# Set collision layers
-	area.collision_layer = 0  # Don't collide with anything
-	area.collision_mask = ground_collision_mask  # Detect ground
-	
-	# Connect area signal
-	area.body_entered.connect(func(body): _on_projectile_area_collision(projectile, body))
-	area.area_entered.connect(func(area_node): _on_projectile_area_collision(projectile, area_node))
-	
-	# Store reference to check for ground hits
-	projectile.set_meta("flower_node", flower)
-	projectile.set_meta("has_landed", false)
-	
-	# Add continuous ground check using timer
-	var check_timer: Timer = Timer.new()
-	check_timer.wait_time = 0.05  # Check every 0.05 seconds
-	check_timer.timeout.connect(func(): _check_projectile_ground_proximity(projectile))
-	check_timer.autostart = true
-	projectile.add_child(check_timer)
-
-
-func _on_projectile_area_collision(projectile: RigidBody3D, body: Node) -> void:
-	# Check if it's the ground
-	if body is StaticBody3D or body is GridMap:
-		_handle_projectile_landing(projectile)
-
-
-func _handle_projectile_landing(projectile: RigidBody3D) -> void:
-	# Prevent multiple landings
-	if projectile.get_meta("has_landed", false):
-		return
-	
-	projectile.set_meta("has_landed", true)
-	
-	# Stop projectile physics
-	projectile.freeze = true
-	projectile.linear_velocity = Vector3.ZERO
-	
-	# Get the flower node
-	var flower: Node3D = projectile.get_meta("flower_node", null)
-	if not flower:
-		projectile.queue_free()
-		return
-	
-	# Get current position
-	var hit_pos: Vector3 = projectile.global_position
-	
-	# Use raycast to get exact floor position (snap to grid)
-	var cam: Camera3D = raycast_camera if raycast_camera else camera
-	if cam:
-		# Cast ray downward from projectile position
-		var ray_origin: Vector3 = hit_pos + Vector3.UP * 2.0  # Start above
-		var ray_end: Vector3 = hit_pos - Vector3.UP * 5.0  # Cast downward
-		var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-		var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
-		query.collision_mask = ground_collision_mask
-		query.collide_with_bodies = true
-		query.collide_with_areas = false
-		
-		var result: Dictionary = space_state.intersect_ray(query)
-		if not result.is_empty():
-			hit_pos = result.position
-			
-			# Snap to grid if it's a GridMap
-			var collider = result.collider
-			if collider is GridMap:
-				var gridmap: GridMap = collider as GridMap
-				var local_hit: Vector3 = gridmap.to_local(hit_pos)
-				var cell_coords: Vector3i = gridmap.local_to_map(local_hit)
-				var cell_center_local: Vector3 = gridmap.map_to_local(cell_coords)
-				var cell_center_global: Vector3 = gridmap.to_global(cell_center_local)
-				hit_pos = Vector3(cell_center_global.x, result.position.y, cell_center_global.z)
-	
-	# Apply flower offset
-	hit_pos.y += flower_y_offset
-	
-	# Remove flower from projectile
-	projectile.remove_child(flower)
-	
-	# Remove projectile
-	projectile.queue_free()
-	
-	# Add flower to scene at snapped position
-	get_tree().current_scene.add_child(flower)
-	flower.global_position = hit_pos
-	
-	# Play planting sound
-	if planting_seed: planting_seed.play()
-	
-	print("Flower projectile landed and snapped to floor at: ", hit_pos)
-
-
-func _check_projectile_ground_proximity(projectile: RigidBody3D) -> void:
-	if projectile.get_meta("has_landed", false):
-		return
-	
-	# Check if projectile is close to ground
-	var pos: Vector3 = projectile.global_position
-	var ray_origin: Vector3 = pos + Vector3.UP * 0.2
-	var ray_end: Vector3 = pos - Vector3.UP * 2.0
-	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
-	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
-	query.collision_mask = ground_collision_mask
-	query.collide_with_bodies = true
-	query.collide_with_areas = false
-	
-	var result: Dictionary = space_state.intersect_ray(query)
-	if not result.is_empty():
-		var distance: float = pos.distance_to(result.position)
-		# If very close to ground, trigger landing
-		if distance < 0.5:
-			_handle_projectile_landing(projectile)
 
 
 # ---------------------------

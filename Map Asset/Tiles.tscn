@@ -125,7 +125,7 @@ cull_mode = 2
 albedo_texture = ExtResource("4_ptnoi")
 texture_filter = 2
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_cnjxd"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_uxr80"]
 _surfaces = [{
 "aabb": AABB(-1.0944744, -0.18012701, -1.0944744, 2.1889489, 1.2746015, 2.1889489),
 "format": 34359742465,
@@ -179,7 +179,7 @@ _surfaces = [{
 "vertex_data": PackedByteArray("MvPMDP//AIDMDDLz//8AgDLzMvP//wCAzAzMDP//AID//8wMzAz/v///MvMy8/+///8y88wM/7///8wMMvP/vzLz///MDP+/zAz//zLz/7/MDP//zAz/vzLz//8y8/+/AADMDDLzAAAAADLzzAwAAAAAMvMy8wAAAADMDMwMAADMDMwMAAAAADLzMvMAAAAAzAwy8wAAAAAy88wMAAAAAMwMAAAy82hOAADMDDLzaE7MDMwM//9oTswMMvP//5axAAAy8zLzlrHMDP//MvOWscwMAADMDL4jzAzMDAAAviMAAMwMzAy+I8wM///MDEDcAAAy88wMQNzMDDLzAABA3DLzAAAy82hOMvPMDP//aE7//8wMMvNoTjLz//8y85ax//8y8zLzlrEy8zLz//+WsTLzAADMDL4j///MDMwMviMy88wMAAC+IzLz///MDEDcMvMy8wAAQNz//zLzzAxA3MwMAADMDAI6AADMDDLzAjrMDAAAMvMCOgAAzAzMDAI6zAzMDP///58AADLzMvP/n8wMMvP///+fAADMDDLz/5/MDP//MvP8xQAAMvPMDPzFzAz//8wM/MUAADLzMvP8xcwMMvMAAAAAAADMDMwMAADMDMwMAAAAAAAAMvPMDAAAMvMAAMwM/x/MDMwMAAD/H8wMAADMDP8fMvPMDAAA/x/MDP//zAz/3zLzMvMAAP/fMvP//8wM/9/MDDLzAAD/3///MvPMDAAAMvPMDAAAAAD//8wMzAwAADLzMvMAAAAAMvMAADLzAjr//8wMzAwCOjLzAADMDAI6///MDDLzAjoy8///zAz8xf//MvMy8/zFMvP//zLz/MX//zLzzAz8xTLzMvP///+f///MDDLz/58y88wM////n///MvMy8/+fzAwAADLz/18y88wM////XzLzAAAy8/9fzAzMDP///18y8///MvP/n8wMMvP///+fzAz//zLz/58y8zLz////n8wMAADMDP8/MvMAADLz/z8y8wAAzAz/P8wMAAAy8/8//3////9/////f////3////9/AAD/fwAA/38AAP9/AAD///9/////f////3////9//z//f/8//3//P/9//z//f////3////9/////f////38yRvCXMkbwlzJG8JcN6DHGDegxxg3oMcZnMY2gZzGNoGcxjaBx32excd9nsXHfZ7HxF8058RfNOfEXzTnMuQ5ozLkOaMy5DmiNIJdOjSCXTo0gl06XznFfl85xX5fOcV/+Of6c/jn+nP45/pz+Of6c/3////9/////f////3/////i/bn/4v25/+L9uf/i/bn//3yl//98pf//fKX//3ylAAD/fwAA/38AAP9/AAD/f////3////9/////f////3+B2v9/gdr/f4Ha/3+B2v9//xwBRv8cAUb/HAFG/xwBRgDGAGMAxgBjAMYAYwDGAGP/fwAA/38AAP9/AAD/fwAAAAD/fwAA/38AAP9/AAD/f////3////9/////f////38AAP9/AAD/fwAA/38AAP9/")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_cnjxd")
+shadow_mesh = SubResource("ArrayMesh_uxr80")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hiuw7"]
 size = Vector3(2.1, 2.1, 2.1)
@@ -244,6 +244,7 @@ shape = SubResource("ConcavePolygonShape3D_p6uyp")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8199863, 0.91193986, 2.8785915)
 
 [node name="Cube_020" parent="Grass block/GrassRadiant2" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01525259, 0.015670717, -0.010320187)
 surface_material_override/0 = SubResource("ShaderMaterial_uxr80")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Grass block/GrassRadiant2/Cube_020" index="0"]

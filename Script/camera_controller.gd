@@ -16,7 +16,11 @@ func _input(event: InputEvent) -> void:
 	# 检测鼠标移动并旋转视角
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		var mouse_delta = event.relative
-		rotation.y -= mouse_delta.x * mouse_sensitivity
+		# Rotate SpringArm3D for yaw (left/right) - horizontal mouse movement
+		# Rotate around the Y axis (vertical axis) for left/right camera movement
+		rotate_y(-mouse_delta.x * mouse_sensitivity)
+		# Rotate SpringArm3D for pitch (up/down) - vertical mouse movement
+		# Rotate around the X axis for up/down camera movement
 		rotation.x -= mouse_delta.y * mouse_sensitivity
 		rotation.x = clamp(rotation.x, -PI/2, PI/4)
 	

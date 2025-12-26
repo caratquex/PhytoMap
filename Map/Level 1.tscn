@@ -479,7 +479,7 @@ transform = Transform3D(0.27095288, 0.22193608, -0.9366584, 0.44319585, 0.835022
 transform = Transform3D(0.27095288, 0.22193608, -0.9366584, 0.44319585, 0.8350225, 0.3260599, 0.8544952, -0.50347, 0.12789044, 16.44653, 0.31382325, -11.982849)
 
 [node name="Node3D" parent="." instance=ExtResource("25_s8enn")]
-transform = Transform3D(5.22, 0, 0, 0, 3.41, 0, 0, 0, 5.57, 30.514086, 0.44818544, -6.422171)
+transform = Transform3D(5.2199697, 0, 0.019151289, 0, 3.41, 0, -0.017947882, 0, 5.5699673, 30.514086, 0.44818544, -6.422171)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
