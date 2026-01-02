@@ -1,5 +1,40 @@
-[gd_scene format=3 uid="uid://qfkfvt6felnv"]
+[gd_scene load_steps=2 format=3 uid="uid://qfkfvt6felnv"]
+
+[ext_resource type="Script" path="res://Script/game_manager.gd" id="1_game_manager"]
 
 [node name="GameManager" type="Node"]
+script = ExtResource("1_game_manager")
 
 [node name="Timer" type="Timer" parent="."]
+
+[node name="DebugUI" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="Panel" type="PanelContainer" parent="DebugUI"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 280.0
+offset_bottom = 120.0
+
+[node name="VBox" type="VBoxContainer" parent="DebugUI/Panel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="DebugUI/Panel/VBox"]
+layout_mode = 2
+text = "=== DEBUG ==="
+horizontal_alignment = 1
+
+[node name="TimeLabel" type="Label" parent="DebugUI/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Time: --:--"
+
+[node name="RadiationLabel" type="Label" parent="DebugUI/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Radiation: --"
+
+[node name="StatusLabel" type="Label" parent="DebugUI/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Status: Playing"

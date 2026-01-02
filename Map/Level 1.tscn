@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=4 uid="uid://sl5ib4d0b7c6"]
+[gd_scene load_steps=53 format=4 uid="uid://sl5ib4d0b7c6"]
 
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_s8enn"]
 [ext_resource type="MeshLibrary" uid="uid://ctlg4t84uuu0u" path="res://Tiles/Tiles11.tres" id="2_dn7vj"]
@@ -42,6 +42,7 @@
 [ext_resource type="AudioStream" uid="uid://bksqa2otderuc" path="res://Sfx/Hotbar_Switching2.wav" id="40_8sq5o"]
 [ext_resource type="AudioStream" uid="uid://b2jepp8pt3wji" path="res://Sfx/got hurt.wav" id="41_opgf8"]
 [ext_resource type="AudioStream" uid="uid://bmpdyihcbhqkc" path="res://Sfx/throw plant grenade.mp3" id="42_ewipy"]
+[ext_resource type="PackedScene" uid="uid://qfkfvt6felnv" path="res://Scene/GameManager.tscn" id="43_b6wlo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_we51m"]
 resource_local_to_scene = true
@@ -529,3 +530,7 @@ stream = ExtResource("41_opgf8")
 
 [node name="ThrowPlantGrenade" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("42_ewipy")
+
+[node name="GameManager" parent="." node_paths=PackedStringArray("gridmap") instance=ExtResource("43_b6wlo")]
+gridmap = NodePath("../GrassBlock/GridMap2")
+radiation_tile_ids = Array[int]([-1, 0, 0, 0, 0, 0, 0, 0, 0, 0])

@@ -20,6 +20,7 @@ class FlowerProjectile extends RigidBody3D:
 	var last_position: Vector3
 	var flower_scene: PackedScene
 	var has_landed: bool = false
+	var landing_collider: Node = null  # Store the collider we landed on for radiation check
 	
 	# Node References
 	var mesh_instance: MeshInstance3D
@@ -121,6 +122,9 @@ class FlowerProjectile extends RigidBody3D:
 			var floor_pos = result.position
 			var collider = result.collider
 			
+			# Store the collider for radiation check
+			landing_collider = collider
+			
 			# Snap to grid if GridMap
 			if collider is GridMap:
 				var gridmap = collider as GridMap
@@ -134,6 +138,7 @@ class FlowerProjectile extends RigidBody3D:
 			transform_to_flower(floor_pos)
 		else:
 			# No floor found, just place at impact position
+			landing_collider = null
 			transform_to_flower(impact_pos)
 	
 	func transform_to_flower(flower_pos: Vector3) -> void:
@@ -156,6 +161,11 @@ class FlowerProjectile extends RigidBody3D:
 			get_tree().current_scene.add_child(flower)
 			flower.global_position = flower_pos
 			print("Flower spawned at: ", flower_pos)
+			
+			# Check if planted on radiation location and notify GameManager
+			if GameManager.instance and GameManager.instance.is_radiation_location(flower_pos, landing_collider):
+				GameManager.instance.on_radiation_cleared()
+				print("Radiation cleared by projectile at: ", flower_pos)
 		else:
 			push_error("Cannot spawn flower - no scene tree!")
 		
@@ -957,6 +967,11 @@ func plant_flower_at_cursor() -> void:
 	var flower: Node3D = sunflower_scene.instantiate()
 	get_tree().current_scene.add_child(flower)
 	flower.global_position = ground_pos
+	
+	# Check if planted on radiation location and notify GameManager
+	if GameManager.instance and GameManager.instance.is_radiation_location(ground_pos, floor_hit.collider):
+		GameManager.instance.on_radiation_cleared()
+		print("Radiation cleared by planting at: ", ground_pos)
 
 
 func raycast_to_floor(mouse_pos: Vector2, viewport_size: Vector2, cam: Camera3D) -> Dictionary:
