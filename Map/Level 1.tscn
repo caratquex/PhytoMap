@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=4 uid="uid://sl5ib4d0b7c6"]
+[gd_scene load_steps=54 format=4 uid="uid://sl5ib4d0b7c6"]
 
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_s8enn"]
 [ext_resource type="MeshLibrary" uid="uid://ctlg4t84uuu0u" path="res://Tiles/Tiles11.tres" id="2_dn7vj"]
@@ -42,7 +42,6 @@
 [ext_resource type="AudioStream" uid="uid://bksqa2otderuc" path="res://Sfx/Hotbar_Switching2.wav" id="40_8sq5o"]
 [ext_resource type="AudioStream" uid="uid://b2jepp8pt3wji" path="res://Sfx/got hurt.wav" id="41_opgf8"]
 [ext_resource type="AudioStream" uid="uid://bmpdyihcbhqkc" path="res://Sfx/throw plant grenade.mp3" id="42_ewipy"]
-[ext_resource type="PackedScene" uid="uid://qfkfvt6felnv" path="res://Scene/GameManager.tscn" id="43_b6wlo"]
 [ext_resource type="PackedScene" uid="uid://4p5bvlkog65k" path="res://Scene/RadiationZoneBox.tscn" id="44_wwfh2"]
 [ext_resource type="Texture2D" uid="uid://bomdnaxhjmxbd" path="res://Map Asset/grass_albedo.tres" id="45_8sq5o"]
 
@@ -533,14 +532,8 @@ stream = ExtResource("41_opgf8")
 [node name="ThrowPlantGrenade" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("42_ewipy")
 
-[node name="GameManager" parent="." node_paths=PackedStringArray("gridmap") instance=ExtResource("43_b6wlo")]
+[node name="RadiationZoneBox" parent="." node_paths=PackedStringArray("gridmap") instance=ExtResource("44_wwfh2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.963598, 5.7697973, -5.04679)
+required_sunflowers = 5
+normal_grass_texture = ExtResource("45_8sq5o")
 gridmap = NodePath("../GrassBlock/GridMap2")
-radiation_tile_ids = Array[int]([0])
-
-[node name="RadiationZoneBox" parent="." instance=ExtResource("44_wwfh2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.327862, 4.632724, -5.971752)
-normal_grass_texture = ExtResource("45_8sq5o")
-
-[node name="RadiationZoneBox2" parent="." instance=ExtResource("44_wwfh2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.386114, -1.0711031, -12.712652)
-normal_grass_texture = ExtResource("45_8sq5o")

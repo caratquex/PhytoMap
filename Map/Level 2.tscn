@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=4 uid="uid://j57p8ed70c7i"]
+[gd_scene load_steps=58 format=4 uid="uid://j57p8ed70c7i"]
 
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_ibaua"]
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="2_754fx"]
@@ -42,6 +42,8 @@
 [ext_resource type="PackedScene" uid="uid://bk7xiwbaknp4w" path="res://Map Asset/bridges_plate_1.tscn" id="38_f14xn"]
 [ext_resource type="PackedScene" uid="uid://nhc71q5iss6n" path="res://Map Asset/bridge.tscn" id="39_awp4g"]
 [ext_resource type="Texture2D" uid="uid://qjm7jmewl6c1" path="res://addons/simplegrasstextured/textures/Grass Grey.png" id="39_p3yci"]
+[ext_resource type="PackedScene" uid="uid://4p5bvlkog65k" path="res://Scene/RadiationZoneBox.tscn" id="43_nbbt7"]
+[ext_resource type="Texture2D" uid="uid://bomdnaxhjmxbd" path="res://Map Asset/grass_albedo.tres" id="43_ucx1a"]
 
 [sub_resource type="Animation" id="Animation_81gk7"]
 resource_name = "Moving Platform 2"
@@ -445,9 +447,6 @@ stream = ExtResource("26_ywkyo")
 [node name="ThrowPlantGrenade" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("28_nbbt7")
 
-[node name="Player" parent="." instance=ExtResource("21_jrhep")]
-transform = Transform3D(-0.36188486, 0, 0.9322228, 0, 1, 0, -0.9322228, 0, -0.36188486, 63.355988, 8.22254, 22.489065)
-
 [node name="GrassBlock" type="Node3D" parent="."]
 
 [node name="Node3D2" parent="GrassBlock" instance=ExtResource("22_52s5m")]
@@ -639,3 +638,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59.13897, 5.869309, -69.00062
 
 [node name="Stone3" parent="." instance=ExtResource("12_52s5m")]
 transform = Transform3D(0.8403225, 0, -1.3261818, 0, 1.5699998, 0, 1.3261818, 0, 0.8403225, 54.024757, 2.019075, -77.39042)
+
+[node name="RadiantZone" type="Node" parent="."]
+
+[node name="RadiationZoneBox" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.229918, 23.515472, -19.343403)
+normal_grass_texture = ExtResource("43_ucx1a")
+gridmap = NodePath("../../GridMap")
+
+[node name="Player" parent="." instance=ExtResource("21_jrhep")]
+transform = Transform3D(0.99812734, 0, -0.06117048, 0, 1, 0, 0.06117048, 0, 0.99812734, 93.0838, 21.054665, -15.331945)

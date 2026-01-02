@@ -21,6 +21,14 @@ extends Area3D
 @export var grass_conversion_duration: float = 1.0  ## Duration of the grass color transition
 
 # ---------------------------
+# GridMap Conversion Settings
+# ---------------------------
+@export_group("GridMap Conversion")
+@export var gridmap: GridMap  ## Reference to the GridMap
+@export var radiation_tile_ids: Array[int] = []  ## Tile IDs for RadiantGrass (e.g., [1, 2])
+@export var normal_grass_tile_id: int = 0  ## Tile ID for normal Grass block
+
+# ---------------------------
 # State
 # ---------------------------
 var current_sunflowers: int = 0
@@ -197,6 +205,10 @@ func clear_zone() -> void:
 	if convert_grass_on_clear:
 		_convert_radiant_grass_in_zone()
 	
+	# Convert GridMap tiles to normal grass
+	if gridmap and radiation_tile_ids.size() > 0:
+		_convert_gridmap_tiles_in_zone()
+	
 	# Remove from Radiation group
 	remove_from_group("Radiation")
 	
@@ -334,6 +346,51 @@ func _update_shader_material(material: ShaderMaterial, new_texture: Texture2D) -
 	# Update the albedo_texture shader parameter
 	if material.get_shader_parameter("albedo_texture") != null:
 		material.set_shader_parameter("albedo_texture", new_texture)
+
+
+# ---------------------------
+# GridMap Tile Conversion
+# ---------------------------
+
+func _convert_gridmap_tiles_in_zone() -> void:
+	if not gridmap:
+		_debug_print("WARNING: GridMap not assigned!")
+		return
+	
+	if radiation_tile_ids.size() == 0:
+		_debug_print("WARNING: No radiation_tile_ids configured!")
+		return
+	
+	# Get all used cells from GridMap
+	var used_cells = gridmap.get_used_cells()
+	_debug_print("Found %d cells in GridMap" % used_cells.size())
+	
+	var zone_pos = global_position
+	var converted_count = 0
+	
+	# Process each cell
+	for cell_coords in used_cells:
+		# Get the tile item at this cell
+		var tile_item = gridmap.get_cell_item(cell_coords)
+		
+		# Check if this is a radiation tile
+		if tile_item in radiation_tile_ids:
+			# Convert cell coordinates to world position
+			var local_pos = gridmap.map_to_local(cell_coords)
+			var world_pos = gridmap.to_global(local_pos)
+			
+			# Check if within zone radius
+			var distance = world_pos.distance_to(zone_pos)
+			if distance <= zone_radius:
+				# Get the cell's orientation to preserve it
+				var orientation = gridmap.get_cell_item_orientation(cell_coords)
+				
+				# Replace with normal grass tile
+				gridmap.set_cell_item(cell_coords, normal_grass_tile_id, orientation)
+				converted_count += 1
+				_debug_print("Converted GridMap tile at %s (distance: %.2f) from ID %d to %d" % [cell_coords, distance, tile_item, normal_grass_tile_id])
+	
+	_debug_print("Converted %d GridMap tiles to normal grass" % converted_count)
 
 
 # ---------------------------
