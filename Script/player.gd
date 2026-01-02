@@ -4,6 +4,173 @@ extends CharacterBody3D
 static var instance: CharacterBody3D
 
 # ---------------------------
+# FLOWER PROJECTILE CLASS
+# ---------------------------
+class FlowerProjectile extends RigidBody3D:
+	# Projectile Configuration
+	@export var initial_velocity: Vector3 = Vector3.ZERO
+	@export var max_range: float = 50.0
+	@export var bounce_damping: float = 0.6  # Reduce velocity on bounce
+	@export var min_velocity_to_bounce: float = 1.0
+	@export var ground_collision_mask: int = 1  # Match player's ground collision mask
+	
+	# Projectile State
+	var distance_traveled: float = 0.0
+	var spawn_position: Vector3
+	var last_position: Vector3
+	var flower_scene: PackedScene
+	var has_landed: bool = false
+	
+	# Node References
+	var mesh_instance: MeshInstance3D
+	
+	func _ready() -> void:
+		# Store spawn position
+		spawn_position = global_position
+		last_position = global_position
+		
+		# Apply initial velocity
+		if initial_velocity != Vector3.ZERO:
+			linear_velocity = initial_velocity
+		
+		# Enable contact monitoring for collision detection
+		contact_monitor = true
+		max_contacts_reported = 10
+		
+		# Configure physics
+		gravity_scale = 1.0  # Use default gravity
+		
+		# Get mesh instance
+		mesh_instance = get_node_or_null("MeshInstance3D")
+	
+	func _physics_process(delta: float) -> void:
+		if has_landed:
+			return
+		
+		# Track distance traveled
+		var current_distance = global_position.distance_to(last_position)
+		distance_traveled += current_distance
+		last_position = global_position
+		
+		# Check max range
+		if distance_traveled > max_range:
+			destroy_projectile()
+			return
+		
+		# Check for collisions using get_colliding_bodies
+		var colliding_bodies = get_colliding_bodies()
+		if colliding_bodies.size() > 0:
+			handle_collision(colliding_bodies)
+	
+	func handle_collision(colliding_bodies: Array) -> void:
+		if has_landed:
+			return
+		
+		# Get collision information using raycast from last position to current
+		var space_state = get_world_3d().direct_space_state
+		var query = PhysicsRayQueryParameters3D.create(
+			last_position,
+			global_position
+		)
+		query.collide_with_bodies = true
+		query.collide_with_areas = false
+		query.exclude = [get_rid()]
+		
+		var result = space_state.intersect_ray(query)
+		
+		if result.is_empty():
+			return
+		
+		var normal = result.normal
+		var current_velocity = linear_velocity
+		
+		# Check if hitting floor (normal pointing up)
+		if normal.y > 0.7:  # Mostly upward normal = floor
+			land_on_floor(result.position)
+			return
+		
+		# Bounce off wall
+		if current_velocity.length() > min_velocity_to_bounce:
+			var reflected_velocity = current_velocity.bounce(normal) * bounce_damping
+			linear_velocity = reflected_velocity
+		else:
+			# Too slow, fall straight down
+			linear_velocity = Vector3(0, linear_velocity.y, 0)
+	
+	func land_on_floor(impact_pos: Vector3) -> void:
+		has_landed = true
+		
+		# Stop physics
+		freeze = true
+		linear_velocity = Vector3.ZERO
+		
+		# Raycast down to find exact floor
+		var space_state = get_world_3d().direct_space_state
+		var query = PhysicsRayQueryParameters3D.create(
+			impact_pos + Vector3.UP * 0.5,
+			impact_pos - Vector3.UP * 2.0
+		)
+		query.collision_mask = ground_collision_mask
+		query.collide_with_bodies = true
+		query.collide_with_areas = false
+		query.exclude = [get_rid()]
+		
+		var result = space_state.intersect_ray(query)
+		
+		if not result.is_empty():
+			var floor_pos = result.position
+			var collider = result.collider
+			
+			# Snap to grid if GridMap
+			if collider is GridMap:
+				var gridmap = collider as GridMap
+				var local_hit = gridmap.to_local(floor_pos)
+				var cell_coords = gridmap.local_to_map(local_hit)
+				var cell_center_local = gridmap.map_to_local(cell_coords)
+				var cell_center_global = gridmap.to_global(cell_center_local)
+				floor_pos = Vector3(cell_center_global.x, floor_pos.y, cell_center_global.z)
+			
+			# Transform to flower
+			transform_to_flower(floor_pos)
+		else:
+			# No floor found, just place at impact position
+			transform_to_flower(impact_pos)
+	
+	func transform_to_flower(flower_pos: Vector3) -> void:
+		var scene_to_use = flower_scene
+		if not scene_to_use:
+			# Use the same Sunflower1.tscn scene that player uses for planting
+			scene_to_use = load("res://Scene/Sunflower1.tscn")
+		
+		if not scene_to_use:
+			push_error("Failed to load Sunflower1.tscn!")
+			queue_free()
+			return
+		
+		# Hide projectile
+		visible = false
+		
+		# Spawn flower using Sunflower1.tscn
+		var flower = scene_to_use.instantiate()
+		if get_tree() and get_tree().current_scene:
+			get_tree().current_scene.add_child(flower)
+			flower.global_position = flower_pos
+			print("Flower spawned at: ", flower_pos)
+		else:
+			push_error("Cannot spawn flower - no scene tree!")
+		
+		# Remove projectile immediately
+		queue_free()
+	
+	func destroy_projectile() -> void:
+		queue_free()
+
+
+# Factory method to create FlowerProjectile instances
+static func create_flower_projectile() -> FlowerProjectile:
+	return FlowerProjectile.new()
+
+# ---------------------------
 # Weapon System
 # ---------------------------
 enum WeaponType { GUN = 1, GRENADE = 2, SHOVEL = 3 }
@@ -21,7 +188,7 @@ var sunflower_scene: PackedScene = null
 # Floor Indicator (3D square outline snapped to grid)
 # ---------------------------
 @export var show_floor_indicator: bool = true
-@export var indicator_color: Color = Color(1.0, 1.0, 0.0, 1.0)  # Yellow like in the image
+@export var indicator_color: Color = Color(0.463, 0.94, 0.207, 1.0)  # Yellow like in the image
 @export var indicator_line_width: float = 0.05  # Width of the outline
 var floor_indicator: Node3D  # Parent node for the outline
 var floor_indicator_material: StandardMaterial3D
@@ -51,6 +218,14 @@ var current_grid_cell: Vector3i = Vector3i(-99999, -99999, -99999)  # Track curr
 @export var shovel_model: Node3D
 
 # ---------------------------
+# Projectile System
+# ---------------------------
+@export var gun_projectile_speed: float = 20.0
+@export var grenade_projectile_speed: float = 12.0
+@export var gun_projectile_arc: float = 0.1  # Slight upward arc
+@export var grenade_projectile_arc: float = 0.3  # Higher arc
+
+# ---------------------------
 # Dash Variables
 # ---------------------------
 const DASH_SPEED: float = 15.0
@@ -68,6 +243,11 @@ var is_hurting: bool = false  # للأنيميشن الضرر
 
 var playback: AnimationNodeStateMachinePlayback
 var target_angle: float = PI
+
+# Track previous key states for numpad detection
+var prev_kp_1: bool = false
+var prev_kp_2: bool = false
+var prev_kp_3: bool = false
 
 # ---------------------------
 # Hurt Animation
@@ -190,9 +370,6 @@ func switch_weapon(weapon: WeaponType) -> void:
 		WeaponType.SHOVEL:
 			if shovel_model:
 				shovel_model.visible = true
-	
-	# Update camera position for first-person mode
-	_update_camera_position()
 
 
 func _process(delta: float) -> void:
@@ -212,16 +389,25 @@ func _process(delta: float) -> void:
 		elif current_state == "idle" or current_state == "Run":
 			reset_action_state()
 
-	# تبديل السلاح بالأرقام 1، 2، 3
-	if Input.is_action_just_pressed("gun"):
+	# تبديل السلاح بالأرقام 1، 2، 3 (regular keys or numpad)
+	var kp_1_pressed = Input.is_key_pressed(KEY_KP_1)
+	var kp_2_pressed = Input.is_key_pressed(KEY_KP_2)
+	var kp_3_pressed = Input.is_key_pressed(KEY_KP_3)
+	
+	if Input.is_action_just_pressed("gun") or (kp_1_pressed and not prev_kp_1):
 		switch_weapon(WeaponType.GUN)
 		if hotbar_switching_2: hotbar_switching_2.play()
-	elif Input.is_action_just_pressed("grenade"):
+	elif Input.is_action_just_pressed("grenade") or (kp_2_pressed and not prev_kp_2):
 		switch_weapon(WeaponType.GRENADE)
 		if hotbar_switching_2: hotbar_switching_2.play()
-	elif Input.is_action_just_pressed("shovel"):
+	elif Input.is_action_just_pressed("shovel") or (kp_3_pressed and not prev_kp_3):
 		switch_weapon(WeaponType.SHOVEL)
 		if hotbar_switching_2: hotbar_switching_2.play()
+	
+	# Update previous key states
+	prev_kp_1 = kp_1_pressed
+	prev_kp_2 = kp_2_pressed
+	prev_kp_3 = kp_3_pressed
 
 	# اتجاه الإدخال (WASD)
 	var input_dir: Vector2 = Input.get_vector("left", "right", "forward", "backward")
@@ -281,6 +467,9 @@ func start_shoot() -> void:
 	if playback:
 		playback.travel("Shoot")
 		play_sfx_delayed(shoot_out_flower,0.4)
+	
+	# Spawn projectile after a short delay to match animation
+	spawn_projectile_delayed(WeaponType.GUN, 0.2)
 
 
 func start_throw() -> void:
@@ -289,6 +478,9 @@ func start_throw() -> void:
 	if playback:
 		playback.travel("Throw Grenade")
 		play_sfx_delayed(throw_plant_grenade,0.5)
+	
+	# Spawn projectile after a short delay to match animation
+	spawn_projectile_delayed(WeaponType.GRENADE, 0.3)
 
 func start_plant() -> void:
 	# Play animation
@@ -813,3 +1005,98 @@ func raycast_to_floor(mouse_pos: Vector2, viewport_size: Vector2, cam: Camera3D)
 		"normal": result.normal,
 		"collider": result.collider
 	}
+
+
+# ---------------------------
+# PROJECTILE SPAWNING
+# ---------------------------
+func spawn_projectile_delayed(weapon_type: WeaponType, delay: float) -> void:
+	await get_tree().create_timer(delay).timeout
+	spawn_projectile(weapon_type)
+
+
+func spawn_projectile(weapon_type: WeaponType) -> void:
+	# Get spawn position (gun/grenade model or hand position)
+	var spawn_pos = get_spawn_position(weapon_type)
+	
+	# Calculate direction from camera
+	var cam = raycast_camera if raycast_camera else camera
+	if not cam:
+		push_error("No camera available for projectile spawning!")
+		return
+	
+	var forward = -cam.global_transform.basis.z
+	var right = cam.global_transform.basis.x
+	var up = cam.global_transform.basis.y
+	
+	# Add slight upward arc
+	var arc_amount = gun_projectile_arc if weapon_type == WeaponType.GUN else grenade_projectile_arc
+	var direction = (forward + up * arc_amount).normalized()
+	
+	# Calculate speed
+	var speed = gun_projectile_speed if weapon_type == WeaponType.GUN else grenade_projectile_speed
+	var initial_velocity = direction * speed
+	
+	# Create projectile node directly using the inner class
+	var projectile = create_flower_projectile()
+	
+	# Set up the projectile node structure BEFORE adding to scene tree
+	var collision_shape = CollisionShape3D.new()
+	var sphere_shape = SphereShape3D.new()
+	sphere_shape.radius = 0.1
+	collision_shape.shape = sphere_shape
+	projectile.add_child(collision_shape)
+	
+	var mesh_instance = MeshInstance3D.new()
+	var sphere_mesh = SphereMesh.new()
+	sphere_mesh.radius = 0.1
+	sphere_mesh.height = 0.2
+	mesh_instance.mesh = sphere_mesh
+	mesh_instance.name = "MeshInstance3D"  # Set name so _ready can find it
+	projectile.add_child(mesh_instance)
+	
+	# Configure RigidBody3D properties
+	projectile.lock_rotation = true
+	projectile.contact_monitor = true
+	projectile.max_contacts_reported = 10
+	projectile.gravity_scale = 1.0
+	
+	# Pass the existing sunflower_scene from player (which loads Sunflower1.tscn)
+	projectile.flower_scene = sunflower_scene
+	# Pass ground collision mask
+	projectile.ground_collision_mask = ground_collision_mask
+	
+	# Now add to scene tree and set properties
+	get_tree().current_scene.add_child(projectile)
+	projectile.global_position = spawn_pos
+	projectile.initial_velocity = initial_velocity
+
+
+func get_spawn_position(weapon_type: WeaponType) -> Vector3:
+	# Try to get spawn position from weapon model
+	var weapon_model: Node3D = null
+	match weapon_type:
+		WeaponType.GUN:
+			weapon_model = gun_model
+		WeaponType.GRENADE:
+			weapon_model = grenade_model
+		WeaponType.SHOVEL:
+			weapon_model = shovel_model
+	
+	# If weapon model exists and is visible, use its position
+	if weapon_model and weapon_model.visible:
+		# Try to find a child node that represents the muzzle/throw point
+		# For now, use the model's global position with slight forward offset
+		var forward_offset = Vector3(0, 0, -0.3)  # Slight forward offset
+		var local_offset = weapon_model.global_transform.basis * forward_offset
+		return weapon_model.global_position + local_offset
+	
+	# Fallback: use player position with offset
+	var cam = raycast_camera if raycast_camera else camera
+	if cam:
+		# Spawn slightly in front of camera
+		var forward = -cam.global_transform.basis.z
+		return global_position + Vector3(0, 1.0, 0) + forward * 0.5
+	
+	# Last resort: player position
+	return global_position + Vector3(0, 1.0, 0)
