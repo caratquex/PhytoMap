@@ -13,6 +13,14 @@ extends Area3D
 @export var debug_enabled: bool = true  ## Enable debug prints
 
 # ---------------------------
+# Grass Conversion Settings
+# ---------------------------
+@export_group("Grass Conversion")
+@export var convert_grass_on_clear: bool = true  ## Convert RadiantGrass to normal Grass when cleared
+@export var normal_grass_texture: Texture2D  ## The normal grass albedo texture (grass_albedo.tres)
+@export var grass_conversion_duration: float = 1.0  ## Duration of the grass color transition
+
+# ---------------------------
 # State
 # ---------------------------
 var current_sunflowers: int = 0
@@ -145,6 +153,8 @@ func _update_collision_shape() -> void:
 		if zone_visual.mesh is SphereMesh:
 			(zone_visual.mesh as SphereMesh).radius = zone_radius
 			(zone_visual.mesh as SphereMesh).height = zone_radius * 2
+		elif zone_visual.mesh is BoxMesh:
+			(zone_visual.mesh as BoxMesh).size = Vector3(zone_radius * 2, zone_radius, zone_radius * 2)
 
 
 func _is_sunflower(node: Node3D) -> bool:
@@ -183,6 +193,10 @@ func clear_zone() -> void:
 			visual_tween.tween_property(mesh_material, "albedo_color:a", 0.0, 0.5)
 			visual_tween.tween_callback(func(): zone_visual.visible = false)
 	
+	# Convert RadiantGrass blocks to normal grass
+	if convert_grass_on_clear:
+		_convert_radiant_grass_in_zone()
+	
 	# Remove from Radiation group
 	remove_from_group("Radiation")
 	
@@ -194,6 +208,132 @@ func clear_zone() -> void:
 		GameManager.instance.on_radiation_cleared()
 	
 	_debug_print("=== ZONE CLEARED! === All %d sunflowers planted!" % required_sunflowers)
+
+
+# ---------------------------
+# RadiantGrass Conversion
+# ---------------------------
+
+func _convert_radiant_grass_in_zone() -> void:
+	# Load normal grass texture if not set
+	var grass_texture = normal_grass_texture
+	if not grass_texture:
+		grass_texture = load("res://Map Asset/grass_albedo.tres")
+		if not grass_texture:
+			_debug_print("WARNING: Could not load normal grass texture!")
+			return
+	
+	# Find all RadiantGrass blocks in the scene
+	var scene_root = get_tree().current_scene
+	if not scene_root:
+		return
+	
+	var radiant_grass_blocks: Array[Node3D] = []
+	_find_radiant_grass_recursive(scene_root, radiant_grass_blocks)
+	
+	_debug_print("Found %d RadiantGrass blocks in scene" % radiant_grass_blocks.size())
+	
+	# Convert blocks within zone radius
+	var zone_pos = global_position
+	var converted_count = 0
+	
+	for grass_block in radiant_grass_blocks:
+		var distance = grass_block.global_position.distance_to(zone_pos)
+		if distance <= zone_radius:
+			_convert_single_grass_block(grass_block, grass_texture)
+			converted_count += 1
+			_debug_print("Converted RadiantGrass '%s' at distance %.2f" % [grass_block.name, distance])
+	
+	_debug_print("Converted %d RadiantGrass blocks to normal grass" % converted_count)
+
+
+func _find_radiant_grass_recursive(node: Node, result: Array[Node3D]) -> void:
+	# Check if this node is a RadiantGrass block
+	if node is Node3D and _is_radiant_grass(node as Node3D):
+		result.append(node as Node3D)
+		return  # Don't check children
+	
+	# Recursively check children
+	for child in node.get_children():
+		_find_radiant_grass_recursive(child, result)
+
+
+func _is_radiant_grass(node: Node3D) -> bool:
+	# Check by scene filename
+	var scene_path = node.scene_file_path.to_lower()
+	if "radiantgrass" in scene_path or "grassradiant" in scene_path:
+		return true
+	
+	# Check by node name
+	var node_name = node.name.to_lower()
+	if "radiantgrass" in node_name or "grassradiant" in node_name:
+		return true
+	
+	return false
+
+
+func _convert_single_grass_block(grass_block: Node3D, new_texture: Texture2D) -> void:
+	# Find all MeshInstance3D children with ShaderMaterial
+	var mesh_instances: Array[MeshInstance3D] = []
+	_find_mesh_instances_recursive(grass_block, mesh_instances)
+	
+	for mesh_instance in mesh_instances:
+		_convert_mesh_material(mesh_instance, new_texture)
+	
+	# Find and disable GPUParticles3D
+	var particles: Array[GPUParticles3D] = []
+	_find_particles_recursive(grass_block, particles)
+	
+	for particle in particles:
+		# Fade out particles then disable
+		var tween = create_tween()
+		tween.tween_property(particle, "amount_ratio", 0.0, grass_conversion_duration * 0.5)
+		tween.tween_callback(func(): particle.emitting = false)
+		_debug_print("  Disabled particles: %s" % particle.name)
+
+
+func _find_mesh_instances_recursive(node: Node, result: Array[MeshInstance3D]) -> void:
+	if node is MeshInstance3D:
+		result.append(node as MeshInstance3D)
+	
+	for child in node.get_children():
+		_find_mesh_instances_recursive(child, result)
+
+
+func _find_particles_recursive(node: Node, result: Array[GPUParticles3D]) -> void:
+	if node is GPUParticles3D:
+		result.append(node as GPUParticles3D)
+	
+	for child in node.get_children():
+		_find_particles_recursive(child, result)
+
+
+func _convert_mesh_material(mesh_instance: MeshInstance3D, new_texture: Texture2D) -> void:
+	# Check surface override materials first
+	for i in range(mesh_instance.get_surface_override_material_count()):
+		var material = mesh_instance.get_surface_override_material(i)
+		if material and material is ShaderMaterial:
+			_update_shader_material(material as ShaderMaterial, new_texture)
+			_debug_print("  Updated surface override material %d on %s" % [i, mesh_instance.name])
+			return
+	
+	# Check mesh materials
+	if mesh_instance.mesh:
+		for i in range(mesh_instance.mesh.get_surface_count()):
+			var material = mesh_instance.mesh.surface_get_material(i)
+			if material and material is ShaderMaterial:
+				# Create a copy to avoid modifying shared resources
+				var mat_copy = material.duplicate() as ShaderMaterial
+				_update_shader_material(mat_copy, new_texture)
+				mesh_instance.set_surface_override_material(i, mat_copy)
+				_debug_print("  Updated mesh material %d on %s" % [i, mesh_instance.name])
+				return
+
+
+func _update_shader_material(material: ShaderMaterial, new_texture: Texture2D) -> void:
+	# Update the albedo_texture shader parameter
+	if material.get_shader_parameter("albedo_texture") != null:
+		material.set_shader_parameter("albedo_texture", new_texture)
 
 
 # ---------------------------
