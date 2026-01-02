@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=4 uid="uid://sl5ib4d0b7c6"]
+[gd_scene load_steps=54 format=4 uid="uid://sl5ib4d0b7c6"]
 
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_s8enn"]
 [ext_resource type="MeshLibrary" uid="uid://ctlg4t84uuu0u" path="res://Tiles/Tiles11.tres" id="2_dn7vj"]
@@ -43,6 +43,7 @@
 [ext_resource type="AudioStream" uid="uid://b2jepp8pt3wji" path="res://Sfx/got hurt.wav" id="41_opgf8"]
 [ext_resource type="AudioStream" uid="uid://bmpdyihcbhqkc" path="res://Sfx/throw plant grenade.mp3" id="42_ewipy"]
 [ext_resource type="PackedScene" uid="uid://qfkfvt6felnv" path="res://Scene/GameManager.tscn" id="43_b6wlo"]
+[ext_resource type="PackedScene" uid="uid://ccvsefk6cbgpg" path="res://Scene/RadiationZone.tscn" id="44_wwfh2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_we51m"]
 resource_local_to_scene = true
@@ -340,7 +341,7 @@ transform = Transform3D(4.675, 0, 0, 0, -4.66684, 0.2761176, 0, -0.2761176, -4.6
 transform = Transform3D(4.675, 0, 0, 0, -4.6668415, 0.27611768, 0, -0.27611768, -4.6668415, 50.340477, -1.6481501, 34.193726)
 
 [node name="Player" parent="." instance=ExtResource("19_uvnbp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.31986332, 16.259775, 52.386322)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.31986332, 9.522104, -4.601265)
 indicator_color = Color(1, 1, 0, 1)
 
 [node name="Rock" type="Node3D" parent="."]
@@ -533,4 +534,10 @@ stream = ExtResource("42_ewipy")
 
 [node name="GameManager" parent="." node_paths=PackedStringArray("gridmap") instance=ExtResource("43_b6wlo")]
 gridmap = NodePath("../GrassBlock/GridMap2")
-radiation_tile_ids = Array[int]([-1, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+radiation_tile_ids = Array[int]([0])
+
+[node name="RadiationZone" parent="." instance=ExtResource("44_wwfh2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7953033, 3.1567903, 4.652109)
+required_sunflowers = 5
+light_color = Color(0.7655008, 0.27070418, 0.15738848, 1)
+light_energy = 10.0
