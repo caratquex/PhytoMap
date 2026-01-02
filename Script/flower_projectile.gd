@@ -4,7 +4,7 @@ extends RigidBody3D
 # Projectile Configuration
 # ---------------------------
 @export var initial_velocity: Vector3 = Vector3.ZERO
-@export var max_range: float = 50.0
+@export var max_range: float = 150.0  # Increased range for longer shooting distance
 @export var bounce_damping: float = 0.6  # Reduce velocity on bounce
 @export var min_velocity_to_bounce: float = 1.0
 @export var ground_collision_mask: int = 1  # Match player's ground collision mask
@@ -147,16 +147,15 @@ func transform_to_flower(flower_pos: Vector3) -> void:
 		queue_free()
 		return
 	
-	# Hide projectile
-	visible = false
+	# Wait 1 second before transforming into flower
+	await get_tree().create_timer(1.0).timeout
 	
 	# Spawn flower using Sunflower1.tscn
 	var flower = flower_scene.instantiate()
 	get_tree().current_scene.add_child(flower)
 	flower.global_position = flower_pos
 	
-	# Remove projectile
-	await get_tree().create_timer(0.1).timeout
+	# Remove projectile after transformation
 	queue_free()
 
 

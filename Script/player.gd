@@ -9,7 +9,7 @@ static var instance: CharacterBody3D
 class FlowerProjectile extends RigidBody3D:
 	# Projectile Configuration
 	@export var initial_velocity: Vector3 = Vector3.ZERO
-	@export var max_range: float = 50.0
+	@export var max_range: float = 500.0  # Increased range for longer shooting distance
 	@export var bounce_damping: float = 0.6  # Reduce velocity on bounce
 	@export var min_velocity_to_bounce: float = 1.0
 	@export var ground_collision_mask: int = 1  # Match player's ground collision mask
@@ -137,6 +137,9 @@ class FlowerProjectile extends RigidBody3D:
 			transform_to_flower(impact_pos)
 	
 	func transform_to_flower(flower_pos: Vector3) -> void:
+		# Wait 1 second before transforming into flower
+		await get_tree().create_timer(1.0).timeout
+		
 		var scene_to_use = flower_scene
 		if not scene_to_use:
 			# Use the same Sunflower1.tscn scene that player uses for planting
@@ -147,9 +150,6 @@ class FlowerProjectile extends RigidBody3D:
 			queue_free()
 			return
 		
-		# Hide projectile
-		visible = false
-		
 		# Spawn flower using Sunflower1.tscn
 		var flower = scene_to_use.instantiate()
 		if get_tree() and get_tree().current_scene:
@@ -159,7 +159,7 @@ class FlowerProjectile extends RigidBody3D:
 		else:
 			push_error("Cannot spawn flower - no scene tree!")
 		
-		# Remove projectile immediately
+		# Remove projectile after transformation
 		queue_free()
 	
 	func destroy_projectile() -> void:
@@ -222,7 +222,7 @@ var current_grid_cell: Vector3i = Vector3i(-99999, -99999, -99999)  # Track curr
 # ---------------------------
 @export var gun_projectile_speed: float = 20.0
 @export var grenade_projectile_speed: float = 12.0
-@export var gun_projectile_arc: float = 0.1  # Slight upward arc
+@export var gun_projectile_arc: float = 0.2  # Slight upward arc
 @export var grenade_projectile_arc: float = 0.3  # Higher arc
 
 # ---------------------------
