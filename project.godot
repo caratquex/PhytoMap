@@ -45,7 +45,11 @@ SimpleGrass="*res://addons/simplegrasstextured/singleton.tscn"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/simplegrasstextured/plugin.cfg")
+enabled=PackedStringArray("res://addons/proton_scatter/plugin.cfg", "res://addons/simplegrasstextured/plugin.cfg")
+
+[filesystem]
+
+import/blender/enabled=false
 
 [input]
 

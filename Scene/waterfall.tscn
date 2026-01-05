@@ -1,11 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://cqbe17putm60c"]
+[gd_scene load_steps=19 format=3 uid="uid://cqbe17putm60c"]
 
-[ext_resource type="Shader" path="res://Shader/waterfall.tres" id="2_dhmnp"]
-[ext_resource type="Texture2D" path="res://Shader/base_color_texture.tres" id="3_ihmmx"]
-[ext_resource type="Texture2D" uid="uid://d2g735anmx6h7" path="res://Shader/waterfall_texture.png" id="4_dhmnp"]
+[ext_resource type="Shader" uid="uid://ceogolekapm65" path="res://Shader/waterfall.tres" id="2_dhmnp"]
+[ext_resource type="Texture2D" uid="uid://c70ciygt8ybc8" path="res://Shader/base_color_texture.tres" id="3_ihmmx"]
 [ext_resource type="Texture2D" uid="uid://d2g735anmx6h7" path="res://Shader/waterfall_texture.png" id="4_mfat2"]
 [ext_resource type="PackedScene" uid="uid://cfb5ctg6q4e2r" path="res://Map Asset/water_tut.glb" id="5_fpm7f"]
-[ext_resource type="Shader" path="res://Shader/waterfall bubbles .tres" id="6_2fc08"]
+[ext_resource type="Shader" uid="uid://dckti6q5eo57n" path="res://Shader/waterfall bubbles .tres" id="6_2fc08"]
 [ext_resource type="Texture2D" uid="uid://11l3ugymdtk5" path="res://Shader/glow.png" id="7_m5exw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2fc08"]
@@ -18,7 +17,7 @@ shader_parameter/FloatParameter = 0.14
 shader_parameter/Base_gradient_Texture = ExtResource("3_ihmmx")
 shader_parameter/Vector2Parameter = Vector2(2.57, 1.74)
 shader_parameter/Vector2Parameter2 = Vector2(0, -1.74)
-shader_parameter/Water_Texture = ExtResource("4_dhmnp")
+shader_parameter/Water_Texture = ExtResource("4_mfat2")
 shader_parameter/Vector2Parameter3 = Vector2(1.86, 0.82)
 shader_parameter/Vector2Parameter4 = Vector2(0.41, -0.6)
 shader_parameter/Water_Texture_2 = ExtResource("4_mfat2")
