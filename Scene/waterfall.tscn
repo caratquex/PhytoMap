@@ -1,0 +1,142 @@
+[gd_scene load_steps=20 format=3 uid="uid://cqbe17putm60c"]
+
+[ext_resource type="Shader" path="res://Shader/waterfall.tres" id="2_dhmnp"]
+[ext_resource type="Texture2D" path="res://Shader/base_color_texture.tres" id="3_ihmmx"]
+[ext_resource type="Texture2D" uid="uid://d2g735anmx6h7" path="res://Shader/waterfall_texture.png" id="4_dhmnp"]
+[ext_resource type="Texture2D" uid="uid://d2g735anmx6h7" path="res://Shader/waterfall_texture.png" id="4_mfat2"]
+[ext_resource type="PackedScene" uid="uid://cfb5ctg6q4e2r" path="res://Map Asset/water_tut.glb" id="5_fpm7f"]
+[ext_resource type="Shader" path="res://Shader/waterfall bubbles .tres" id="6_2fc08"]
+[ext_resource type="Texture2D" uid="uid://11l3ugymdtk5" path="res://Shader/glow.png" id="7_m5exw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2fc08"]
+render_priority = 0
+shader = ExtResource("2_dhmnp")
+shader_parameter/Vector2Parameter5 = Vector2(2, 0.92)
+shader_parameter/dis_scroll = Vector2(0, -0.61)
+shader_parameter/displacement_tut = ExtResource("4_mfat2")
+shader_parameter/FloatParameter = 0.14
+shader_parameter/Base_gradient_Texture = ExtResource("3_ihmmx")
+shader_parameter/Vector2Parameter = Vector2(2.57, 1.74)
+shader_parameter/Vector2Parameter2 = Vector2(0, -1.74)
+shader_parameter/Water_Texture = ExtResource("4_dhmnp")
+shader_parameter/Vector2Parameter3 = Vector2(1.86, 0.82)
+shader_parameter/Vector2Parameter4 = Vector2(0.41, -0.6)
+shader_parameter/Water_Texture_2 = ExtResource("4_mfat2")
+shader_parameter/overlay_alpha = 1.23
+shader_parameter/normal_depth = 0.26
+
+[sub_resource type="Curve" id="Curve_y8jx2"]
+_limits = [0.0, 100.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_mfat2"]
+curve = SubResource("Curve_y8jx2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jo7hq"]
+lifetime_randomness = 0.5
+emission_shape_scale = Vector3(0.065, 0, -0.16)
+emission_shape = 2
+emission_sphere_radius = 4.8
+direction = Vector3(1, 0, 0.5)
+spread = 133.334
+initial_velocity_min = 0.099999994
+initial_velocity_max = 0.5
+gravity = Vector3(0, -1, 0)
+damping_min = 1.0
+damping_max = 2.73
+damping_curve = SubResource("CurveTexture_mfat2")
+
+[sub_resource type="FogMaterial" id="FogMaterial_q7a3f"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fpm7f"]
+next_pass = SubResource("FogMaterial_q7a3f")
+transparency = 2
+alpha_scissor_threshold = 0.88
+alpha_antialiasing_mode = 0
+blend_mode = 3
+albedo_color = Color(0.809964, 0.95434123, 0.99999994, 1)
+metallic_specular = 0.0
+roughness = 0.0
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_yoewu"]
+material = SubResource("StandardMaterial3D_fpm7f")
+uv2_padding = 2.06
+radius = 0.2
+height = 0.4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m5exw"]
+render_priority = 0
+shader = ExtResource("6_2fc08")
+shader_parameter/Texture2DParameter = ExtResource("7_m5exw")
+shader_parameter/FloatParameter = 0.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_a1kx4"]
+material = SubResource("ShaderMaterial_m5exw")
+radius = 0.16
+height = 0.27
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fpm7f"]
+lifetime_randomness = 1.0
+emission_shape_scale = Vector3(0.25, 0.25, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+velocity_pivot = Vector3(0, 1, 0)
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 3.0
+scale_min = 0.13
+scale_max = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_blyjk"]
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("7_m5exw")
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_m5exw"]
+material = SubResource("StandardMaterial3D_blyjk")
+size = Vector2(0.25, 0.25)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="water_tut" parent="." instance=ExtResource("5_fpm7f")]
+transform = Transform3D(2.53, 0, 0, 0, 2.53, 0, 0, 0, 2.53, 2.860517, 0, 2.355133)
+
+[node name="Plane" parent="water_tut" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5914283)
+surface_material_override/0 = SubResource("ShaderMaterial_2fc08")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="water_tut"]
+transform = Transform3D(0.0011692799, 0, 0.99999934, 0, 1, 0, -0.99999934, 0, 0.0011692799, 0.12181902, 0.16688925, 0.2575891)
+gi_lightmap_texel_scale = 0.983
+amount = 176
+amount_ratio = 0.5145
+lifetime = 1.41
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_jo7hq")
+draw_pass_1 = SubResource("SphereMesh_yoewu")
+
+[node name="GPUParticles3D2" type="GPUParticles3D" parent="water_tut"]
+transform = Transform3D(0.0011692799, 0, 0.99999934, 0, 1, 0, -0.99999934, 0, 0.0011692799, 0.07920146, 0.12217271, 0.21094918)
+gi_lightmap_texel_scale = 0.983
+amount = 229
+lifetime = 0.26
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_jo7hq")
+draw_passes = 2
+draw_pass_1 = SubResource("SphereMesh_yoewu")
+draw_pass_2 = SubResource("SphereMesh_a1kx4")
+
+[node name="GPUParticles3D3" type="GPUParticles3D" parent="water_tut"]
+transform = Transform3D(-0.025086049, 0.11820746, 0.9926728, -0.000138265, 0.9929841, -0.11824792, -0.99968547, -0.0031036292, -0.02489372, 0.1264286, 0.16015619, 0.31746817)
+amount = 146
+lifetime = 0.5
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_fpm7f")
+draw_pass_1 = SubResource("QuadMesh_m5exw")
+
+[editable path="water_tut"]
