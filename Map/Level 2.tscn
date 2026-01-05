@@ -642,9 +642,17 @@ transform = Transform3D(0.8403225, 0, -1.3261818, 0, 1.5699998, 0, 1.3261818, 0,
 [node name="RadiantZone" type="Node" parent="."]
 
 [node name="RadiationZoneBox" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.229918, 23.515472, -19.343403)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.229918, 25.123482, -22.112425)
 normal_grass_texture = ExtResource("43_ucx1a")
 gridmap = NodePath("../../GridMap")
+radiation_tile_ids = Array[int]([1, 2])
+
+[node name="RadiationZoneBox2" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.74166, 4.550555, -71.365425)
+required_sunflowers = 7
+normal_grass_texture = ExtResource("43_ucx1a")
+gridmap = NodePath("../../GridMap")
+radiation_tile_ids = Array[int]([1, 2])
 
 [node name="Player" parent="." instance=ExtResource("21_jrhep")]
 transform = Transform3D(0.99812734, 0, -0.06117048, 0, 1, 0, 0.06117048, 0, 0.99812734, 93.0838, 21.054665, -15.331945)

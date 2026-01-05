@@ -533,7 +533,8 @@ stream = ExtResource("41_opgf8")
 stream = ExtResource("42_ewipy")
 
 [node name="RadiationZoneBox" parent="." node_paths=PackedStringArray("gridmap") instance=ExtResource("44_wwfh2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.963598, 5.7697973, -5.04679)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.055756, 0.23463583, -3.8691502)
 required_sunflowers = 5
 normal_grass_texture = ExtResource("45_8sq5o")
 gridmap = NodePath("../GrassBlock/GridMap2")
+radiation_tile_ids = Array[int]([1, 2])

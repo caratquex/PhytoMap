@@ -27,6 +27,7 @@ extends Area3D
 @export var gridmap: GridMap  ## Reference to the GridMap
 @export var radiation_tile_ids: Array[int] = []  ## Tile IDs for RadiantGrass (e.g., [1, 2])
 @export var normal_grass_tile_id: int = 0  ## Tile ID for normal Grass block
+@export var ignore_zone_bounds: bool = false  ## If true, convert all radiation tiles regardless of zone position (for testing)
 
 # ---------------------------
 # State
@@ -186,6 +187,7 @@ func _check_clear_condition() -> void:
 
 func clear_zone() -> void:
 	is_cleared = true
+	_debug_print("=== CLEAR_ZONE CALLED ===")
 	
 	# Turn off the light with fade effect
 	if omni_light:
@@ -361,36 +363,128 @@ func _convert_gridmap_tiles_in_zone() -> void:
 		_debug_print("WARNING: No radiation_tile_ids configured!")
 		return
 	
+	_debug_print("=== GRIDMAP CONVERSION START ===")
+	_debug_print("Zone position: %s" % global_position)
+	_debug_print("Zone radius: %.2f" % zone_radius)
+	_debug_print("Radiation tile IDs configured: %s" % str(radiation_tile_ids))
+	_debug_print("Normal grass tile ID: %d" % normal_grass_tile_id)
+	_debug_print("GridMap name: %s" % gridmap.name)
+	_debug_print("GridMap global position: %s" % gridmap.global_position)
+	
 	# Get all used cells from GridMap
 	var used_cells = gridmap.get_used_cells()
 	_debug_print("Found %d cells in GridMap" % used_cells.size())
 	
+	if used_cells.size() == 0:
+		_debug_print("WARNING: No cells found in GridMap! Is the GridMap populated?")
+		return
+	
 	var zone_pos = global_position
 	var converted_count = 0
 	
+	# Determine if we're using a box or sphere shape
+	var is_box_shape = collision_shape and collision_shape.shape is BoxShape3D
+	var box_size: Vector3 = Vector3.ZERO
+	if is_box_shape:
+		box_size = (collision_shape.shape as BoxShape3D).size
+	
 	# Process each cell
+	var radiation_tiles_found = 0
+	var all_tile_items: Dictionary = {}  # Track all unique tile items found
+	
 	for cell_coords in used_cells:
 		# Get the tile item at this cell
 		var tile_item = gridmap.get_cell_item(cell_coords)
 		
+		# Skip invalid tiles
+		if tile_item < 0:
+			continue
+		
+		# Track all tile items for debugging
+		if not all_tile_items.has(tile_item):
+			all_tile_items[tile_item] = 0
+		all_tile_items[tile_item] += 1
+		
+		# Debug: show first few cells
+		if used_cells.find(cell_coords) < 5:
+			_debug_print("  Sample cell %s: tile_item = %d" % [cell_coords, tile_item])
+		
 		# Check if this is a radiation tile
 		if tile_item in radiation_tile_ids:
+			# Skip if this tile ID is the same as normal grass (would convert to itself)
+			if tile_item == normal_grass_tile_id:
+				_debug_print("  Skipping tile ID %d - same as normal_grass_tile_id!" % tile_item)
+				continue
+			
+			radiation_tiles_found += 1
 			# Convert cell coordinates to world position
+			# map_to_local converts cell coords to GridMap's local space
 			var local_pos = gridmap.map_to_local(cell_coords)
+			# to_global converts to world space
 			var world_pos = gridmap.to_global(local_pos)
 			
-			# Check if within zone radius
-			var distance = world_pos.distance_to(zone_pos)
-			if distance <= zone_radius:
+			_debug_print("  Found radiation tile ID %d at cell %s -> world pos %s" % [tile_item, cell_coords, world_pos])
+			
+			# Check if within zone bounds (sphere or box)
+			var is_inside: bool = false
+			if ignore_zone_bounds:
+				# Test mode: convert all radiation tiles
+				is_inside = true
+				_debug_print("  IGNORE_ZONE_BOUNDS enabled - converting regardless of position")
+			elif is_box_shape:
+				# For box: check if point is within box bounds
+				var local_to_zone = to_local(world_pos)
+				var half_size = box_size * 0.5
+				is_inside = (
+					abs(local_to_zone.x) <= half_size.x and
+					abs(local_to_zone.y) <= half_size.y and
+					abs(local_to_zone.z) <= half_size.z
+				)
+				if is_inside:
+					_debug_print("  Cell %s at %s is INSIDE box (local: %s)" % [cell_coords, world_pos, local_to_zone])
+			else:
+				# For sphere: check distance
+				var distance = world_pos.distance_to(zone_pos)
+				is_inside = distance <= zone_radius
+				if is_inside:
+					_debug_print("  Cell %s at %s is INSIDE sphere (distance: %.2f)" % [cell_coords, world_pos, distance])
+			
+			if is_inside:
 				# Get the cell's orientation to preserve it
 				var orientation = gridmap.get_cell_item_orientation(cell_coords)
 				
 				# Replace with normal grass tile
 				gridmap.set_cell_item(cell_coords, normal_grass_tile_id, orientation)
 				converted_count += 1
-				_debug_print("Converted GridMap tile at %s (distance: %.2f) from ID %d to %d" % [cell_coords, distance, tile_item, normal_grass_tile_id])
+				_debug_print("✓ Converted GridMap tile at %s from ID %d to %d" % [cell_coords, tile_item, normal_grass_tile_id])
+			else:
+				# Debug: show why it wasn't converted
+				if is_box_shape:
+					var local_to_zone = to_local(world_pos)
+					_debug_print("✗ Radiation tile at %s is OUTSIDE box (local: %s, box size: %s)" % [cell_coords, local_to_zone, box_size])
+				else:
+					var distance = world_pos.distance_to(zone_pos)
+					_debug_print("✗ Radiation tile at %s is OUTSIDE sphere (distance: %.2f > %.2f)" % [cell_coords, distance, zone_radius])
 	
-	_debug_print("Converted %d GridMap tiles to normal grass" % converted_count)
+	_debug_print("=== GRIDMAP CONVERSION SUMMARY ===")
+	_debug_print("Total radiation tiles found: %d" % radiation_tiles_found)
+	_debug_print("Converted: %d tiles" % converted_count)
+	_debug_print("All tile IDs found in GridMap: %s" % str(all_tile_items.keys()))
+	_debug_print("Tile ID counts: %s" % str(all_tile_items))
+	
+	# Check if radiation tile IDs match any found tiles
+	var matching_ids = []
+	for tile_id in radiation_tile_ids:
+		if all_tile_items.has(tile_id):
+			matching_ids.append(tile_id)
+	
+	if matching_ids.size() == 0:
+		_debug_print("⚠️ WARNING: None of the configured radiation_tile_ids (%s) match any tiles in the GridMap!" % str(radiation_tile_ids))
+		_debug_print("   Available tile IDs in GridMap: %s" % str(all_tile_items.keys()))
+	else:
+		_debug_print("✓ Found matching radiation tile IDs: %s" % str(matching_ids))
+	
+	_debug_print("================================")
 
 
 # ---------------------------
