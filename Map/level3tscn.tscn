@@ -1,4 +1,4 @@
-[gd_scene load_steps=174 format=4 uid="uid://5st2matn1qe3"]
+[gd_scene load_steps=175 format=4 uid="uid://5st2matn1qe3"]
 
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="1_fa38q"]
 [ext_resource type="PackedScene" uid="uid://p6nnonr03ork" path="res://Scene/directional_light_3d.tscn" id="2_630rr"]
@@ -48,6 +48,7 @@
 [ext_resource type="Script" uid="uid://dvgm65naomahs" path="res://addons/proton_scatter/src/modifiers/randomize_rotation.gd" id="47_inxsn"]
 [ext_resource type="Script" uid="uid://bd2psl6xchm5k" path="res://addons/proton_scatter/src/modifiers/offset_scale.gd" id="48_geu57"]
 [ext_resource type="Script" uid="uid://ddargw3arucj3" path="res://addons/proton_scatter/src/scatter_item.gd" id="48_ykht6"]
+[ext_resource type="PackedScene" uid="uid://f1q0ykhjjrjh" path="res://Map Asset/Stone1.tscn" id="49_l8wyj"]
 [ext_resource type="Script" uid="uid://xxm5rglrfn1g" path="res://addons/proton_scatter/src/scatter_shape.gd" id="49_pyi43"]
 [ext_resource type="PackedScene" uid="uid://bfcjigq0vdl4d" path="res://addons/proton_scatter/demos/assets/fence_planks.tscn" id="51_idcw0"]
 [ext_resource type="PackedScene" uid="uid://df44qbjskigqv" path="res://Map Asset/temple_debris_1.tscn" id="53_71g5e"]
@@ -1975,6 +1976,9 @@ transform = Transform3D(2.5717196, 0, 0.4837287, -0.106336206, 1.2355477, 0.3236
 [node name="rock_small4" parent="Rock" instance=ExtResource("22_x0r5b")]
 transform = Transform3D(2.5717196, 0, 0.4837287, -0.106336206, 1.2355477, 0.32362342, -0.63043714, -0.20840056, 1.9186713, -48.682545, 3.4017315, 52.147324)
 
+[node name="Node3D" parent="Rock" instance=ExtResource("49_l8wyj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.305009, 92.43607, 98.35374)
+
 [node name="Debris" type="Node" parent="."]
 
 [node name="temple_debris_1" parent="Debris" instance=ExtResource("53_71g5e")]
@@ -2071,6 +2075,12 @@ transform = Transform3D(1, 0, 0, 0, 0.20726293, -0.9782853, 0, 0.9782853, 0.2072
 
 [node name="Node3D3" parent="Trees" instance=ExtResource("13_c2bd3")]
 transform = Transform3D(1, 0, 0, 0, 0.9476904, 0.31919086, 0, -0.31919086, 0.9476904, -43.1149, 24.233635, 12.287777)
+
+[node name="Node3D" parent="." instance=ExtResource("42_hijhp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.756567, 97.97782, 100.5576)
+
+[node name="Node3D2" parent="." instance=ExtResource("1_fa38q")]
+transform = Transform3D(0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, -40.733627, 97.68074, 101.65312)
 
 [editable path="toxic barrel"]
 [editable path="toxic barrel2"]
