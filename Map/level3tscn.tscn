@@ -2091,6 +2091,7 @@ transform = Transform3D(0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, -40.733627, 97.68074
 
 [node name="RadiationZoneSphere" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.9227505, 15.132011, 69.45551)
+visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
 gridmap = NodePath("../../GridMap")
@@ -2098,6 +2099,7 @@ radiation_tile_ids = Array[int]([1, 2])
 
 [node name="RadiationZoneSphere2" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.680456, 16.006857, 72.6551)
+visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
 gridmap = NodePath("../../GridMap")
@@ -2105,6 +2107,7 @@ radiation_tile_ids = Array[int]([1, 2])
 
 [node name="RadiationZoneSphere6" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.28409, 22.97604, 80.36465)
+visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
 gridmap = NodePath("../../GridMap")
@@ -2112,6 +2115,7 @@ radiation_tile_ids = Array[int]([1, 2])
 
 [node name="RadiationZoneSphere7" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.405437, 13.029547, 84.81226)
+visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
 gridmap = NodePath("../../GridMap")
@@ -2119,6 +2123,7 @@ radiation_tile_ids = Array[int]([1, 2])
 
 [node name="RadiationZoneSphere3" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.508066, 10.315045, 74.82389)
+visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
 gridmap = NodePath("../../GridMap")
@@ -2126,6 +2131,7 @@ radiation_tile_ids = Array[int]([1, 2])
 
 [node name="RadiationZoneSphere5" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5395, 19.370552, 72.6551)
+visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
 gridmap = NodePath("../../GridMap")
@@ -2133,6 +2139,7 @@ radiation_tile_ids = Array[int]([1, 2])
 
 [node name="RadiationZoneSphere4" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19349766, 15.608194, 63.587578)
+visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
 gridmap = NodePath("../../GridMap")

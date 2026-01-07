@@ -211,9 +211,11 @@ var current_grid_cell: Vector3i = Vector3i(-99999, -99999, -99999)  # Track curr
 @export var fall_multiplier: float = 1.2  # تسريع السقوط خفيف جداً
 @export var speed: float = 4.0
 @export var jump_velocity: float = 8.5      # نطة قريبة من الأصل
+@export var double_jump_velocity: float = 7.0  # Double jump velocity (slightly lower than regular jump)
 @export var rotation_speed: float = 5.0     # سرعة لف الأرنب
 @export var acceleration: float = 50.0       # سرعة التسارع عند الحركة (زيادة للاستجابة)
 @export var friction: float = 60.0           # سرعة التباطؤ عند التوقف (زيادة للاستجابة)
+var has_double_jump: bool = true  # Track if double jump is available
 
 # ---------------------------
 # Nodes (عيّنها من الـ Inspector)
@@ -729,9 +731,16 @@ func _physics_process(delta: float) -> void:
 			velocity.y -= gravity * delta
 
 	# ----- JUMP (Space / ui_accept) -----
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = jump_velocity
-		if jump: jump.play()
+	if Input.is_action_just_pressed("ui_accept"):
+		if is_on_floor():
+			# Regular jump from floor
+			velocity.y = jump_velocity
+			if jump: jump.play()
+		elif has_double_jump:
+			# Double jump in air
+			velocity.y = double_jump_velocity
+			has_double_jump = false
+			if jump: jump.play()
 
 	# ----- MOVEMENT (WASD) -----
 	var direction: Vector3 = Vector3.ZERO
@@ -767,6 +776,8 @@ func _physics_process(delta: float) -> void:
 	if on_floor and not prev_on_floor:
 		if drop and not drop.playing:
 			drop.play()
+		# Reset double jump when landing
+		has_double_jump = true
 
 	prev_on_floor = on_floor
 
