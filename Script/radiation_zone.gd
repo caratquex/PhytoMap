@@ -30,6 +30,16 @@ extends Area3D
 @export var ignore_zone_bounds: bool = false  ## If true, convert all radiation tiles regardless of zone position (for testing)
 
 # ---------------------------
+# Grass Spawning Settings
+# ---------------------------
+@export_group("Grass Spawning")
+@export var spawn_grass_on_clear: bool = true  ## Enable/disable grass spawning when zone is cleared
+@export var grass_scene: PackedScene = preload("res://Map/Grass.tscn")  ## Reference to Grass.tscn
+@export var grass_spawn_count: int = 4  ## Number of grass instances to spawn (3-5 range)
+@export var grass_spawn_radius: float = 0.8  ## Multiplier for spawn area (0.8 = 80% of zone radius)
+@export var grass_height_offset: float = 0.5  ## Height offset above ground
+
+# ---------------------------
 # State
 # ---------------------------
 var current_sunflowers: int = 0
@@ -210,6 +220,10 @@ func clear_zone() -> void:
 	# Convert GridMap tiles to normal grass
 	if gridmap and radiation_tile_ids.size() > 0:
 		_convert_gridmap_tiles_in_zone()
+	
+	# Spawn grass instances in the cleared zone
+	if spawn_grass_on_clear:
+		_spawn_grass_in_zone()
 	
 	# Remove from Radiation group
 	remove_from_group("Radiation")
@@ -484,6 +498,99 @@ func _convert_gridmap_tiles_in_zone() -> void:
 	else:
 		_debug_print("✓ Found matching radiation tile IDs: %s" % str(matching_ids))
 	
+	_debug_print("================================")
+
+
+# ---------------------------
+# Grass Spawning
+# ---------------------------
+
+func _spawn_grass_in_zone() -> void:
+	if not spawn_grass_on_clear:
+		return
+	
+	if not grass_scene:
+		_debug_print("WARNING: Grass scene not set! Cannot spawn grass.")
+		return
+	
+	var scene_root = get_tree().current_scene
+	if not scene_root:
+		_debug_print("WARNING: No scene root found! Cannot spawn grass.")
+		return
+	
+	_debug_print("=== SPAWNING GRASS IN ZONE ===")
+	
+	var zone_pos = global_position
+	var spawn_radius = zone_radius * grass_spawn_radius
+	var spawned_count = 0
+	
+	# Determine if we're using a box or sphere shape
+	var is_box_shape = collision_shape and collision_shape.shape is BoxShape3D
+	var box_size: Vector3 = Vector3.ZERO
+	if is_box_shape:
+		box_size = (collision_shape.shape as BoxShape3D).size
+	
+	# Get space state for raycasting
+	var space_state = get_world_3d().direct_space_state
+	
+	# Spawn grass instances
+	for i in range(grass_spawn_count):
+		# Generate random position within spawn area
+		var random_pos: Vector3
+		
+		if is_box_shape:
+			# For box: random position within box bounds (using spawn_radius multiplier)
+			var half_size = box_size * 0.5 * grass_spawn_radius
+			random_pos = zone_pos + Vector3(
+				randf_range(-half_size.x, half_size.x),
+				0.0,  # Will be adjusted by raycast
+				randf_range(-half_size.z, half_size.z)
+			)
+		else:
+			# For sphere: random position within circle
+			var angle = randf() * TAU
+			var distance = randf() * spawn_radius
+			random_pos = zone_pos + Vector3(
+				cos(angle) * distance,
+				0.0,  # Will be adjusted by raycast
+				sin(angle) * distance
+			)
+		
+		# Raycast downward to find ground
+		var ray_start = random_pos + Vector3.UP * 10.0  # Start above
+		var ray_end = random_pos - Vector3.UP * 20.0  # Cast downward
+		
+		var query = PhysicsRayQueryParameters3D.create(ray_start, ray_end)
+		query.collision_mask = 1  # Ground collision layer
+		query.collide_with_bodies = true
+		query.collide_with_areas = false
+		
+		var result = space_state.intersect_ray(query)
+		
+		if result.is_empty():
+			_debug_print("  No ground found at position %s, skipping grass spawn" % random_pos)
+			continue
+		
+		# Get ground position and add offset
+		var ground_pos = result.position
+		ground_pos.y += grass_height_offset
+		
+		# Instantiate grass
+		var grass_instance = grass_scene.instantiate()
+		scene_root.add_child(grass_instance)
+		grass_instance.global_position = ground_pos
+		
+		# Random rotation for variety
+		grass_instance.rotation.y = randf() * TAU
+		
+		# Random scale for variety (0.9 to 1.1)
+		var random_scale = randf_range(0.9, 1.1)
+		grass_instance.scale = Vector3(random_scale, random_scale, random_scale)
+		
+		spawned_count += 1
+		_debug_print("  Spawned grass %d at %s" % [i + 1, ground_pos])
+	
+	_debug_print("Spawned %d/%d grass instances in zone" % [spawned_count, grass_spawn_count])
 	_debug_print("================================")
 
 
