@@ -21,6 +21,10 @@ class FlowerProjectile extends RigidBody3D:
 	var flower_scene: PackedScene
 	var has_landed: bool = false
 	var landing_collider: Node = null  # Store the collider we landed on for radiation check
+	var weapon_type: WeaponType = WeaponType.GUN  # Track which weapon created this projectile
+	var explosion_radius: float = 5.0  # Configurable explosion radius
+	var explosion_force: float = 0.0  # Will be calculated as 3x jump_velocity
+	var player_instance: CharacterBody3D = null  # Reference to player instance
 	
 	# Node References
 	var mesh_instance: MeshInstance3D
@@ -30,9 +34,13 @@ class FlowerProjectile extends RigidBody3D:
 		spawn_position = global_position
 		last_position = global_position
 		
+		print("[PROJECTILE] _ready() - weapon_type: ", weapon_type, " | velocity: ", initial_velocity)
+		
 		# Apply initial velocity
 		if initial_velocity != Vector3.ZERO:
 			linear_velocity = initial_velocity
+		else:
+			print("[PROJECTILE] WARNING: initial_velocity is ZERO!")
 		
 		# Enable contact monitoring for collision detection
 		contact_monitor = true
@@ -84,6 +92,14 @@ class FlowerProjectile extends RigidBody3D:
 		
 		var normal = result.normal
 		var current_velocity = linear_velocity
+		
+		# Check if this is a grenade - trigger explosion on any collision
+		if weapon_type == WeaponType.GRENADE:
+			print("[GRENADE] Explosion triggered at: ", result.position)
+			trigger_explosion(result.position)
+			# Still land on floor to transform into flower
+			land_on_floor(result.position)
+			return
 		
 		# Check if hitting floor (normal pointing up)
 		if normal.y > 0.7:  # Mostly upward normal = floor
@@ -142,6 +158,7 @@ class FlowerProjectile extends RigidBody3D:
 			transform_to_flower(impact_pos)
 	
 	func transform_to_flower(flower_pos: Vector3) -> void:
+		print("[PROJECTILE] Transforming to flower at: ", flower_pos)
 		# Wait 1 second before transforming into flower
 		await get_tree().create_timer(1.0).timeout
 		
@@ -174,6 +191,25 @@ class FlowerProjectile extends RigidBody3D:
 	
 	func destroy_projectile() -> void:
 		queue_free()
+	
+	func trigger_explosion(explosion_pos: Vector3) -> void:
+		# Check if player instance exists and is within explosion radius
+		if not player_instance:
+			return
+		
+		# Calculate distance from explosion to player
+		var distance_to_player = explosion_pos.distance_to(player_instance.global_position)
+		
+		# Only affect player if within explosion radius
+		if distance_to_player > explosion_radius:
+			return
+		
+		# Calculate direction from grenade to player
+		var direction_to_player = (player_instance.global_position - explosion_pos).normalized()
+		
+		# Apply explosion force to player
+		if player_instance.has_method("apply_explosion_force"):
+			player_instance.apply_explosion_force(direction_to_player, explosion_force)
 
 
 # Factory method to create FlowerProjectile instances
@@ -449,6 +485,12 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("shoot") and can_act:
 		perform_weapon_action()
 	
+	# Right Click - Grenade boost (simple version)
+	if Input.is_action_just_pressed("grenade jump") and current_weapon == WeaponType.GRENADE and can_act:
+		# Apply 3x jump height upward velocity
+		velocity.y = jump_velocity * 3.0
+		if jump: jump.play()
+	
 	# Hurt Animation (H key)
 	if Input.is_action_just_pressed("hurt") and not is_hurting:
 		play_hurt_animation()
@@ -489,7 +531,7 @@ func start_throw() -> void:
 		animation_tree.set("parameters/conditions/is_throwing", true)
 	if playback:
 		playback.travel("Throw Grenade")
-		play_sfx_delayed(throw_plant_grenade,0.5)
+	play_sfx_delayed(throw_plant_grenade,0.5)
 	
 	# Spawn projectile after a short delay to match animation
 	spawn_projectile_delayed(WeaponType.GRENADE, 0.3)
@@ -661,6 +703,24 @@ func get_all_mesh_instances(node: Node) -> Array:
 # يمكن استدعاؤها من أي مكان (مثلاً عند التصادم مع عدو)
 func take_damage() -> void:
 	play_hurt_animation()
+
+
+# ---------------------------
+# EXPLOSION FORCE
+# ---------------------------
+func apply_explosion_force(direction: Vector3, force: float) -> void:
+	# Normalize direction and ensure upward component
+	var normalized_dir = direction.normalized()
+	
+	# Apply upward velocity component (3x jump height)
+	# The force already accounts for 3x jump height, so we use it directly
+	velocity.y = force
+	
+	# Apply horizontal velocity component based on direction from explosion
+	# Scale horizontal component to be proportional but not too strong
+	var horizontal_force = force * 0.6  # 60% of vertical force for horizontal push
+	velocity.x += normalized_dir.x * horizontal_force
+	velocity.z += normalized_dir.z * horizontal_force
 
 
 # ---------------------------
@@ -1042,6 +1102,7 @@ func spawn_projectile_delayed(weapon_type: WeaponType, delay: float) -> void:
 
 
 func spawn_projectile(weapon_type: WeaponType) -> void:
+	print("[SPAWN] Creating ", weapon_type, " projectile")
 	# Get spawn position (gun/grenade model or hand position)
 	var spawn_pos = get_spawn_position(weapon_type)
 	
@@ -1091,11 +1152,37 @@ func spawn_projectile(weapon_type: WeaponType) -> void:
 	projectile.flower_scene = sunflower_scene
 	# Pass ground collision mask
 	projectile.ground_collision_mask = ground_collision_mask
+	# Pass weapon type to identify grenades
+	projectile.weapon_type = weapon_type
+	# Pass player instance reference for explosion effects
+	projectile.player_instance = instance
+	# Set explosion force for grenades (3x jump height)
+	if weapon_type == WeaponType.GRENADE:
+		projectile.explosion_force = jump_velocity * 3.0
 	
-	# Now add to scene tree and set properties
-	get_tree().current_scene.add_child(projectile)
-	projectile.global_position = spawn_pos
+	# Set properties that don't require scene tree
 	projectile.initial_velocity = initial_velocity
+	
+	# Now add to scene tree FIRST (required before accessing global_position)
+	if not get_tree() or not get_tree().current_scene:
+		push_error("No scene tree or current scene!")
+		return
+	
+	get_tree().current_scene.add_child(projectile)
+	
+	# NOW set position after it's in the tree
+	projectile.global_position = spawn_pos
+	
+	# Apply velocity after node is in scene tree (in case _ready() already ran)
+	# This ensures velocity is applied even if _ready() was called before initial_velocity was set
+	# Use call_deferred to ensure physics is ready
+	call_deferred("_apply_projectile_velocity", projectile, initial_velocity)
+
+
+func _apply_projectile_velocity(projectile: FlowerProjectile, velocity: Vector3) -> void:
+	if projectile and is_instance_valid(projectile):
+		if velocity != Vector3.ZERO:
+			projectile.linear_velocity = velocity
 
 
 func get_spawn_position(weapon_type: WeaponType) -> Vector3:

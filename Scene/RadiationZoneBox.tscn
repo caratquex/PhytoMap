@@ -21,7 +21,8 @@ monitorable = false
 script = ExtResource("1_radiation_zone")
 light_color = Color(1, 0.2, 0.1, 1)
 grass_spawn_count = 6
-grass_height_offset = 1.0
+grass_spawn_radius = 1.0
+grass_height_offset = 1.2
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 light_color = Color(1, 0.2, 0.1, 1)

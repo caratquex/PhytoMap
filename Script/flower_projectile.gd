@@ -161,4 +161,3 @@ func transform_to_flower(flower_pos: Vector3) -> void:
 
 func destroy_projectile() -> void:
 	queue_free()
-
