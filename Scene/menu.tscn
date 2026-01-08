@@ -1,0 +1,193 @@
+[gd_scene load_steps=15 format=3 uid="uid://c6tgerrehffjf"]
+
+[ext_resource type="Texture2D" uid="uid://blanc1mp52gil" path="res://GUI/Title 4.png" id="2_alu6o"]
+[ext_resource type="FontFile" uid="uid://dn6lk74wvhckb" path="res://GUI/Pixelify_Sans (1)/static/PixelifySans-Bold.ttf" id="2_eas8t"]
+[ext_resource type="PackedScene" uid="uid://b44y8jny6lpue" path="res://Map/MenuBG.tscn" id="3_u2k45"]
+[ext_resource type="PackedScene" uid="uid://bwtdn0m42xiy7" path="res://Scene/BGM.tscn" id="4_alu6o"]
+
+[sub_resource type="MeshTexture" id="MeshTexture_ffxp3"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ffxp3"]
+texture = SubResource("MeshTexture_ffxp3")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u2k45"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_alu6o"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ffxp3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6hgn1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fyf5i"]
+
+[sub_resource type="Animation" id="Animation_u2k45"]
+resource_name = "camera_animation"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BG/SubViewportContainer/SubViewport/Camera3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.01, 2, 3, 4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.0404563, 5.2539487, 13.5064745), Vector3(1.4980626, 5.2539487, 13.5064745), Vector3(1.1505442, 5.7144346, 13.5064745), Vector3(0.8296921, 5.2692475, 13.5064745), Vector3(1.0404563, 5.2539487, 13.5064745)]
+}
+
+[sub_resource type="Animation" id="Animation_alu6o"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BG/SubViewportContainer/SubViewport/Camera3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.0404563, 5.2539487, 13.5064745)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_alu6o"]
+_data = {
+&"RESET": SubResource("Animation_alu6o"),
+&"camera_animation": SubResource("Animation_u2k45")
+}
+
+[node name="Menu" type="CanvasLayer"]
+
+[node name="BG" type="Node3D" parent="."]
+
+[node name="Node3D" parent="BG" instance=ExtResource("3_u2k45")]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="BG"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+stretch = true
+stretch_shrink = 5
+
+[node name="SubViewport" type="SubViewport" parent="BG/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(230, 129)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="BG/SubViewportContainer/SubViewport"]
+transform = Transform3D(-0.97753006, 0, 0.21079595, 0.03192517, 0.98846483, 0.1480475, -0.20836438, 0.15145059, -0.9662541, 1.0404563, 5.2539487, 13.5064745)
+fov = 50.0
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(400, 0)
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 400.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_ffxp3")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 96
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 96
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+alignment = 1
+
+[node name="Title" type="Sprite2D" parent="Control/MarginContainer/VBoxContainer"]
+position = Vector2(193.88017, 73.46744)
+scale = Vector2(1.0224121, 1.022412)
+texture = ExtResource("2_alu6o")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+
+[node name="btn_statrGame" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_hover_color = Color(0.71, 0.71, 0.71, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.6, 0.7176471, 0.2784314, 1)
+theme_override_fonts/font = ExtResource("2_eas8t")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_u2k45")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_alu6o")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ffxp3")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_6hgn1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_fyf5i")
+text = "Start Game"
+
+[node name="btn_options" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_hover_color = Color(0.71, 0.71, 0.71, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.6, 0.7176471, 0.2784314, 1)
+theme_override_fonts/font = ExtResource("2_eas8t")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_u2k45")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_alu6o")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ffxp3")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_6hgn1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_fyf5i")
+text = "Options"
+
+[node name="btn_credits" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_hover_color = Color(0.71, 0.71, 0.71, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.6, 0.7176471, 0.2784314, 1)
+theme_override_fonts/font = ExtResource("2_eas8t")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_u2k45")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_alu6o")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ffxp3")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_6hgn1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_fyf5i")
+text = "Credit"
+
+[node name="btn_qiut" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_hover_color = Color(0.71, 0.71, 0.71, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.6, 0.7176471, 0.2784314, 1)
+theme_override_fonts/font = ExtResource("2_eas8t")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_u2k45")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_alu6o")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_ffxp3")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_6hgn1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_fyf5i")
+text = "Quit"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_alu6o")
+}
+autoplay = "camera_animation"
+speed_scale = 0.2
+
+[node name="AudioStreamPlayer" parent="." instance=ExtResource("4_alu6o")]
