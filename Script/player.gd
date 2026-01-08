@@ -237,14 +237,6 @@ var floor_indicator: Node3D  # Parent node for the outline
 var floor_indicator_material: StandardMaterial3D
 var current_grid_cell: Vector3i = Vector3i(-99999, -99999, -99999)  # Track current cell
 
-# ---------------------------
-# Projectile Landing Indicator
-# ---------------------------
-@export var show_projectile_indicator: bool = true
-@export var projectile_indicator_color: Color = Color(1.0, 0.8, 0.2, 1.0)  # Orange/yellow for projectile
-@export var projectile_indicator_size: float = 0.8  # Size of the indicator
-var projectile_indicator: Node3D  # Parent node for the indicator
-var projectile_indicator_material: StandardMaterial3D
 
 # ---------------------------
 # Movement
@@ -398,9 +390,6 @@ func _ready() -> void:
 	
 	# Create planting cursor UI
 	_create_plant_cursor()
-	
-	# Create projectile landing indicator
-	_create_projectile_indicator()
 
 
 func hide_all_weapons() -> void:
@@ -512,9 +501,6 @@ func _process(delta: float) -> void:
 	
 	# Update planting cursor position
 	_update_plant_cursor()
-	
-	# Update projectile landing indicator
-	_update_projectile_indicator()
 
 
 # ---------------------------
@@ -1012,172 +998,6 @@ func _update_plant_cursor() -> void:
 
 
 # ---------------------------
-# PROJECTILE LANDING INDICATOR
-# ---------------------------
-func _create_projectile_indicator() -> void:
-	if not show_projectile_indicator:
-		return
-	
-	# Use call_deferred to ensure scene tree is ready
-	call_deferred("_create_projectile_indicator_deferred")
-
-
-func _create_projectile_indicator_deferred() -> void:
-	# Create material for the indicator
-	projectile_indicator_material = StandardMaterial3D.new()
-	projectile_indicator_material.albedo_color = projectile_indicator_color
-	projectile_indicator_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	projectile_indicator_material.no_depth_test = true  # Always render on top
-	projectile_indicator_material.emission_enabled = true
-	projectile_indicator_material.emission = projectile_indicator_color
-	
-	# Create parent node for the indicator
-	projectile_indicator = Node3D.new()
-	projectile_indicator.name = "ProjectileIndicator"
-	
-	# Create a circle/ring indicator using a cylinder mesh (thin and wide)
-	var cylinder_mesh = CylinderMesh.new()
-	cylinder_mesh.top_radius = projectile_indicator_size
-	cylinder_mesh.bottom_radius = projectile_indicator_size
-	cylinder_mesh.height = 0.02  # Very thin
-	cylinder_mesh.material = projectile_indicator_material
-	
-	var mesh_instance = MeshInstance3D.new()
-	mesh_instance.mesh = cylinder_mesh
-	mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	mesh_instance.rotation.x = deg_to_rad(90)  # Rotate to lay flat
-	
-	projectile_indicator.add_child(mesh_instance)
-	
-	# Add to scene root
-	var scene_root = get_tree().current_scene
-	if scene_root:
-		scene_root.add_child(projectile_indicator)
-		projectile_indicator.visible = false
-	else:
-		push_error("Could not create projectile indicator - no scene root")
-
-
-func _update_projectile_indicator() -> void:
-	if not show_projectile_indicator:
-		return
-	
-	# Wait for indicator to be created
-	if not projectile_indicator or not is_instance_valid(projectile_indicator):
-		return
-	
-	# Only show indicator when gun or grenade is equipped
-	var show_indicator: bool = (current_weapon == WeaponType.GUN or current_weapon == WeaponType.GRENADE)
-	
-	if not show_indicator:
-		projectile_indicator.visible = false
-		return
-	
-	# Get camera for raycasting
-	var cam: Camera3D = raycast_camera if raycast_camera else camera
-	if not cam:
-		projectile_indicator.visible = false
-		return
-	
-	# Get spawn position
-	var spawn_pos = get_spawn_position(current_weapon)
-	
-	# Use mouse raycast to determine target position
-	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
-	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var floor_hit: Dictionary = raycast_to_floor(mouse_pos, viewport_size, cam)
-	
-	# Get camera forward direction
-	var forward = -cam.global_transform.basis.z
-	
-	# Calculate target position (same logic as spawn_projectile)
-	var target_pos: Vector3
-	if floor_hit.is_empty():
-		# Fallback: aim forward from camera
-		var fallback_distance = 15.0 if current_weapon == WeaponType.GUN else 20.0
-		target_pos = spawn_pos + forward * fallback_distance
-		target_pos.y = spawn_pos.y
-	else:
-		target_pos = floor_hit.position
-	
-	# Add forward offset to land ahead of aim point
-	var forward_offset_distance = 1.5 if current_weapon == WeaponType.GUN else 2.0
-	target_pos = target_pos + forward * forward_offset_distance
-	
-	# For grenades, ensure minimum throw distance
-	if current_weapon == WeaponType.GRENADE:
-		var to_target = target_pos - spawn_pos
-		var horizontal_dist = Vector3(to_target.x, 0, to_target.z).length()
-		var min_throw_distance = 8.0
-		if horizontal_dist < min_throw_distance:
-			var horizontal_dir = Vector3(to_target.x, 0, to_target.z).normalized()
-			target_pos = spawn_pos + horizontal_dir * min_throw_distance
-			target_pos.y = target_pos.y
-	
-	# Simulate trajectory to find landing position
-	var landing_pos = calculate_landing_position(spawn_pos, target_pos, current_weapon)
-	
-	if landing_pos == Vector3.ZERO:
-		# Could not calculate landing position
-		projectile_indicator.visible = false
-		return
-	
-	# Position indicator at landing position
-	projectile_indicator.global_position = landing_pos
-	projectile_indicator.visible = true
-
-
-func calculate_landing_position(spawn_pos: Vector3, target_pos: Vector3, weapon_type: WeaponType) -> Vector3:
-	"""
-	Calculate where the projectile will land using physics calculations.
-	Returns the landing position.
-	"""
-	var arc_height = 2.0 if weapon_type == WeaponType.GUN else 4.0
-	var initial_velocity = calculate_trajectory_velocity(spawn_pos, target_pos, arc_height)
-	
-	var g = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
-	var horizontal_vel = Vector3(initial_velocity.x, 0, initial_velocity.z)
-	var vertical_vel = initial_velocity.y
-	
-	# Calculate time to reach peak and fall back down
-	# Time to peak: t = v_y / g
-	var t_peak = vertical_vel / g if g > 0 else 0.0
-	var height_at_peak = spawn_pos.y + vertical_vel * t_peak - 0.5 * g * t_peak * t_peak
-	
-	# Time to fall from peak to target height
-	var height_diff = height_at_peak - target_pos.y
-	var t_fall = sqrt(2.0 * height_diff / g) if height_diff > 0 and g > 0 else 0.0
-	
-	# Total flight time
-	var total_time = t_peak + t_fall
-	
-	# Calculate horizontal distance traveled
-	var horizontal_dist = horizontal_vel.length() * total_time
-	var horizontal_dir = horizontal_vel.normalized() if horizontal_vel.length() > 0.01 else Vector3(1, 0, 0)
-	
-	# Calculate landing position
-	var landing_pos = spawn_pos + horizontal_dir * horizontal_dist
-	landing_pos.y = target_pos.y  # Use target Y (floor level)
-	
-	# Raycast down to find exact floor at landing position
-	var space_state = get_world_3d().direct_space_state
-	var query = PhysicsRayQueryParameters3D.create(
-		landing_pos + Vector3.UP * 2.0,
-		landing_pos - Vector3.UP * 5.0
-	)
-	query.collision_mask = ground_collision_mask
-	query.collide_with_bodies = true
-	query.collide_with_areas = false
-	
-	var result = space_state.intersect_ray(query)
-	if not result.is_empty():
-		return result.position
-	
-	# Fallback to calculated position
-	return landing_pos
-
-
-# ---------------------------
 # FLOWER PLANTING
 # ---------------------------
 func plant_flower_at_cursor() -> void:
@@ -1349,6 +1169,15 @@ func spawn_projectile(weapon_type: WeaponType) -> void:
 	var forward_offset_distance = 1.5 if weapon_type == WeaponType.GUN else 2.0  # Grenades land further ahead
 	target_pos = target_pos + forward * forward_offset_distance
 	
+	# For gun mode, adjust target to be mostly horizontal (slight upward angle)
+	if weapon_type == WeaponType.GUN:
+		# Keep target at similar height to spawn (slight upward angle)
+		var horizontal_to_target = Vector3(target_pos.x - spawn_pos.x, 0, target_pos.z - spawn_pos.z)
+		var horizontal_dist = horizontal_to_target.length()
+		# Add slight upward offset based on distance (realistic gun trajectory)
+		var upward_offset = horizontal_dist * 0.05  # 5% upward angle
+		target_pos.y = spawn_pos.y + upward_offset
+	
 	# For grenades, ensure minimum throw distance from spawn position
 	if weapon_type == WeaponType.GRENADE:
 		var to_target = target_pos - spawn_pos
@@ -1360,11 +1189,24 @@ func spawn_projectile(weapon_type: WeaponType) -> void:
 			target_pos = spawn_pos + horizontal_dir * min_throw_distance
 			target_pos.y = target_pos.y  # Keep the Y from original target
 	
-	# Calculate arc height (higher for grenades)
-	var arc_height = 2.0 if weapon_type == WeaponType.GUN else 4.0
+	# Calculate arc height (very small for gun, higher for grenades)
+	var arc_height = 0.3 if weapon_type == WeaponType.GUN else 4.0
 	
 	# Calculate trajectory velocity
 	var initial_velocity = calculate_trajectory_velocity(spawn_pos, target_pos, arc_height)
+	
+	# For gun mode, prioritize horizontal velocity with minimal vertical component
+	if weapon_type == WeaponType.GUN:
+		var horizontal_vel = Vector3(initial_velocity.x, 0, initial_velocity.z)
+		var horizontal_speed = horizontal_vel.length()
+		# Ensure minimum horizontal speed for realistic gun
+		if horizontal_speed < 15.0:
+			var horizontal_dir = horizontal_vel.normalized() if horizontal_speed > 0.01 else forward
+			horizontal_speed = 15.0
+			horizontal_vel = horizontal_dir * horizontal_speed
+		# Keep vertical velocity small (just slight upward angle)
+		var vertical_vel = min(initial_velocity.y, 2.0)  # Cap vertical velocity at 2.0
+		initial_velocity = Vector3(horizontal_vel.x, vertical_vel, horizontal_vel.z)
 	
 	# For grenades, ensure minimum velocity to throw it away from player
 	if weapon_type == WeaponType.GRENADE:

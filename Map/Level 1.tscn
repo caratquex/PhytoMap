@@ -343,6 +343,7 @@ transform = Transform3D(4.675, 0, 0, 0, -4.6668415, 0.27611768, 0, -0.27611768, 
 [node name="Player" parent="." instance=ExtResource("19_uvnbp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.31986332, 9.522104, -4.601265)
 indicator_color = Color(1, 1, 0, 1)
+gun_projectile_arc = 0.2
 
 [node name="Rock" type="Node3D" parent="."]
 
