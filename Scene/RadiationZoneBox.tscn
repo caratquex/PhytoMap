@@ -37,3 +37,4 @@ shape = SubResource("BoxShape3D_zone")
 [node name="ZoneVisual" type="MeshInstance3D" parent="."]
 cast_shadow = 0
 mesh = SubResource("BoxMesh_visual")
+

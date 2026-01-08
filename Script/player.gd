@@ -34,13 +34,9 @@ class FlowerProjectile extends RigidBody3D:
 		spawn_position = global_position
 		last_position = global_position
 		
-		print("[PROJECTILE] _ready() - weapon_type: ", weapon_type, " | velocity: ", initial_velocity)
-		
 		# Apply initial velocity
 		if initial_velocity != Vector3.ZERO:
 			linear_velocity = initial_velocity
-		else:
-			print("[PROJECTILE] WARNING: initial_velocity is ZERO!")
 		
 		# Enable contact monitoring for collision detection
 		contact_monitor = true
@@ -95,7 +91,6 @@ class FlowerProjectile extends RigidBody3D:
 		
 		# Check if this is a grenade - trigger explosion on any collision
 		if weapon_type == WeaponType.GRENADE:
-			print("[GRENADE] Explosion triggered at: ", result.position)
 			trigger_explosion(result.position)
 			# Still land on floor to transform into flower
 			land_on_floor(result.position)
@@ -158,7 +153,6 @@ class FlowerProjectile extends RigidBody3D:
 			transform_to_flower(impact_pos)
 	
 	func transform_to_flower(flower_pos: Vector3) -> void:
-		print("[PROJECTILE] Transforming to flower at: ", flower_pos)
 		# Wait 1 second before transforming into flower
 		await get_tree().create_timer(1.0).timeout
 		
@@ -177,12 +171,10 @@ class FlowerProjectile extends RigidBody3D:
 		if get_tree() and get_tree().current_scene:
 			get_tree().current_scene.add_child(flower)
 			flower.global_position = flower_pos
-			print("Flower spawned at: ", flower_pos)
 			
 			# Check if planted on radiation location and notify GameManager
 			if GameManager.instance and GameManager.instance.is_radiation_location(flower_pos, landing_collider):
 				GameManager.instance.on_radiation_cleared()
-				print("Radiation cleared by projectile at: ", flower_pos)
 		else:
 			push_error("Cannot spawn flower - no scene tree!")
 		
@@ -884,7 +876,6 @@ func _create_floor_indicator_deferred() -> void:
 	if scene_root:
 		scene_root.add_child(floor_indicator)
 		floor_indicator.visible = false
-		print("Floor indicator created successfully")
 	else:
 		push_error("Could not create floor indicator - no scene root")
 
@@ -1018,21 +1009,11 @@ func plant_flower_at_cursor() -> void:
 	var floor_hit: Dictionary = raycast_to_floor(mouse_pos, viewport_size, cam)
 	
 	if floor_hit.is_empty():
-		print("No floor found at click position")
 		return
 	
 	# Get the floor surface position and apply offset
 	var ground_pos: Vector3 = floor_hit.position
 	ground_pos.y += flower_y_offset
-	
-	# Debug: Show what was hit and positions
-	var collider_name: String = floor_hit.collider.name if floor_hit.collider else "unknown"
-	print("=== FLOWER PLANT DEBUG ===")
-	print("  Raycast hit collider: ", collider_name)
-	print("  Hit position: ", floor_hit.position)
-	print("  Camera position: ", cam.global_position)
-	print("  Final flower Y: ", ground_pos.y)
-	print("==========================")
 	
 	# Create and place the flower - snaps to the actual floor block
 	var flower: Node3D = sunflower_scene.instantiate()
@@ -1042,7 +1023,6 @@ func plant_flower_at_cursor() -> void:
 	# Check if planted on radiation location and notify GameManager
 	if GameManager.instance and GameManager.instance.is_radiation_location(ground_pos, floor_hit.collider):
 		GameManager.instance.on_radiation_cleared()
-		print("Radiation cleared by planting at: ", ground_pos)
 
 
 func raycast_to_floor(mouse_pos: Vector2, viewport_size: Vector2, cam: Camera3D) -> Dictionary:
@@ -1083,9 +1063,6 @@ func raycast_to_floor(mouse_pos: Vector2, viewport_size: Vector2, cam: Camera3D)
 	if result.is_empty():
 		return {}
 	
-	# Debug: print the actual hit position
-	print("Raycast hit at Y=", result.position.y, " collider=", result.collider.name if result.collider else "unknown")
-	
 	return {
 		"position": result.position,
 		"normal": result.normal,
@@ -1102,7 +1079,6 @@ func spawn_projectile_delayed(weapon_type: WeaponType, delay: float) -> void:
 
 
 func spawn_projectile(weapon_type: WeaponType) -> void:
-	print("[SPAWN] Creating ", weapon_type, " projectile")
 	# Get spawn position (gun/grenade model or hand position)
 	var spawn_pos = get_spawn_position(weapon_type)
 	
