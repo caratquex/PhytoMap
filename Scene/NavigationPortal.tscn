@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://b4c8lad2p1qo3"]
+[gd_scene load_steps=5 format=3 uid="uid://dmmure813kvy7"]
 
-[ext_resource type="Script" path="res://Script/navigation_portal.gd" id="1_navigation_portal"]
+[ext_resource type="Script" uid="uid://cx6g8o8twktxo" path="res://Script/navigation_portal.gd" id="1_navigation_portal"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_portal"]
 size = Vector3(4, 6, 4)
@@ -16,8 +16,8 @@ material = SubResource("StandardMaterial3D_glow")
 size = Vector3(4, 6, 4)
 
 [node name="NavigationPortal" type="Area3D"]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
 collision_layer = 0
-collision_mask = 1
 monitorable = false
 script = ExtResource("1_navigation_portal")
 light_color = Color(0.1, 0.8, 0.4, 1)

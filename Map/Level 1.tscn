@@ -42,8 +42,8 @@
 [ext_resource type="AudioStream" uid="uid://bksqa2otderuc" path="res://Sfx/Hotbar_Switching2.wav" id="40_8sq5o"]
 [ext_resource type="AudioStream" uid="uid://b2jepp8pt3wji" path="res://Sfx/got hurt.wav" id="41_opgf8"]
 [ext_resource type="AudioStream" uid="uid://bmpdyihcbhqkc" path="res://Sfx/throw plant grenade.mp3" id="42_ewipy"]
-[ext_resource type="PackedScene" path="res://Scene/NavigationPortal.tscn" id="44_8sq5o"]
 [ext_resource type="PackedScene" uid="uid://4p5bvlkog65k" path="res://Scene/RadiationZoneBox.tscn" id="44_wwfh2"]
+[ext_resource type="PackedScene" uid="uid://qfkfvt6felnv" path="res://Scene/GameManager.tscn" id="45_8sq5o"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_we51m"]
 resource_local_to_scene = true
@@ -341,7 +341,7 @@ transform = Transform3D(4.675, 0, 0, 0, -4.66684, 0.2761176, 0, -0.2761176, -4.6
 transform = Transform3D(4.675, 0, 0, 0, -4.6668415, 0.27611768, 0, -0.27611768, -4.6668415, 50.340477, -1.6481501, 34.193726)
 
 [node name="Player" parent="." instance=ExtResource("19_uvnbp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.31986332, 9.522104, -4.601265)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.31986332, 6.044134, 58.844715)
 indicator_color = Color(0.23921569, 0.99215686, 0.29803923, 1)
 gun_projectile_arc = 0.2
 
@@ -557,5 +557,5 @@ required_sunflowers = 5
 gridmap = NodePath("../../GrassBlock/GridMap2")
 snap_to_floor_in_editor = false
 
-[node name="NavigationPortal" parent="." instance=ExtResource("44_8sq5o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0035450459, 0.24412012, -47.968258)
+[node name="GameManager" parent="." instance=ExtResource("45_8sq5o")]
+portal_spawn_position = Vector3(0.187, 0, -47)

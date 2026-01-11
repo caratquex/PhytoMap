@@ -25,16 +25,13 @@ static var instance: Node
 # ---------------------------
 const LEVEL_CONFIG: Dictionary = {
 	"res://Map/Level 1.tscn": {
-		"next_level": "res://Map/Level 2.tscn",
-		"portal_position": Vector3(0, 10, 0)  # Near player spawn
+		"next_level": "res://Map/Level 2.tscn"
 	},
 	"res://Map/Level 2.tscn": {
-		"next_level": "res://Map/Level 3.tscn",
-		"portal_position": Vector3(93, 22, -15)  # Near player spawn
+		"next_level": "res://Map/Level 3.tscn"
 	},
 	"res://Map/Level 3.tscn": {
-		"next_level": "",  # Final level - no next level
-		"portal_position": Vector3(-16, 49, -29)  # Near player spawn
+		"next_level": ""  # Final level - no next level
 	}
 }
 
@@ -139,8 +136,7 @@ func _apply_level_config() -> void:
 	if scene_path in LEVEL_CONFIG:
 		var config = LEVEL_CONFIG[scene_path]
 		next_level_path = config.get("next_level", "")
-		portal_spawn_position = config.get("portal_position", Vector3.ZERO)
-		print("[GameManager] Level config applied - Next: %s, Portal pos: %s" % [next_level_path, portal_spawn_position])
+		print("[GameManager] Level config applied - Next: %s" % [next_level_path])
 	else:
 		print("[GameManager] No config found for scene: %s (using defaults)" % scene_path)
 
