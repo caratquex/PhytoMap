@@ -31,6 +31,13 @@ extends Area3D
 @export var tree_conversion_duration: float = 1.0  ## Duration of the tree texture transition
 
 # ---------------------------
+# SimpleGrassTextured Conversion Settings
+# ---------------------------
+@export_group("SimpleGrassTextured Conversion")
+@export var convert_simple_grass_on_clear: bool = true  ## Convert SimpleGrassTextured textures when cleared
+@export var normal_simple_grass_texture: Texture2D  ## Normal grass texture for SimpleGrassTextured
+
+# ---------------------------
 # GridMap Conversion Settings
 # ---------------------------
 @export_group("GridMap Conversion")
@@ -312,6 +319,10 @@ func clear_zone() -> void:
 	# Convert RadiantTrees to normal trees
 	if convert_trees_on_clear:
 		_convert_radiant_trees_in_zone()
+	
+	# Convert SimpleGrassTextured textures
+	if convert_simple_grass_on_clear:
+		_convert_simple_grass_textured_in_zone()
 	
 	# Convert GridMap tiles to normal grass
 	if gridmap and radiation_tile_ids.size() > 0:
@@ -630,6 +641,80 @@ func _convert_tree_material(mesh_instance: MeshInstance3D, new_texture: Texture2
 			mat_copy.albedo_texture = new_texture
 			mesh_instance.set_surface_override_material(surface_idx, mat_copy)
 			_debug_print("  Updated tree surface %d material on %s" % [surface_idx, mesh_instance.name])
+
+
+# ---------------------------
+# SimpleGrassTextured Conversion
+# ---------------------------
+
+func _convert_simple_grass_textured_in_zone() -> void:
+	# Load normal grass texture if not set
+	var grass_texture = normal_simple_grass_texture
+	if not grass_texture:
+		# Try to load a default normal grass texture
+		grass_texture = load("res://Map Asset/grass_albedo.tres")
+		if not grass_texture:
+			_debug_print("WARNING: Could not load normal SimpleGrassTextured texture!")
+			return
+	
+	# Find all SimpleGrassTextured nodes in the scene
+	var scene_root = get_tree().current_scene
+	if not scene_root:
+		return
+	
+	var simple_grass_nodes: Array[MultiMeshInstance3D] = []
+	_find_simple_grass_textured_recursive(scene_root, simple_grass_nodes)
+	
+	_debug_print("Found %d SimpleGrassTextured nodes in scene" % simple_grass_nodes.size())
+	
+	# Determine zone shape for detection
+	var is_box_shape = collision_shape and collision_shape.shape is BoxShape3D
+	var box_size: Vector3 = Vector3.ZERO
+	if is_box_shape:
+		box_size = (collision_shape.shape as BoxShape3D).size
+	
+	# Convert SimpleGrassTextured nodes within zone bounds
+	var zone_pos = global_position
+	var converted_count = 0
+	
+	for grass_node in simple_grass_nodes:
+		var grass_pos = grass_node.global_position
+		var is_inside: bool = false
+		
+		if is_box_shape:
+			# Box detection: check if point is within box bounds
+			var local_pos = to_local(grass_pos)
+			var half_size = box_size * 0.5
+			is_inside = (
+				abs(local_pos.x) <= half_size.x and
+				abs(local_pos.y) <= half_size.y and
+				abs(local_pos.z) <= half_size.z
+			)
+		else:
+			# Sphere detection: use distance check
+			var distance = grass_pos.distance_to(zone_pos)
+			is_inside = distance <= zone_radius
+		
+		if is_inside:
+			# Change the texture_albedo property (the setter will handle the material update)
+			grass_node.texture_albedo = grass_texture
+			converted_count += 1
+			_debug_print("Converted SimpleGrassTextured '%s' at %s" % [grass_node.name, grass_pos])
+	
+	_debug_print("Converted %d SimpleGrassTextured nodes to normal grass texture" % converted_count)
+
+
+func _find_simple_grass_textured_recursive(node: Node, result: Array[MultiMeshInstance3D]) -> void:
+	# Check if this node is a SimpleGrassTextured (MultiMeshInstance3D with meta)
+	if node is MultiMeshInstance3D:
+		var multi_mesh = node as MultiMeshInstance3D
+		if multi_mesh.has_meta("SimpleGrassTextured"):
+			result.append(multi_mesh)
+			return  # Don't check children
+	
+	# Recursively check children
+	for child in node.get_children():
+		_find_simple_grass_textured_recursive(child, result)
 
 
 # ---------------------------

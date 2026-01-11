@@ -535,27 +535,35 @@ stream = ExtResource("42_ewipy")
 
 [node name="RadiationZone" type="Node" parent="."]
 
-[node name="RadiationZoneBox" parent="RadiationZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("44_wwfh2")]
-transform = Transform3D(1.465, 0, 0, 0, 1.465, 0, 0, 0, 1.465, -27.628084, 2.7520218, -5.7746367)
-gridmap = NodePath("../../GrassBlock/GridMap2")
-snap_to_floor_in_editor = false
+[node name="RadiationZoneBox" parent="RadiationZone" instance=ExtResource("44_wwfh2")]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -27.628084, 2.7520218, -5.7746367)
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = false
+grass_height_offset = 0
 
-[node name="RadiationZoneBox2" parent="RadiationZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("44_wwfh2")]
+[node name="RadiationZoneBox2" parent="RadiationZone" instance=ExtResource("44_wwfh2")]
 transform = Transform3D(1.465, 0, 0, 0, 1.465, 0, 0, 0, 1.465, 30.661985, 1.3258371, -5.7746367)
-gridmap = NodePath("../../GrassBlock/GridMap2")
-snap_to_floor_in_editor = false
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = false
+grass_height_offset = 0
 
-[node name="RadiationZoneBox3" parent="RadiationZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("44_wwfh2")]
+[node name="RadiationZoneBox3" parent="RadiationZone" instance=ExtResource("44_wwfh2")]
 transform = Transform3D(1.64, 0, 0, 0, 1.64, 0, 0, 0, 1.64, 39.618355, 2.054699, -14.144654)
 required_sunflowers = 5
-gridmap = NodePath("../../GrassBlock/GridMap2")
-snap_to_floor_in_editor = false
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = false
+grass_height_offset = 0
 
-[node name="RadiationZoneBox4" parent="RadiationZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("44_wwfh2")]
-transform = Transform3D(1.465, 0, 0, 0, 1.465, 0, 0, 0, 1.465, 43.806477, 2.9697905, -31.908646)
+[node name="RadiationZoneBox4" parent="RadiationZone" instance=ExtResource("44_wwfh2")]
+transform = Transform3D(1.4178127, -0.36815774, 0.022187063, 0.36609492, 1.4154708, 0.09296173, -0.044798452, -0.084423035, 1.4618793, 43.806477, 2.9697905, -31.908646)
 required_sunflowers = 5
-gridmap = NodePath("../../GrassBlock/GridMap2")
-snap_to_floor_in_editor = false
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = false
+grass_height_offset = 0
 
 [node name="GameManager" parent="." instance=ExtResource("45_8sq5o")]
 portal_spawn_position = Vector3(0.187, 0, -47)

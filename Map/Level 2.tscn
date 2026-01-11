@@ -481,7 +481,7 @@ transform = Transform3D(0.55478173, 0, -3.4615471, 0, 3.322, 0, 4.566423, 0, 0.4
 transform = Transform3D(-0.19111529, 1.7639403, -2.434409, 0.14510648, 2.3232317, 1.8483524, 4.031866, -3.5845613e-08, -0.18191592, 23.916473, -22.547401, -169.59122)
 
 [node name="rock_small" parent="Rock" instance=ExtResource("27_hlkp1")]
-transform = Transform3D(1.4386818, 0, -2.1053958, 0, 2.5499997, 0, 2.1053958, 0, 1.4386818, 98.561134, 1.969574, -28.581644)
+transform = Transform3D(1.4385321, -0.036805093, -2.1051764, 0.02076503, 2.549734, -0.03038796, 2.1053958, 0, 1.438682, 98.561134, 1.969574, -28.581644)
 
 [node name="rock_small5" parent="Rock" instance=ExtResource("27_hlkp1")]
 transform = Transform3D(0.9316942, 0.1696449, -0.6637772, -0.9080453, 1.3356119, -0.10588186, 1.472625, 0.71623045, 0.35466725, 173.66977, -9.322099, -19.012592)
@@ -641,47 +641,108 @@ transform = Transform3D(0.8403225, 0, -1.3261818, 0, 1.5699998, 0, 1.3261818, 0,
 [node name="RadiantZone" type="Node" parent="."]
 
 [node name="RadiationZoneBox" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.229918, 11.856665, -22.112425)
+transform = Transform3D(1.15, 0, 0, 0, 3.048, 0, 0, 0, 1.15, 20.229918, 25.167685, -22.112425)
+normal_simple_grass_texture = Array[int]([1, 2])
 gridmap = NodePath("../../GridMap")
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
+
+[node name="RadiationZoneBox11" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 4.5452485, 6.4519653, -2.011583)
+normal_simple_grass_texture = Array[int]([1, 2])
+gridmap = NodePath("../../GridMap")
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
+
+[node name="RadiationZoneBox12" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 12.151054, 4.727239, -15.408221)
+normal_simple_grass_texture = Array[int]([1, 2])
+gridmap = NodePath("../../GridMap")
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
 [node name="RadiationZoneBox8" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
-transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 23.533266, 8.267076, -24.012678)
+transform = Transform3D(1.03, 0, 0, 0, 1.03, 0, 0, 0, 1.03, 21.20739, 30.782982, -43.376373)
+normal_simple_grass_texture = Array[int]([1, 2])
 gridmap = NodePath("../../GridMap")
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
 [node name="RadiationZoneBox9" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
 transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 20.735106, 22.269703, -42.07128)
+normal_simple_grass_texture = Array[int]([1, 2])
 gridmap = NodePath("../../GridMap")
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
 [node name="RadiationZoneBox2" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
 transform = Transform3D(0.99994445, 0, 0.010541593, 0, 1, 0, -0.010541593, 0, 0.99994445, -18.74166, 4.550555, -71.365425)
 required_sunflowers = 7
+normal_simple_grass_texture = Array[int]([1, 2])
 gridmap = NodePath("../../GridMap")
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
 [node name="RadiationZoneBox3" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
 transform = Transform3D(0.99994445, 0, 0.010541593, 0, 1, 0, -0.010541593, 0, 0.99994445, -12.316876, 5.006274, -78.22248)
 required_sunflowers = 7
+normal_simple_grass_texture = Array[int]([1, 2])
 gridmap = NodePath("../../GridMap")
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
 [node name="RadiationZoneBox4" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
 transform = Transform3D(0.99994445, 0, 0.010541593, 0, 1, 0, -0.010541593, 0, 0.99994445, -6.1002283, 3.4461384, -76.77709)
 required_sunflowers = 7
+normal_simple_grass_texture = Array[int]([1, 2])
 gridmap = NodePath("../../GridMap")
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
 [node name="RadiationZoneBox5" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
 transform = Transform3D(0.99994445, 0, 0.010541593, 0, 1, 0, -0.010541593, 0, 0.99994445, -6.1002283, 14.027856, -70.33615)
 required_sunflowers = 7
+normal_simple_grass_texture = Array[int]([1, 2])
 gridmap = NodePath("../../GridMap")
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
 [node name="RadiationZoneBox6" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
-transform = Transform3D(0.5549692, 0, 0.0058505842, 0, 0.555, 0, -0.0058505842, 0, 0.5549692, -13.053869, 22.41542, -53.859684)
+transform = Transform3D(0.5549692, 0, 0.0058505842, 0, 0.555, 0, -0.0058505842, 0, 0.5549692, -13.053869, 16.820051, -53.859684)
 required_sunflowers = 7
+normal_simple_grass_texture = Array[int]([1, 2])
 gridmap = NodePath("../../GridMap")
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
 [node name="RadiationZoneBox7" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
-transform = Transform3D(0.35998002, 0, 0.0037949735, 0, 0.36, 0, -0.0037949735, 0, 0.35998002, 2.0152335, 25.818672, -57.1516)
+transform = Transform3D(0.3599255, -0.0062640198, 0.0037943984, 0.006263672, 0.35994548, 6.6032735e-05, -0.003794973, 0, 0.35998, 2.0152335, 21.888275, -57.1516)
 required_sunflowers = 7
+normal_simple_grass_texture = Array[int]([1, 2])
 gridmap = NodePath("../../GridMap")
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
+
+[node name="RadiationZoneBox10" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
+transform = Transform3D(0.3599255, -0.0062640198, 0.0037943984, 0.006263672, 0.35994548, 6.6032735e-05, -0.003794973, 0, 0.35998, 9.24588, 23.515285, -42.71842)
+required_sunflowers = 7
+normal_simple_grass_texture = Array[int]([1, 2])
+gridmap = NodePath("../../GridMap")
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
 [node name="Player" parent="." instance=ExtResource("21_jrhep")]
-transform = Transform3D(0.99812734, 0, -0.06117048, 0, 1, 0, 0.06117048, 0, 0.99812734, 93.0838, 21.054665, -15.331945)
+transform = Transform3D(0.99812734, 0, -0.06117048, -0.004451267, 0.9973489, -0.07263195, 0.06100831, 0.07276822, 0.9954812, 62.91718, 10.264978, 23.075428)
 gun_projectile_arc = 0.2
