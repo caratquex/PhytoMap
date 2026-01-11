@@ -42,6 +42,7 @@ config/icon="res://Map Asset/icon.svg"
 [autoload]
 
 SimpleGrass="*res://addons/simplegrasstextured/singleton.tscn"
+GameManager="*res://Scene/GameManager.tscn"
 
 [editor_plugins]
 

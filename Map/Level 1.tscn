@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=4 uid="uid://sl5ib4d0b7c6"]
+[gd_scene load_steps=54 format=4 uid="uid://sl5ib4d0b7c6"]
 
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_s8enn"]
 [ext_resource type="MeshLibrary" uid="uid://ctlg4t84uuu0u" path="res://Tiles/Tiles11.tres" id="2_dn7vj"]
@@ -42,6 +42,7 @@
 [ext_resource type="AudioStream" uid="uid://bksqa2otderuc" path="res://Sfx/Hotbar_Switching2.wav" id="40_8sq5o"]
 [ext_resource type="AudioStream" uid="uid://b2jepp8pt3wji" path="res://Sfx/got hurt.wav" id="41_opgf8"]
 [ext_resource type="AudioStream" uid="uid://bmpdyihcbhqkc" path="res://Sfx/throw plant grenade.mp3" id="42_ewipy"]
+[ext_resource type="PackedScene" path="res://Scene/NavigationPortal.tscn" id="44_8sq5o"]
 [ext_resource type="PackedScene" uid="uid://4p5bvlkog65k" path="res://Scene/RadiationZoneBox.tscn" id="44_wwfh2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_we51m"]
@@ -535,7 +536,6 @@ stream = ExtResource("42_ewipy")
 [node name="RadiationZone" type="Node" parent="."]
 
 [node name="RadiationZoneBox" parent="RadiationZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("44_wwfh2")]
-unique_name_in_owner = true
 transform = Transform3D(1.465, 0, 0, 0, 1.465, 0, 0, 0, 1.465, -27.628084, 2.7520218, -5.7746367)
 gridmap = NodePath("../../GrassBlock/GridMap2")
 snap_to_floor_in_editor = false
@@ -556,3 +556,6 @@ transform = Transform3D(1.465, 0, 0, 0, 1.465, 0, 0, 0, 1.465, 43.806477, 2.9697
 required_sunflowers = 5
 gridmap = NodePath("../../GrassBlock/GridMap2")
 snap_to_floor_in_editor = false
+
+[node name="NavigationPortal" parent="." instance=ExtResource("44_8sq5o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0035450459, 0.24412012, -47.968258)

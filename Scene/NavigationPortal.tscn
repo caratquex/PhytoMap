@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://b4c8lad2p1qo3"]
+
+[ext_resource type="Script" path="res://Script/navigation_portal.gd" id="1_navigation_portal"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_portal"]
+size = Vector3(4, 6, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glow"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(0.1, 0.8, 0.4, 0.35)
+
+[sub_resource type="BoxMesh" id="BoxMesh_visual"]
+material = SubResource("StandardMaterial3D_glow")
+size = Vector3(4, 6, 4)
+
+[node name="NavigationPortal" type="Area3D"]
+collision_layer = 0
+collision_mask = 1
+monitorable = false
+script = ExtResource("1_navigation_portal")
+light_color = Color(0.1, 0.8, 0.4, 1)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+light_color = Color(0.1, 0.8, 0.4, 1)
+light_energy = 2.0
+light_indirect_energy = 0.5
+shadow_enabled = true
+omni_range = 10.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("BoxShape3D_portal")
+
+[node name="ZoneVisual" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_visual")
