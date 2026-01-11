@@ -1,4 +1,4 @@
-[gd_scene load_steps=172 format=4 uid="uid://5st2matn1qe3"]
+[gd_scene load_steps=173 format=4 uid="uid://5st2matn1qe3"]
 
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="1_fa38q"]
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_rlmka"]
@@ -57,6 +57,7 @@
 [ext_resource type="PackedScene" uid="uid://i7rvwskvhtnd" path="res://Map Asset/TreeRadiant2.tscn" id="54_71g5e"]
 [ext_resource type="Script" uid="uid://cnqxhjnrvg774" path="res://addons/proton_scatter/src/shapes/box_shape.gd" id="54_rlmka"]
 [ext_resource type="Texture2D" uid="uid://bomdnaxhjmxbd" path="res://Map Asset/grass_albedo.tres" id="58_ykht6"]
+[ext_resource type="PackedScene" uid="uid://qfkfvt6felnv" path="res://Scene/GameManager.tscn" id="59_kdx7h"]
 [ext_resource type="PackedScene" uid="uid://dpspi6ak6desn" path="res://Scene/RadiationZoneSphere.tscn" id="59_pyi43"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_l52ou"]
@@ -694,14 +695,14 @@ _data = {
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_c2bd3"]
 data = PackedVector3Array(0.9, -0.9, 1, -0.9, 0.9, 1, 0.9, 0.9, 1, 0.9, -0.9, 1, -0.9, -0.9, 1, -0.9, 0.9, 1, 1, -0.9, -0.9, 1, 0.9, 0.9, 1, 0.9, -0.9, 1, -0.9, -0.9, 1, -0.9, 0.9, 1, 0.9, 0.9, 0.9, 1, -0.9, -0.9, 1, 0.9, -0.9, 1, -0.9, 0.9, 1, -0.9, 0.9, 1, 0.9, -0.9, 1, 0.9, -1, -0.9, 0.9, -1, 0.9, -0.9, -1, 0.9, 0.9, -1, -0.9, 0.9, -1, -0.9, -0.9, -1, 0.9, -0.9, -0.9, -0.9, -1, 0.9, 0.9, -1, -0.9, 0.9, -1, -0.9, -0.9, -1, 0.9, -0.9, -1, 0.9, 0.9, -1, -0.9, -1, 0.9, -1, -0.9, 0.9, -0.9, -0.9, 1, -0.9, 0.9, 1, -1, 0.9, 0.9, -0.9, 1, 0.9, -0.9, -1, -0.9, -0.9, -0.9, -1, -1, -0.9, -0.9, -0.9, 1, -0.9, -1, 0.9, -0.9, -0.9, 0.9, -1, 0.9, -1, 0.9, 0.9, -0.9, 1, 1, -0.9, 0.9, 0.9, 1, 0.9, 1, 0.9, 0.9, 0.9, 0.9, 1, 0.9, -1, -0.9, 1, -0.9, -0.9, 0.9, -0.9, -1, 0.9, 1, -0.9, 0.9, 0.9, -1, 1, 0.9, -0.9, -0.9, -1, -0.9, -1, -0.9, 0.9, -0.9, -1, 0.9, -0.9, -1, -0.9, -1, -0.9, -0.9, -1, -0.9, 0.9, -0.9, -0.9, 1, -1, 0.9, 0.9, -0.9, 0.9, 1, -0.9, -0.9, 1, -1, -0.9, 0.9, -1, 0.9, 0.9, -0.9, 1, 0.9, -1, 0.9, -0.9, -0.9, 1, -0.9, -0.9, 1, 0.9, -1, 0.9, 0.9, -1, 0.9, -0.9, -0.9, 0.9, -1, -1, -0.9, -0.9, -0.9, -0.9, -1, -0.9, 0.9, -1, -1, 0.9, -0.9, -1, -0.9, -0.9, 0.9, -1, -0.9, -0.9, -0.9, -1, -0.9, -1, -0.9, 0.9, -1, -0.9, 0.9, -0.9, -1, -0.9, -0.9, -1, -0.9, 1, -0.9, 0.9, 0.9, -1, 0.9, 1, -0.9, -0.9, 1, -0.9, -0.9, 0.9, -1, 0.9, 0.9, -1, 1, 0.9, -0.9, 0.9, -0.9, -1, 1, -0.9, -0.9, 1, 0.9, -0.9, 0.9, 0.9, -1, 0.9, -0.9, -1, 0.9, -1, 0.9, 1, -0.9, -0.9, 0.9, -1, -0.9, 0.9, -1, 0.9, 1, -0.9, 0.9, 1, -0.9, -0.9, 0.9, 1, -0.9, 1, 0.9, 0.9, 0.9, 1, 0.9, 0.9, 1, -0.9, 1, 0.9, -0.9, 1, 0.9, 0.9, 0.9, 0.9, 1, 1, -0.9, 0.9, 0.9, -0.9, 1, 0.9, 0.9, 1, 1, 0.9, 0.9, 1, -0.9, 0.9, -0.9, -1, 0.9, 0.9, -0.9, 1, 0.9, -1, 0.9, -0.9, -1, 0.9, -0.9, -0.9, 1, 0.9, -0.9, 1, 0.9, 1, 0.9, -0.9, 0.9, 1, -0.9, 1, 0.9, 0.9, 1, 0.9, 0.9, 0.9, 1, -0.9, 0.9, 1, -0.9, -1, -0.9, 0.9, -1, 0.9, 0.9, -1, -0.9, -0.9, -1, -0.9, -0.9, -1, 0.9, 0.9, -1, 0.9, -0.1095, 1.0945, 0.1094, -0.9851, 1.0945, 0.98499995, -0.9851, 1.0945, 0.1094, -0.1095, 1.0945, 0.1094, -0.1095, 1.0945, 0.98499995, -0.9851, 1.0945, 0.98499995, -0.1095, 1.0945, 0.1094, 0.1094, 1.0945, 0.98499995, -0.1095, 1.0945, 0.98499995, -0.9851, 1.0945, 0.1094, -0.1095, 1.0945, -0.1095, -0.1095, 1.0945, 0.1094, -0.1095, 1.0945, 0.1094, 0.1094, 1.0945, 0.1094, 0.1094, 1.0945, 0.98499995, -0.9851, 1.0945, 0.1094, -0.9851, 1.0945, -0.1095, -0.1095, 1.0945, -0.1095, 0.1094, 1.0945, 0.1094, -0.1095, 1.0945, 0.1094, -0.1095, 1.0945, -0.1095, -0.1095, 1.0945, -0.1095, -0.9851, 1.0945, -0.1095, -0.9851, 1.0945, -0.9851, 0.1094, 1.0945, 0.1094, 0.98499995, 1.0945, 0.98499995, 0.1094, 1.0945, 0.98499995, 0.1094, 1.0945, 0.1094, 0.98499995, 1.0945, 0.1094, 0.98499995, 1.0945, 0.98499995, -0.1095, 1.0945, -0.1095, -0.9851, 1.0945, -0.9851, -0.1095, 1.0945, -0.9851, 0.98499995, 1.0945, -0.1095, 0.98499995, 1.0945, 0.1094, 0.1094, 1.0945, 0.1094, 0.1094, 1.0945, 0.1094, -0.1095, 1.0945, -0.1095, 0.1094, 1.0945, -0.1095, 0.98499995, 1.0945, -0.1095, 0.1094, 1.0945, 0.1094, 0.1094, 1.0945, -0.1095, 0.1094, 1.0945, -0.1095, -0.1095, 1.0945, -0.1095, -0.1095, 1.0945, -0.9851, 0.1094, 1.0945, -0.1095, 0.98499995, 1.0945, -0.9851, 0.98499995, 1.0945, -0.1095, 0.1094, 1.0945, -0.1095, -0.1095, 1.0945, -0.9851, 0.1094, 1.0945, -0.9851, 0.1094, 1.0945, -0.1095, 0.1094, 1.0945, -0.9851, 0.98499995, 1.0945, -0.9851, -0.18239999, -0.1801, 1.0945, 0, 0.98499995, 1.0945, 0, 0, 1.0945, 0, 0.98499995, 1.0945, 0.18239999, -0.1801, 1.0945, 0, 0, 1.0945, -0.3649, 0, 1.0945, 0, 0.98499995, 1.0945, -0.18239999, -0.1801, 1.0945, 0, 0.98499995, 1.0945, 0.36479998, 0, 1.0945, 0.18239999, -0.1801, 1.0945, -0.72969997, 0, 1.0945, -0.3649, 0, 1.0945, -0.5473, -0.1801, 1.0945, 0, 0.98499995, 1.0945, -0.3649, 0, 1.0945, -0.72969997, 0, 1.0945, 0.36479998, 0, 1.0945, 0.72959995, 0, 1.0945, 0.54719996, -0.1801, 1.0945, 0, 0.98499995, 1.0945, 0.72959995, 0, 1.0945, 0.36479998, 0, 1.0945, 0.72959995, 0, 1.0945, 0, 0.98499995, 1.0945, 1.0945, 0, 1.0945, 0.72959995, 0, 1.0945, 1.0945, 0, 1.0945, 0.912, -0.1801, 1.0945, 1.0945, 0, 1.0945, 0, 0.98499995, 1.0945, 1.0945, 0.98499995, 1.0945, 0, 0.98499995, 1.0945, -0.72969997, 0, 1.0945, -1.0945, 0, 1.0945, -1.0945, 0, 1.0945, -0.72969997, 0, 1.0945, -0.91209996, -0.1801, 1.0945, 0, 0.98499995, 1.0945, -1.0945, 0, 1.0945, -1.0945, 0.98499995, 1.0945, 1.0945, -0.1801, -0.91209996, 1.0945, 0.98499995, -1.0945, 1.0945, 0, -1.0945, 1.0945, 0, -0.72969997, 1.0945, 0.98499995, -1.0945, 1.0945, -0.1801, -0.91209996, 1.0945, 0.98499995, -1.0945, 1.0945, 0, -0.72969997, 1.0945, 0, -0.36479998, 1.0945, 0, -0.36479998, 1.0945, 0, -0.72969997, 1.0945, -0.1801, -0.5473, 1.0945, 0.98499995, -1.0945, 1.0945, 0, -0.36479998, 1.0945, 0, 0, 1.0945, 0, 0, 1.0945, 0, -0.36479998, 1.0945, -0.1801, -0.18239999, 1.0945, 0.98499995, -1.0945, 1.0945, 0, 0, 1.0945, 0.98499995, 0, 1.0945, 0, 0, 1.0945, 0.98499995, 1.0945, 1.0945, 0.98499995, 0, 1.0945, 0, 0.36479998, 1.0945, 0.98499995, 1.0945, 1.0945, 0, 0, 1.0945, 0, 0.36479998, 1.0945, 0, 0, 1.0945, -0.1801, 0.18239999, 1.0945, 0.98499995, 1.0945, 1.0945, 0, 0.36479998, 1.0945, 0, 0.72959995, 1.0945, 0, 0.72959995, 1.0945, 0, 0.36479998, 1.0945, -0.1801, 0.54719996, 1.0945, 0.98499995, 1.0945, 1.0945, 0, 0.72959995, 1.0945, -0.1801, 0.912, 1.0945, 0.98499995, 1.0945, 1.0945, -0.1801, 0.912, 1.0945, 0, 1.0945, 0.18239999, -0.1801, -1.0945, 0, 0.98499995, -1.0945, 0, 0, -1.0945, 0, 0.98499995, -1.0945, -0.18239999, -0.1801, -1.0945, 0, 0, -1.0945, 0.36479998, 0, -1.0945, 0, 0.98499995, -1.0945, 0.18239999, -0.1801, -1.0945, 0, 0.98499995, -1.0945, -0.3649, 0, -1.0945, -0.18239999, -0.1801, -1.0945, 0.72959995, 0, -1.0945, 0.36479998, 0, -1.0945, 0.54719996, -0.1801, -1.0945, 0, 0.98499995, -1.0945, 0.36479998, 0, -1.0945, 0.72959995, 0, -1.0945, -0.3649, 0, -1.0945, -0.72969997, 0, -1.0945, -0.5473, -0.1801, -1.0945, 0, 0.98499995, -1.0945, -0.72969997, 0, -1.0945, -0.3649, 0, -1.0945, -0.72969997, 0, -1.0945, 0, 0.98499995, -1.0945, -1.0945, 0, -1.0945, -0.72969997, 0, -1.0945, -1.0945, 0, -1.0945, -0.91209996, -0.1801, -1.0945, -1.0945, 0, -1.0945, 0, 0.98499995, -1.0945, -1.0945, 0.98499995, -1.0945, 0, 0.98499995, -1.0945, 0.72959995, 0, -1.0945, 1.0945, 0, -1.0945, 1.0945, 0, -1.0945, 0.72959995, 0, -1.0945, 0.912, -0.1801, -1.0945, 0, 0.98499995, -1.0945, 1.0945, 0, -1.0945, 1.0945, 0.98499995, -1.0945, -1.0945, 0.98499995, -1.0945, -1.0945, -0.1801, -0.91209996, -1.0945, 0, -1.0945, -1.0945, 0.98499995, -1.0945, -1.0945, 0, -0.72969997, -1.0945, -0.1801, -0.91209996, -1.0945, 0.98499995, -1.0945, -1.0945, 0, -0.36479998, -1.0945, 0, -0.72969997, -1.0945, 0, -0.72969997, -1.0945, 0, -0.36479998, -1.0945, -0.1801, -0.5473, -1.0945, 0, -0.36479998, -1.0945, 0.98499995, -1.0945, -1.0945, 0, 0, -1.0945, 0, -0.36479998, -1.0945, 0, 0, -1.0945, -0.1801, -0.18239999, -1.0945, 0, 0, -1.0945, 0.98499995, -1.0945, -1.0945, 0.98499995, 0, -1.0945, 0.98499995, 1.0945, -1.0945, 0, 0, -1.0945, 0.98499995, 0, -1.0945, 0.98499995, 1.0945, -1.0945, 0, 0.36479998, -1.0945, 0, 0, -1.0945, 0, 0, -1.0945, 0, 0.36479998, -1.0945, -0.1801, 0.18239999, -1.0945, 0.98499995, 1.0945, -1.0945, 0, 0.72959995, -1.0945, 0, 0.36479998, -1.0945, 0, 0.36479998, -1.0945, 0, 0.72959995, -1.0945, -0.1801, 0.54719996, -1.0945, 0, 0.72959995, -1.0945, 0.98499995, 1.0945, -1.0945, -0.1801, 0.912, -1.0945, -0.1801, 0.912, -1.0945, 0.98499995, 1.0945, -1.0945, 0, 1.0945, 0, 0.98499995, 1.0945, -0.1095, 1.0945, 0.98499995, 0.1094, 1.0945, 0.98499995, 0, 0.98499995, 1.0945, 0.1094, 1.0945, 0.98499995, 0.98499995, 1.0945, 0.98499995, 0, 0.98499995, 1.0945, 0.98499995, 1.0945, 0.98499995, 1.0945, 0.98499995, 1.0945, -0.1095, 1.0945, 0.98499995, 0, 0.98499995, 1.0945, -1.0945, 0.98499995, 1.0945, -0.1095, 1.0945, 0.98499995, -1.0945, 0.98499995, 1.0945, -0.9851, 1.0945, 0.98499995, -0.9851, 1.0945, 0.1094, -1.0945, 0.98499995, 0, -0.9851, 1.0945, -0.1095, -0.9851, 1.0945, 0.98499995, -1.0945, 0.98499995, 0, -0.9851, 1.0945, 0.1094, -0.9851, 1.0945, 0.98499995, -1.0945, 0.98499995, 1.0945, -1.0945, 0.98499995, 0, -1.0945, 0.98499995, -1.0945, -0.9851, 1.0945, -0.1095, -1.0945, 0.98499995, 0, -1.0945, 0.98499995, -1.0945, -0.9851, 1.0945, -0.9851, -0.9851, 1.0945, -0.1095, 1.0945, 0.98499995, 0, 0.98499995, 1.0945, 0.1094, 0.98499995, 1.0945, -0.1095, 0.98499995, 1.0945, -0.9851, 1.0945, 0.98499995, 0, 0.98499995, 1.0945, -0.1095, 0.98499995, 1.0945, -0.9851, 1.0945, 0.98499995, -1.0945, 1.0945, 0.98499995, 0, 1.0945, 0.98499995, 1.0945, 0.98499995, 1.0945, 0.1094, 1.0945, 0.98499995, 0, 1.0945, 0.98499995, 1.0945, 0.98499995, 1.0945, 0.98499995, 0.98499995, 1.0945, 0.1094, -0.1095, 1.0945, -0.9851, 0, 0.98499995, -1.0945, 0.1094, 1.0945, -0.9851, 0, 0.98499995, -1.0945, -0.1095, 1.0945, -0.9851, -0.9851, 1.0945, -0.9851, 0, 0.98499995, -1.0945, -0.9851, 1.0945, -0.9851, -1.0945, 0.98499995, -1.0945, 0.1094, 1.0945, -0.9851, 0, 0.98499995, -1.0945, 1.0945, 0.98499995, -1.0945, 0.1094, 1.0945, -0.9851, 1.0945, 0.98499995, -1.0945, 0.98499995, 1.0945, -0.9851)
 
-[sub_resource type="Resource" id="Resource_ykht6"]
+[sub_resource type="Resource" id="Resource_tp466"]
 script = ExtResource("44_71g5e")
 amount = 25
 override_global_seed = true
 custom_seed = 11
 reference_frame = 1
 
-[sub_resource type="Resource" id="Resource_pyi43"]
+[sub_resource type="Resource" id="Resource_npuwj"]
 script = ExtResource("45_l8wyj")
 position = Vector3(0.173, 0.222, 0.918)
 rotation = Vector3(20, 180, 0)
@@ -710,33 +711,33 @@ override_global_seed = true
 custom_seed = 10
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_14wr4"]
+[sub_resource type="Resource" id="Resource_gx12f"]
 script = ExtResource("47_inxsn")
 rotation = Vector3(360, 0, 360)
 snap_angle = Vector3(180, 0, 180)
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_3pluv"]
+[sub_resource type="Resource" id="Resource_k35cw"]
 script = ExtResource("48_geu57")
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_puby7"]
+[sub_resource type="Resource" id="Resource_yugbn"]
 script = ExtResource("42_geu57")
-stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_ykht6"), SubResource("Resource_pyi43"), SubResource("Resource_14wr4"), SubResource("Resource_3pluv")])
+stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_tp466"), SubResource("Resource_npuwj"), SubResource("Resource_gx12f"), SubResource("Resource_k35cw")])
 
 [sub_resource type="Resource" id="Resource_l8wyj"]
 script = ExtResource("54_rlmka")
 size = Vector3(28.75458, 14.981766, 28.530111)
 metadata/_custom_type_script = "uid://cnqxhjnrvg774"
 
-[sub_resource type="Resource" id="Resource_jud17"]
+[sub_resource type="Resource" id="Resource_rec2d"]
 script = ExtResource("44_71g5e")
 amount = 5
 override_global_seed = true
 custom_seed = 1
 reference_frame = 1
 
-[sub_resource type="Resource" id="Resource_42tye"]
+[sub_resource type="Resource" id="Resource_l4k5s"]
 script = ExtResource("45_l8wyj")
 position = Vector3(0.173, 0.222, 0.918)
 rotation = Vector3(20, 180, 0)
@@ -745,32 +746,32 @@ override_global_seed = true
 custom_seed = 10
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_qr0ag"]
+[sub_resource type="Resource" id="Resource_hcgci"]
 script = ExtResource("47_inxsn")
 rotation = Vector3(360, 0, 360)
 snap_angle = Vector3(180, 0, 180)
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_x76u1"]
+[sub_resource type="Resource" id="Resource_by8lw"]
 script = ExtResource("48_geu57")
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_b2w4g"]
+[sub_resource type="Resource" id="Resource_24y6b"]
 script = ExtResource("42_geu57")
-stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_jud17"), SubResource("Resource_42tye"), SubResource("Resource_qr0ag"), SubResource("Resource_x76u1")])
+stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_rec2d"), SubResource("Resource_l4k5s"), SubResource("Resource_hcgci"), SubResource("Resource_by8lw")])
 
 [sub_resource type="Resource" id="Resource_cva0b"]
 script = ExtResource("54_rlmka")
 size = Vector3(28.75458, 14.981766, 28.530111)
 
-[sub_resource type="Resource" id="Resource_q25xo"]
+[sub_resource type="Resource" id="Resource_hpicg"]
 script = ExtResource("44_71g5e")
 amount = 9
 override_global_seed = true
 custom_seed = 3
 reference_frame = 1
 
-[sub_resource type="Resource" id="Resource_cmb0c"]
+[sub_resource type="Resource" id="Resource_fqcw2"]
 script = ExtResource("45_l8wyj")
 position = Vector3(0.173, 0.222, 0.918)
 rotation = Vector3(20, 180, 0)
@@ -779,32 +780,32 @@ override_global_seed = true
 custom_seed = 10
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_2iivh"]
+[sub_resource type="Resource" id="Resource_leyr8"]
 script = ExtResource("47_inxsn")
 rotation = Vector3(0, 0, 25)
 snap_angle = Vector3(180, 0, 180)
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_ywhk5"]
+[sub_resource type="Resource" id="Resource_uii5m"]
 script = ExtResource("48_geu57")
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_kgyew"]
+[sub_resource type="Resource" id="Resource_45siw"]
 script = ExtResource("42_geu57")
-stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_q25xo"), SubResource("Resource_cmb0c"), SubResource("Resource_2iivh"), SubResource("Resource_ywhk5")])
+stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_hpicg"), SubResource("Resource_fqcw2"), SubResource("Resource_leyr8"), SubResource("Resource_uii5m")])
 
 [sub_resource type="Resource" id="Resource_fbwsr"]
 script = ExtResource("54_rlmka")
 size = Vector3(28.75458, 14.981766, 28.530111)
 
-[sub_resource type="Resource" id="Resource_ub5qw"]
+[sub_resource type="Resource" id="Resource_iv1qi"]
 script = ExtResource("44_71g5e")
 amount = 19
 override_global_seed = true
 custom_seed = 7
 reference_frame = 1
 
-[sub_resource type="Resource" id="Resource_buswo"]
+[sub_resource type="Resource" id="Resource_dmkgv"]
 script = ExtResource("45_l8wyj")
 position = Vector3(0.173, 0.222, 0.918)
 rotation = Vector3(20, 180, 0)
@@ -813,32 +814,32 @@ override_global_seed = true
 custom_seed = 10
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_8tnsv"]
+[sub_resource type="Resource" id="Resource_86okx"]
 script = ExtResource("47_inxsn")
 rotation = Vector3(0, 0, 25)
 snap_angle = Vector3(180, 0, 180)
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_ots8r"]
+[sub_resource type="Resource" id="Resource_cof2g"]
 script = ExtResource("48_geu57")
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_28v51"]
+[sub_resource type="Resource" id="Resource_3q2q2"]
 script = ExtResource("42_geu57")
-stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_ub5qw"), SubResource("Resource_buswo"), SubResource("Resource_8tnsv"), SubResource("Resource_ots8r")])
+stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_iv1qi"), SubResource("Resource_dmkgv"), SubResource("Resource_86okx"), SubResource("Resource_cof2g")])
 
 [sub_resource type="Resource" id="Resource_x5ul8"]
 script = ExtResource("54_rlmka")
 size = Vector3(17.326483, 14.981766, 28.530111)
 
-[sub_resource type="Resource" id="Resource_6qgde"]
+[sub_resource type="Resource" id="Resource_1lp04"]
 script = ExtResource("44_71g5e")
 amount = 19
 override_global_seed = true
 custom_seed = 5
 reference_frame = 1
 
-[sub_resource type="Resource" id="Resource_gmobt"]
+[sub_resource type="Resource" id="Resource_ypq7n"]
 script = ExtResource("45_l8wyj")
 position = Vector3(0.173, 0.222, 0.918)
 rotation = Vector3(20, 180, 0)
@@ -847,32 +848,32 @@ override_global_seed = true
 custom_seed = 10
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_87ewv"]
+[sub_resource type="Resource" id="Resource_frb27"]
 script = ExtResource("47_inxsn")
 rotation = Vector3(0, 0, 25)
 snap_angle = Vector3(180, 0, 180)
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_hxjvl"]
+[sub_resource type="Resource" id="Resource_souri"]
 script = ExtResource("48_geu57")
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_knwrj"]
+[sub_resource type="Resource" id="Resource_hmpyv"]
 script = ExtResource("42_geu57")
-stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_6qgde"), SubResource("Resource_gmobt"), SubResource("Resource_87ewv"), SubResource("Resource_hxjvl")])
+stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_1lp04"), SubResource("Resource_ypq7n"), SubResource("Resource_frb27"), SubResource("Resource_souri")])
 
 [sub_resource type="Resource" id="Resource_ukbag"]
 script = ExtResource("54_rlmka")
 size = Vector3(28.75458, 14.981766, 28.530111)
 
-[sub_resource type="Resource" id="Resource_0uo5a"]
+[sub_resource type="Resource" id="Resource_aa244"]
 script = ExtResource("44_71g5e")
 amount = 37
 override_global_seed = true
 custom_seed = 5
 reference_frame = 1
 
-[sub_resource type="Resource" id="Resource_y31uy"]
+[sub_resource type="Resource" id="Resource_6qqt8"]
 script = ExtResource("45_l8wyj")
 position = Vector3(0.173, 0.222, 0.918)
 rotation = Vector3(20, 180, 0)
@@ -881,32 +882,32 @@ override_global_seed = true
 custom_seed = 10
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_2imr6"]
+[sub_resource type="Resource" id="Resource_y8m3j"]
 script = ExtResource("47_inxsn")
 rotation = Vector3(0, 0, 25)
 snap_angle = Vector3(180, 0, 180)
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_ot54x"]
+[sub_resource type="Resource" id="Resource_gls87"]
 script = ExtResource("48_geu57")
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_72qod"]
+[sub_resource type="Resource" id="Resource_x0hms"]
 script = ExtResource("42_geu57")
-stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_0uo5a"), SubResource("Resource_y31uy"), SubResource("Resource_2imr6"), SubResource("Resource_ot54x")])
+stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_aa244"), SubResource("Resource_6qqt8"), SubResource("Resource_y8m3j"), SubResource("Resource_gls87")])
 
 [sub_resource type="Resource" id="Resource_sf287"]
 script = ExtResource("54_rlmka")
 size = Vector3(30.549065, 14.981766, 32.548687)
 
-[sub_resource type="Resource" id="Resource_vymkb"]
+[sub_resource type="Resource" id="Resource_0tn1l"]
 script = ExtResource("44_71g5e")
 amount = 28
 override_global_seed = true
 custom_seed = 4
 reference_frame = 1
 
-[sub_resource type="Resource" id="Resource_hplcw"]
+[sub_resource type="Resource" id="Resource_1giik"]
 script = ExtResource("45_l8wyj")
 position = Vector3(0.173, 0.222, 0.918)
 rotation = Vector3(20, 180, 0)
@@ -915,32 +916,32 @@ override_global_seed = true
 custom_seed = 10
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_pwk5x"]
+[sub_resource type="Resource" id="Resource_n16gi"]
 script = ExtResource("47_inxsn")
 rotation = Vector3(0, 0, 25)
 snap_angle = Vector3(180, 0, 180)
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_spa40"]
+[sub_resource type="Resource" id="Resource_7vw4s"]
 script = ExtResource("48_geu57")
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_2drqn"]
+[sub_resource type="Resource" id="Resource_hw5ef"]
 script = ExtResource("42_geu57")
-stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_vymkb"), SubResource("Resource_hplcw"), SubResource("Resource_pwk5x"), SubResource("Resource_spa40")])
+stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_0tn1l"), SubResource("Resource_1giik"), SubResource("Resource_n16gi"), SubResource("Resource_7vw4s")])
 
 [sub_resource type="Resource" id="Resource_fcpsd"]
 script = ExtResource("54_rlmka")
 size = Vector3(44.58242, 14.981766, 28.530111)
 
-[sub_resource type="Resource" id="Resource_abosy"]
+[sub_resource type="Resource" id="Resource_cstfx"]
 script = ExtResource("44_71g5e")
 amount = 23
 override_global_seed = true
 custom_seed = 4
 reference_frame = 1
 
-[sub_resource type="Resource" id="Resource_86bwe"]
+[sub_resource type="Resource" id="Resource_37wej"]
 script = ExtResource("45_l8wyj")
 position = Vector3(0.173, 0.222, 0.918)
 rotation = Vector3(20, 180, 0)
@@ -949,32 +950,32 @@ override_global_seed = true
 custom_seed = 10
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_mr3cq"]
+[sub_resource type="Resource" id="Resource_unfa7"]
 script = ExtResource("47_inxsn")
 rotation = Vector3(0, 0, 25)
 snap_angle = Vector3(180, 0, 180)
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_ylwrt"]
+[sub_resource type="Resource" id="Resource_ykolu"]
 script = ExtResource("48_geu57")
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_fs008"]
+[sub_resource type="Resource" id="Resource_mbn8f"]
 script = ExtResource("42_geu57")
-stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_abosy"), SubResource("Resource_86bwe"), SubResource("Resource_mr3cq"), SubResource("Resource_ylwrt")])
+stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_cstfx"), SubResource("Resource_37wej"), SubResource("Resource_unfa7"), SubResource("Resource_ykolu")])
 
 [sub_resource type="Resource" id="Resource_obnl1"]
 script = ExtResource("54_rlmka")
 size = Vector3(28.75458, 14.981766, 28.530111)
 
-[sub_resource type="Resource" id="Resource_vx5jq"]
+[sub_resource type="Resource" id="Resource_qg1bh"]
 script = ExtResource("44_71g5e")
 amount = 5
 override_global_seed = true
 custom_seed = 6
 reference_frame = 1
 
-[sub_resource type="Resource" id="Resource_xcork"]
+[sub_resource type="Resource" id="Resource_hxc3b"]
 script = ExtResource("45_l8wyj")
 position = Vector3(0.173, 0.222, 0.918)
 rotation = Vector3(20, 180, 0)
@@ -983,32 +984,32 @@ override_global_seed = true
 custom_seed = 10
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_if668"]
+[sub_resource type="Resource" id="Resource_qmoic"]
 script = ExtResource("47_inxsn")
 rotation = Vector3(0, 0, 25)
 snap_angle = Vector3(180, 0, 180)
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_7r65u"]
+[sub_resource type="Resource" id="Resource_gl5vj"]
 script = ExtResource("48_geu57")
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_tcfko"]
+[sub_resource type="Resource" id="Resource_qea6f"]
 script = ExtResource("42_geu57")
-stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_vx5jq"), SubResource("Resource_xcork"), SubResource("Resource_if668"), SubResource("Resource_7r65u")])
+stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_qg1bh"), SubResource("Resource_hxc3b"), SubResource("Resource_qmoic"), SubResource("Resource_gl5vj")])
 
 [sub_resource type="Resource" id="Resource_3pyeh"]
 script = ExtResource("54_rlmka")
 size = Vector3(28.75458, 14.981766, 28.530111)
 
-[sub_resource type="Resource" id="Resource_yf6bn"]
+[sub_resource type="Resource" id="Resource_nnsa5"]
 script = ExtResource("44_71g5e")
 amount = 5
 override_global_seed = true
 custom_seed = 6
 reference_frame = 1
 
-[sub_resource type="Resource" id="Resource_ux5kn"]
+[sub_resource type="Resource" id="Resource_dcthd"]
 script = ExtResource("45_l8wyj")
 position = Vector3(0.173, 0.222, 0.918)
 rotation = Vector3(20, 180, 0)
@@ -1017,19 +1018,19 @@ override_global_seed = true
 custom_seed = 10
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_ggjfv"]
+[sub_resource type="Resource" id="Resource_r4fn3"]
 script = ExtResource("47_inxsn")
 rotation = Vector3(0, 0, 25)
 snap_angle = Vector3(180, 0, 180)
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_esbly"]
+[sub_resource type="Resource" id="Resource_7m7ow"]
 script = ExtResource("48_geu57")
 reference_frame = 2
 
-[sub_resource type="Resource" id="Resource_2buk2"]
+[sub_resource type="Resource" id="Resource_tpkd7"]
 script = ExtResource("42_geu57")
-stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_yf6bn"), SubResource("Resource_ux5kn"), SubResource("Resource_ggjfv"), SubResource("Resource_esbly")])
+stack = Array[ExtResource("43_qmm36")]([SubResource("Resource_nnsa5"), SubResource("Resource_dcthd"), SubResource("Resource_r4fn3"), SubResource("Resource_7m7ow")])
 
 [sub_resource type="Resource" id="Resource_tqcm5"]
 script = ExtResource("54_rlmka")
@@ -1643,7 +1644,7 @@ process_mode = 3
 transform = Transform3D(0.330514, 0, 0.943801, 0, 1, 0, -0.943801, 0, 0.330514, 0.6857033, 29.015625, -17.919092)
 script = ExtResource("41_idcw0")
 render_mode = 1
-modifier_stack = SubResource("Resource_puby7")
+modifier_stack = SubResource("Resource_yugbn")
 Performance/use_chunks = true
 Performance/chunk_dimensions = Vector3(15, 15, 15)
 
@@ -1663,7 +1664,7 @@ process_mode = 3
 transform = Transform3D(0.330514, 0, 0.943801, 0, 1, 0, -0.943801, 0, 0.330514, 0.6857033, 25.571918, -19.515747)
 script = ExtResource("41_idcw0")
 render_mode = 1
-modifier_stack = SubResource("Resource_b2w4g")
+modifier_stack = SubResource("Resource_24y6b")
 Performance/use_chunks = true
 Performance/chunk_dimensions = Vector3(15, 15, 15)
 
@@ -1683,7 +1684,7 @@ process_mode = 3
 transform = Transform3D(0.2851575, 0.5055972, 0.81428295, -0.37451714, 0.8407921, -0.39090306, -0.8822823, -0.19349399, 0.429113, -12.398241, 21.938307, -0.4164505)
 script = ExtResource("41_idcw0")
 render_mode = 1
-modifier_stack = SubResource("Resource_kgyew")
+modifier_stack = SubResource("Resource_45siw")
 Performance/use_chunks = true
 Performance/chunk_dimensions = Vector3(15, 15, 15)
 
@@ -1703,7 +1704,7 @@ process_mode = 3
 transform = Transform3D(0.4603293, -0.16417524, 0.8724354, -0.22070423, 0.93073136, 0.29159722, -0.8598761, -0.32678095, 0.39220864, 5.9909554, 10.126226, 63.963882)
 script = ExtResource("41_idcw0")
 render_mode = 1
-modifier_stack = SubResource("Resource_28v51")
+modifier_stack = SubResource("Resource_3q2q2")
 Performance/use_chunks = true
 Performance/chunk_dimensions = Vector3(15, 15, 15)
 
@@ -1723,7 +1724,7 @@ process_mode = 3
 transform = Transform3D(0.8072958, -0.05988817, 0.5871008, 0.05045583, 0.9981991, 0.032443643, -0.5879865, 0.003431052, 0.80886346, 11.948687, 22.154348, 87.45063)
 script = ExtResource("41_idcw0")
 render_mode = 1
-modifier_stack = SubResource("Resource_knwrj")
+modifier_stack = SubResource("Resource_hmpyv")
 Performance/use_chunks = true
 Performance/chunk_dimensions = Vector3(15, 15, 15)
 
@@ -1743,7 +1744,7 @@ process_mode = 3
 transform = Transform3D(0.9180361, -0.033563007, -0.39507404, 0.050455827, 0.9981991, 0.03244364, 0.39327392, -0.049718097, 0.9180762, 5.1180954, 38.50201, 107.500114)
 script = ExtResource("41_idcw0")
 render_mode = 1
-modifier_stack = SubResource("Resource_72qod")
+modifier_stack = SubResource("Resource_x0hms")
 Performance/use_chunks = true
 Performance/chunk_dimensions = Vector3(15, 15, 15)
 
@@ -1763,7 +1764,7 @@ process_mode = 3
 transform = Transform3D(0.28518054, 0.016732689, -0.9583278, 0.050455827, 0.99819905, 0.032443635, 0.9571451, -0.057605397, 0.28382286, -22.772385, 54.46586, 107.038055)
 script = ExtResource("41_idcw0")
 render_mode = 1
-modifier_stack = SubResource("Resource_2drqn")
+modifier_stack = SubResource("Resource_hw5ef")
 Performance/use_chunks = true
 Performance/chunk_dimensions = Vector3(15, 15, 15)
 
@@ -1783,7 +1784,7 @@ process_mode = 3
 transform = Transform3D(-0.6812157, -0.34610674, 0.64510113, -0.28921118, 0.93673855, 0.19717292, -0.67253447, -0.05225321, -0.73821914, -7.7997036, 60.153442, 104.23681)
 script = ExtResource("41_idcw0")
 render_mode = 1
-modifier_stack = SubResource("Resource_fs008")
+modifier_stack = SubResource("Resource_mbn8f")
 Performance/use_chunks = true
 Performance/chunk_dimensions = Vector3(15, 15, 15)
 
@@ -1803,7 +1804,7 @@ process_mode = 3
 transform = Transform3D(-0.5523881, 0.20685852, 0.80751264, 0.31733337, 0.9479639, -0.025762454, -0.7708225, 0.2420197, -0.5892873, -7.918249, 93.966866, 87.11806)
 script = ExtResource("41_idcw0")
 render_mode = 1
-modifier_stack = SubResource("Resource_tcfko")
+modifier_stack = SubResource("Resource_qea6f")
 Performance/use_chunks = true
 Performance/chunk_dimensions = Vector3(15, 15, 15)
 
@@ -1823,7 +1824,7 @@ process_mode = 3
 transform = Transform3D(-0.552388, 0.2068585, 0.80751276, -0.21265414, 0.9016983, -0.37645447, -0.8060062, -0.37966987, -0.45409817, -7.918249, 89.629974, 123.46571)
 script = ExtResource("41_idcw0")
 render_mode = 1
-modifier_stack = SubResource("Resource_2buk2")
+modifier_stack = SubResource("Resource_tpkd7")
 Performance/use_chunks = true
 Performance/chunk_dimensions = Vector3(15, 15, 15)
 
@@ -2035,167 +2036,231 @@ transform = Transform3D(0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, -40.733627, 97.68074
 
 [node name="RadiationBox" type="Node" parent="."]
 
-[node name="RadiationZoneSphere" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere" parent="RadiationBox" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.9227505, 15.132011, 69.45551)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere2" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere2" parent="RadiationBox" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.680456, 16.006857, 72.6551)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere6" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere6" parent="RadiationBox" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.28409, 22.97604, 80.36465)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere7" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere7" parent="RadiationBox" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.405437, 13.029547, 84.81226)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere8" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere8" parent="RadiationBox" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.073006, 25.910479, 86.71954)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere9" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere9" parent="RadiationBox" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.02571, 28.944633, 92.03421)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere10" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere10" parent="RadiationBox" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.659513, 20.782486, 97.98457)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere3" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere3" parent="RadiationBox" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.508066, 10.315045, 74.82389)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere5" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere5" parent="RadiationBox" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5395, 19.370552, 72.6551)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere4" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere4" parent="RadiationBox" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19349766, 15.608194, 63.587578)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
 [node name="RadiationBox2" type="Node" parent="."]
 
-[node name="RadiationZoneSphere11" parent="RadiationBox2" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere11" parent="RadiationBox2" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.96498, 35.895126, 98.688255)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere12" parent="RadiationBox2" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere12" parent="RadiationBox2" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.14414, 31.921967, 108.86223)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere13" parent="RadiationBox2" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere13" parent="RadiationBox2" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.753461, 38.818867, 113.066696)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere14" parent="RadiationBox2" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere14" parent="RadiationBox2" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.690108, 40.194096, 115.67364)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere15" parent="RadiationBox2" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere15" parent="RadiationBox2" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1934414, 37.594658, 119.42455)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere16" parent="RadiationBox2" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere16" parent="RadiationBox2" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3509774, 37.594658, 116.1872)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere17" parent="RadiationBox2" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere17" parent="RadiationBox2" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.116529, 36.091137, 110.008385)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere18" parent="RadiationBox2" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere18" parent="RadiationBox2" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 0.9689424, -0.24728651, 0, 0.24728651, 0.9689424, -10.452194, 39.219364, 122.16435)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere19" parent="RadiationBox2" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere19" parent="RadiationBox2" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 0.9689424, -0.24728651, 0, 0.24728651, 0.9689424, -8.8162155, 48.332836, 119.364845)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
 
-[node name="RadiationZoneSphere20" parent="RadiationBox2" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_pyi43")]
+[node name="RadiationZoneSphere20" parent="RadiationBox2" instance=ExtResource("59_pyi43")]
 transform = Transform3D(1, 0, 0, 0, 0.9689424, -0.24728651, 0, 0.24728651, 0.9689424, -25.075548, 48.431408, 104.22495)
 visible = false
 required_sunflowers = 1
 normal_grass_texture = ExtResource("58_ykht6")
-gridmap = NodePath("../../GridMap")
-radiation_tile_ids = Array[int]([1, 2])
+normal_simple_grass_texture = Array[int]([1, 2])
+radiation_tile_ids = null
+grass_spawn_count = null
+grass_spawn_radius = true
+grass_height_offset = 0
+
+[node name="GameManager" parent="." instance=ExtResource("59_kdx7h")]
+time_limit = 360.0
+portal_spawn_position = Vector3(-23, 100, 100)
 
 [editable path="toxic barrel"]
 [editable path="toxic barrel2"]
@@ -2213,3 +2278,4 @@ radiation_tile_ids = Array[int]([1, 2])
 [editable path="Trees/Tree4"]
 [editable path="Trees/Tree1"]
 [editable path="Trees/Tree5"]
+[editable path="GameManager"]

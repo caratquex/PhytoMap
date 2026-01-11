@@ -224,6 +224,7 @@ var current_weapon: WeaponType = WeaponType.SHOVEL  # Default is Shovel (Plant)
 # ---------------------------
 var sunflower_scene: PackedScene = null
 @export var plant_ray_length: float = 100.0
+@export var max_plant_distance: float = 10.0  # Maximum distance player can plant flowers
 @export var ground_collision_mask: int = 1  # Set to match your ground/gridmap collision layer
 @export var flower_y_offset: float = 0.0  # Fine-tune flower height (0 = exactly at player's floor level)
 
@@ -1025,6 +1026,12 @@ func plant_flower_at_cursor() -> void:
 	# Get the floor surface position and apply offset
 	var ground_pos: Vector3 = floor_hit.position
 	ground_pos.y += flower_y_offset
+	
+	# Check distance limit
+	var distance_to_plant = global_position.distance_to(ground_pos)
+	if distance_to_plant > max_plant_distance:
+		# Plant is too far away, don't plant
+		return
 	
 	# Create and place the flower - snaps to the actual floor block
 	var flower: Node3D = sunflower_scene.instantiate()
