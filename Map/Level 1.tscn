@@ -533,9 +533,30 @@ stream = ExtResource("41_opgf8")
 [node name="ThrowPlantGrenade" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("42_ewipy")
 
-[node name="RadiationZoneBox" parent="." node_paths=PackedStringArray("gridmap") instance=ExtResource("44_wwfh2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.055756, 0.23463583, -3.8691502)
+[node name="RadiationZone" type="Node" parent="."]
+
+[node name="RadiationZoneBox" parent="RadiationZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("44_wwfh2")]
+transform = Transform3D(1.465, 0, 0, 0, 1.465, 0, 0, 0, 1.465, -27.628084, 2.1441317, -5.7746367)
+normal_grass_texture = ExtResource("45_8sq5o")
+gridmap = NodePath("../../GrassBlock/GridMap2")
+radiation_tile_ids = Array[int]([1, 2])
+
+[node name="RadiationZoneBox2" parent="RadiationZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("44_wwfh2")]
+transform = Transform3D(1.465, 0, 0, 0, 1.465, 0, 0, 0, 1.465, 30.661985, 1.9535217, -5.7746367)
+normal_grass_texture = ExtResource("45_8sq5o")
+gridmap = NodePath("../../GrassBlock/GridMap2")
+radiation_tile_ids = Array[int]([1, 2])
+
+[node name="RadiationZoneBox3" parent="RadiationZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("44_wwfh2")]
+transform = Transform3D(1.64, 0, 0, 0, 1.64, 0, 0, 0, 1.64, 41.653065, 2.0227184, -14.144654)
 required_sunflowers = 5
 normal_grass_texture = ExtResource("45_8sq5o")
-gridmap = NodePath("../GrassBlock/GridMap2")
+gridmap = NodePath("../../GrassBlock/GridMap2")
+radiation_tile_ids = Array[int]([1, 2])
+
+[node name="RadiationZoneBox4" parent="RadiationZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("44_wwfh2")]
+transform = Transform3D(1.465, 0, 0, 0, 1.465, 0, 0, 0, 1.465, 43.699085, 4.3005695, -32.141674)
+required_sunflowers = 5
+normal_grass_texture = ExtResource("45_8sq5o")
+gridmap = NodePath("../../GrassBlock/GridMap2")
 radiation_tile_ids = Array[int]([1, 2])

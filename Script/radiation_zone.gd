@@ -1,3 +1,4 @@
+@tool
 class_name RadiationZone
 extends Area3D
 
@@ -40,6 +41,12 @@ extends Area3D
 @export var grass_height_offset: float = 0.5  ## Height offset above ground
 
 # ---------------------------
+# Editor Snap-to-Floor Settings
+# ---------------------------
+@export_group("Editor Snap-to-Floor")
+@export var snap_to_floor_in_editor: bool = true  ## Automatically snap box zones to floor in editor
+
+# ---------------------------
 # State
 # ---------------------------
 var current_sunflowers: int = 0
@@ -62,6 +69,10 @@ signal sunflower_count_changed(current: int, required: int)
 
 
 func _ready() -> void:
+	# Editor snap-to-floor for box zones
+	if Engine.is_editor_hint() and snap_to_floor_in_editor:
+		_snap_to_floor_editor()
+	
 	# Add to Radiation group for GameManager compatibility
 	add_to_group("Radiation")
 	
@@ -91,6 +102,58 @@ func _debug_print(message: String) -> void:
 		print("[RadiationZone] ", message)
 
 
+func _snap_to_floor_editor() -> void:
+	# Only snap box-shaped zones, not spheres
+	if not collision_shape or not collision_shape.shape:
+		return
+	
+	if not collision_shape.shape is BoxShape3D:
+		return
+	
+	var box_shape = collision_shape.shape as BoxShape3D
+	var box_height = box_shape.size.y
+	
+	# Get current position
+	var current_pos = global_position
+	
+	# Raycast downward to find ground
+	# Start slightly above current position, cast downward
+	var ray_start = current_pos + Vector3.UP * 10.0
+	var ray_end = current_pos - Vector3.UP * 50.0  # Cast far enough to find ground
+	
+	# Get world 3D space state
+	var world_3d = get_world_3d()
+	if not world_3d:
+		return
+	
+	var space_state = world_3d.direct_space_state
+	if not space_state:
+		return
+	
+	var query = PhysicsRayQueryParameters3D.create(ray_start, ray_end)
+	query.collision_mask = 1  # Ground collision layer
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
+	
+	var result = space_state.intersect_ray(query)
+	
+	if result.is_empty():
+		# No ground found, don't move the node
+		return
+	
+	# Get ground Y position
+	var ground_y = result.position.y
+	
+	# Calculate the Y position so the bottom of the box touches the ground
+	# Bottom of box is at: global_position.y - (box_height / 2)
+	# We want: ground_y = new_y - (box_height / 2)
+	# Therefore: new_y = ground_y + (box_height / 2)
+	var new_y = ground_y + (box_height / 2.0)
+	
+	# Update position
+	global_position.y = new_y
+
+
 func _update_light_settings() -> void:
 	if omni_light:
 		omni_light.light_color = light_color
@@ -109,18 +172,38 @@ func _scan_for_sunflowers() -> void:
 	var found_sunflowers: Array[Node3D] = []
 	_find_sunflowers_recursive(scene_root, found_sunflowers)
 	
-	# Check which sunflowers are within the zone radius
+	# Determine zone shape for detection
+	var is_box_shape = collision_shape and collision_shape.shape is BoxShape3D
+	var box_size: Vector3 = Vector3.ZERO
+	if is_box_shape:
+		box_size = (collision_shape.shape as BoxShape3D).size
+	
+	# Check which sunflowers are within the zone bounds
 	var sunflowers_in_zone: Array[Node3D] = []
 	var zone_pos = global_position
 	
 	for sunflower in found_sunflowers:
-		var distance = sunflower.global_position.distance_to(zone_pos)
-		var is_inside = distance <= zone_radius
+		var is_inside: bool = false
+		var sunflower_pos = sunflower.global_position
+		
+		if is_box_shape:
+			# Box detection: check if point is within box bounds
+			var local_pos = to_local(sunflower_pos)
+			var half_size = box_size * 0.5
+			is_inside = (
+				abs(local_pos.x) <= half_size.x and
+				abs(local_pos.y) <= half_size.y and
+				abs(local_pos.z) <= half_size.z
+			)
+		else:
+			# Sphere detection: use distance check
+			var distance = sunflower_pos.distance_to(zone_pos)
+			is_inside = distance <= zone_radius
 		
 		if is_inside:
 			sunflowers_in_zone.append(sunflower)
 			if sunflower not in tracked_sunflowers:
-				_debug_print("NEW Sunflower ENTERED zone! '%s' at %s (distance: %.2f)" % [sunflower.name, sunflower.global_position, distance])
+				_debug_print("NEW Sunflower ENTERED zone! '%s' at %s" % [sunflower.name, sunflower_pos])
 	
 	# Check for sunflowers that left the zone
 	for tracked in tracked_sunflowers:
@@ -160,20 +243,20 @@ func _find_sunflowers_recursive(node: Node, result: Array[Node3D]) -> void:
 
 
 func _update_collision_shape() -> void:
+	# Only update sphere shapes from zone_radius
+	# For box shapes, use the actual BoxShape3D size set in the editor
 	if collision_shape and collision_shape.shape:
 		if collision_shape.shape is SphereShape3D:
 			(collision_shape.shape as SphereShape3D).radius = zone_radius
+			# Update visual mesh to match
+			if zone_visual and zone_visual.mesh is SphereMesh:
+				(zone_visual.mesh as SphereMesh).radius = zone_radius
+				(zone_visual.mesh as SphereMesh).height = zone_radius * 2
 		elif collision_shape.shape is BoxShape3D:
-			# For box shape, use zone_radius as half-extents
-			(collision_shape.shape as BoxShape3D).size = Vector3(zone_radius * 2, zone_radius, zone_radius * 2)
-	
-	# Update visual mesh to match collision shape
-	if zone_visual and zone_visual.mesh:
-		if zone_visual.mesh is SphereMesh:
-			(zone_visual.mesh as SphereMesh).radius = zone_radius
-			(zone_visual.mesh as SphereMesh).height = zone_radius * 2
-		elif zone_visual.mesh is BoxMesh:
-			(zone_visual.mesh as BoxMesh).size = Vector3(zone_radius * 2, zone_radius, zone_radius * 2)
+			# For box: sync visual mesh to match collision shape (don't override from zone_radius)
+			var box_size = (collision_shape.shape as BoxShape3D).size
+			if zone_visual and zone_visual.mesh is BoxMesh:
+				(zone_visual.mesh as BoxMesh).size = box_size
 
 
 func _is_sunflower(node: Node3D) -> bool:
