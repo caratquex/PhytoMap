@@ -68,14 +68,17 @@ func _ready() -> void:
 	# Set up singleton
 	instance = self
 	
-	# Connect to scene tree changes to reinitialize when scene changes
-	get_tree().tree_changed.connect(_on_tree_changed)
-	
 	# Wait a frame for the scene to be fully loaded, then initialize
 	call_deferred("_initialize_for_current_level")
 
 
 func _initialize_for_current_level() -> void:
+	# Check if tree is available
+	if not is_inside_tree():
+		# Tree not ready yet, try again next frame
+		call_deferred("_initialize_for_current_level")
+		return
+	
 	# Reset state for new level
 	portal_spawned = false
 	game_active = false
@@ -104,26 +107,16 @@ func _initialize_for_current_level() -> void:
 	_update_debug_ui()
 	
 	var scene_path = ""
-	if get_tree().current_scene:
+	if get_tree() and get_tree().current_scene:
 		scene_path = get_tree().current_scene.scene_file_path
 	print("[GameManager] Initialized for level: %s. Radiation count: %d, Next level: %s" % [scene_path, total_radiation_count, next_level_path])
 
 
-var _last_scene_path: String = ""
-
-func _on_tree_changed() -> void:
-	# Check if we've changed to a new scene
-	if not get_tree() or not get_tree().current_scene:
+func _apply_level_config() -> void:
+	# Check if tree is available
+	if not is_inside_tree() or not get_tree():
 		return
 	
-	var current_path = get_tree().current_scene.scene_file_path
-	if current_path != _last_scene_path and current_path != "":
-		_last_scene_path = current_path
-		# Reinitialize for the new level
-		call_deferred("_initialize_for_current_level")
-
-
-func _apply_level_config() -> void:
 	# Get current scene path
 	var scene_root = get_tree().current_scene
 	if not scene_root:
@@ -143,6 +136,10 @@ func _apply_level_config() -> void:
 
 func _count_radiation_targets() -> void:
 	total_radiation_count = 0
+	
+	# Check if tree is available
+	if not is_inside_tree() or not get_tree():
+		return
 	
 	# Step A: Count all nodes in the "Radiation" group
 	var radiation_nodes = get_tree().get_nodes_in_group("Radiation")
@@ -307,9 +304,25 @@ func load_next_level(level_path: String) -> void:
 	
 	print("[GameManager] Loading level: %s" % level_path)
 	
+	# Store tree reference before scene change
+	var tree = get_tree()
+	if not tree:
+		print("[GameManager] ERROR: No tree available!")
+		return
+	
 	# Change to the next level
-	# The _on_tree_changed callback will reinitialize for the new level
-	get_tree().change_scene_to_file(level_path)
+	tree.change_scene_to_file(level_path)
+	
+	# Wait for scene to load using a timer, then reinitialize
+	var wait_timer = Timer.new()
+	wait_timer.wait_time = 0.1
+	wait_timer.one_shot = true
+	add_child(wait_timer)
+	wait_timer.timeout.connect(func():
+		wait_timer.queue_free()
+		_initialize_for_current_level()
+	)
+	wait_timer.start()
 
 
 ## Called when player completes the final level (no more levels to go)

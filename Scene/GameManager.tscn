@@ -6,6 +6,7 @@
 script = ExtResource("1_game_manager")
 
 [node name="Timer" type="Timer" parent="."]
+autostart = true
 
 [node name="DebugUI" type="CanvasLayer" parent="."]
 layer = 100
