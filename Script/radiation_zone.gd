@@ -22,6 +22,15 @@ extends Area3D
 @export var grass_conversion_duration: float = 1.0  ## Duration of the grass color transition
 
 # ---------------------------
+# Tree Conversion Settings
+# ---------------------------
+@export_group("Tree Conversion")
+@export var convert_trees_on_clear: bool = true  ## Convert RadiantTrees to normal Trees when cleared
+@export var normal_tree1_texture: Texture2D  ## Normal Tree1 trunk texture (Tree1_Trunk Base Color.png)
+@export var normal_tree2_texture: Texture2D  ## Normal Tree2 trunk texture (Tree2_Trunk Base Color.png)
+@export var tree_conversion_duration: float = 1.0  ## Duration of the tree texture transition
+
+# ---------------------------
 # GridMap Conversion Settings
 # ---------------------------
 @export_group("GridMap Conversion")
@@ -300,6 +309,10 @@ func clear_zone() -> void:
 	if convert_grass_on_clear:
 		_convert_radiant_grass_in_zone()
 	
+	# Convert RadiantTrees to normal trees
+	if convert_trees_on_clear:
+		_convert_radiant_trees_in_zone()
+	
 	# Convert GridMap tiles to normal grass
 	if gridmap and radiation_tile_ids.size() > 0:
 		_convert_gridmap_tiles_in_zone()
@@ -445,6 +458,178 @@ func _update_shader_material(material: ShaderMaterial, new_texture: Texture2D) -
 	# Update the albedo_texture shader parameter
 	if material.get_shader_parameter("albedo_texture") != null:
 		material.set_shader_parameter("albedo_texture", new_texture)
+
+
+# ---------------------------
+# RadiantTree Conversion
+# ---------------------------
+
+func _convert_radiant_trees_in_zone() -> void:
+	# Load normal tree textures if not set
+	var tree1_texture = normal_tree1_texture
+	if not tree1_texture:
+		tree1_texture = load("res://Map Asset/Tree1_Trunk Base Color.png")
+		if not tree1_texture:
+			_debug_print("WARNING: Could not load Tree1 trunk texture!")
+	
+	var tree2_texture = normal_tree2_texture
+	if not tree2_texture:
+		tree2_texture = load("res://Map Asset/Tree2_Trunk Base Color.png")
+		if not tree2_texture:
+			_debug_print("WARNING: Could not load Tree2 trunk texture!")
+	
+	if not tree1_texture and not tree2_texture:
+		_debug_print("WARNING: No normal tree textures available!")
+		return
+	
+	# Find all RadiantTree blocks in the scene
+	var scene_root = get_tree().current_scene
+	if not scene_root:
+		return
+	
+	var radiant_trees: Array[Node3D] = []
+	_find_radiant_trees_recursive(scene_root, radiant_trees)
+	
+	_debug_print("Found %d RadiantTree blocks in scene" % radiant_trees.size())
+	
+	# Determine zone shape for detection
+	var is_box_shape = collision_shape and collision_shape.shape is BoxShape3D
+	var box_size: Vector3 = Vector3.ZERO
+	if is_box_shape:
+		box_size = (collision_shape.shape as BoxShape3D).size
+	
+	# Convert trees within zone bounds
+	var zone_pos = global_position
+	var converted_count = 0
+	
+	for tree in radiant_trees:
+		var tree_pos = tree.global_position
+		var is_inside: bool = false
+		
+		if is_box_shape:
+			# Box detection: check if point is within box bounds
+			var local_pos = to_local(tree_pos)
+			var half_size = box_size * 0.5
+			is_inside = (
+				abs(local_pos.x) <= half_size.x and
+				abs(local_pos.y) <= half_size.y and
+				abs(local_pos.z) <= half_size.z
+			)
+		else:
+			# Sphere detection: use distance check
+			var distance = tree_pos.distance_to(zone_pos)
+			is_inside = distance <= zone_radius
+		
+		if is_inside:
+			# Determine which texture to use based on tree type
+			var target_texture: Texture2D = null
+			var is_tree1: bool = false
+			if _is_tree_radiant1(tree):
+				target_texture = tree1_texture
+				is_tree1 = true
+			elif _is_tree_radiant2(tree):
+				target_texture = tree2_texture
+				is_tree1 = false
+			
+			if target_texture:
+				_convert_single_tree(tree, target_texture, is_tree1)
+				converted_count += 1
+				_debug_print("Converted RadiantTree '%s' at %s" % [tree.name, tree_pos])
+	
+	_debug_print("Converted %d RadiantTree blocks to normal trees" % converted_count)
+
+
+func _find_radiant_trees_recursive(node: Node, result: Array[Node3D]) -> void:
+	# Check if this node is a RadiantTree
+	if node is Node3D and _is_radiant_tree(node as Node3D):
+		result.append(node as Node3D)
+		return  # Don't check children
+	
+	# Recursively check children
+	for child in node.get_children():
+		_find_radiant_trees_recursive(child, result)
+
+
+func _is_radiant_tree(node: Node3D) -> bool:
+	# Check by scene filename
+	var scene_path = node.scene_file_path.to_lower()
+	if "treeradiant" in scene_path:
+		return true
+	
+	# Check by node name
+	var node_name = node.name.to_lower()
+	if "treeradiant" in node_name:
+		return true
+	
+	return false
+
+
+func _is_tree_radiant1(node: Node3D) -> bool:
+	var scene_path = node.scene_file_path.to_lower()
+	var node_name = node.name.to_lower()
+	return "treeradiant1" in scene_path or "treeradiant1" in node_name
+
+
+func _is_tree_radiant2(node: Node3D) -> bool:
+	var scene_path = node.scene_file_path.to_lower()
+	var node_name = node.name.to_lower()
+	return "treeradiant2" in scene_path or "treeradiant2" in node_name
+
+
+func _convert_single_tree(tree: Node3D, new_texture: Texture2D, is_tree1: bool) -> void:
+	# Find all MeshInstance3D children
+	var mesh_instances: Array[MeshInstance3D] = []
+	_find_mesh_instances_recursive(tree, mesh_instances)
+	
+	for mesh_instance in mesh_instances:
+		_convert_tree_material(mesh_instance, new_texture, is_tree1)
+
+
+func _convert_tree_material(mesh_instance: MeshInstance3D, new_texture: Texture2D, is_tree1: bool) -> void:
+	if not mesh_instance.mesh:
+		return
+	
+	var surface_count = mesh_instance.mesh.get_surface_count()
+	
+	# Determine which surfaces to convert based on tree type
+	var surfaces_to_convert: Array[int] = []
+	if is_tree1:
+		# TreeRadiant1: Change Surface 1 & 2, Surface 0 don't change
+		if surface_count > 1:
+			surfaces_to_convert.append(1)
+		if surface_count > 2:
+			surfaces_to_convert.append(2)
+	else:
+		# TreeRadiant2: Change Surface 0 & 2, Surface 1 don't change
+		if surface_count > 0:
+			surfaces_to_convert.append(0)
+		if surface_count > 2:
+			surfaces_to_convert.append(2)
+	
+	# Convert the specified surfaces
+	for surface_idx in surfaces_to_convert:
+		if surface_idx >= surface_count:
+			continue
+		
+		# Check if there's already a surface override material
+		var existing_override = mesh_instance.get_surface_override_material(surface_idx)
+		var material: StandardMaterial3D = null
+		
+		if existing_override and existing_override is StandardMaterial3D:
+			# Use existing override material
+			material = existing_override as StandardMaterial3D
+		else:
+			# Get material from mesh
+			var mesh_material = mesh_instance.mesh.surface_get_material(surface_idx)
+			if mesh_material and mesh_material is StandardMaterial3D:
+				material = mesh_material as StandardMaterial3D
+		
+		if material:
+			# Create a copy to avoid modifying shared resources
+			var mat_copy = material.duplicate() as StandardMaterial3D
+			mat_copy.albedo_texture = new_texture
+			mesh_instance.set_surface_override_material(surface_idx, mat_copy)
+			_debug_print("  Updated tree surface %d material on %s" % [surface_idx, mesh_instance.name])
 
 
 # ---------------------------

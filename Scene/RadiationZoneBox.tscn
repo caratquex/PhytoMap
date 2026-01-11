@@ -1,6 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://4p5bvlkog65k"]
+[gd_scene load_steps=8 format=3 uid="uid://4p5bvlkog65k"]
 
 [ext_resource type="Script" uid="uid://br7x3drjii35f" path="res://Script/radiation_zone.gd" id="1_radiation_zone"]
+[ext_resource type="Texture2D" uid="uid://bomdnaxhjmxbd" path="res://Map Asset/grass_albedo.tres" id="2_8vtec"]
+[ext_resource type="Texture2D" uid="uid://dg3rv5m876plr" path="res://Map Asset/Tree1_Tree 1_texture.png" id="3_bqqrv"]
+[ext_resource type="Texture2D" uid="uid://bbrup4cgos3xc" path="res://Map Asset/Tree2_Tree4_texture.png" id="4_rav60"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_zone"]
 size = Vector3(10, 5, 10)
@@ -20,6 +23,10 @@ collision_layer = 0
 monitorable = false
 script = ExtResource("1_radiation_zone")
 light_color = Color(1, 0.2, 0.1, 1)
+normal_grass_texture = ExtResource("2_8vtec")
+normal_tree1_texture = ExtResource("3_bqqrv")
+normal_tree2_texture = ExtResource("4_rav60")
+radiation_tile_ids = Array[int]([1, 2])
 grass_spawn_count = 6
 grass_spawn_radius = 1.0
 grass_height_offset = 1.2
@@ -37,4 +44,3 @@ shape = SubResource("BoxShape3D_zone")
 [node name="ZoneVisual" type="MeshInstance3D" parent="."]
 cast_shadow = 0
 mesh = SubResource("BoxMesh_visual")
-
