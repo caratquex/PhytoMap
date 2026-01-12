@@ -61,6 +61,7 @@ signal all_levels_complete()
 # Debug UI References
 @onready var time_label: Label = $DebugUI/Panel/VBox/TimeLabel
 @onready var radiation_label: Label = $DebugUI/Panel/VBox/RadiationLabel
+@onready var hp_label: Label = $DebugUI/Panel/VBox/HPLabel
 @onready var status_label: Label = $DebugUI/Panel/VBox/StatusLabel
 
 
@@ -350,6 +351,51 @@ func _update_debug_ui() -> void:
 	# Update radiation label
 	if radiation_label:
 		radiation_label.text = "Radiation: %d" % total_radiation_count
+	
+	# Update HP label
+	if hp_label:
+		# Access player instance via the script path
+		var player_script = load("res://Script/player.gd")
+		if player_script and player_script.has_method("get") and player_script.get("instance"):
+			var player_instance = player_script.get("instance")
+			if player_instance and is_instance_valid(player_instance) and player_instance.has_method("get_current_hp") and player_instance.has_method("get_max_hp"):
+				var current_hp = player_instance.get_current_hp()
+				var max_hp = player_instance.get_max_hp()
+				hp_label.text = "HP: %d/%d" % [current_hp, max_hp]
+				
+				# Change color based on HP level
+				if current_hp <= 1:
+					hp_label.modulate = Color.RED
+				elif current_hp <= 2:
+					hp_label.modulate = Color.ORANGE
+				else:
+					hp_label.modulate = Color.WHITE
+			else:
+				hp_label.text = "HP: --"
+				hp_label.modulate = Color.WHITE
+		else:
+			# Try direct access via scene tree
+			var player_nodes = get_tree().get_nodes_in_group("player")
+			if player_nodes.size() > 0:
+				var player = player_nodes[0]
+				if player.has_method("get_current_hp") and player.has_method("get_max_hp"):
+					var current_hp = player.get_current_hp()
+					var max_hp = player.get_max_hp()
+					hp_label.text = "HP: %d/%d" % [current_hp, max_hp]
+					
+					# Change color based on HP level
+					if current_hp <= 1:
+						hp_label.modulate = Color.RED
+					elif current_hp <= 2:
+						hp_label.modulate = Color.ORANGE
+					else:
+						hp_label.modulate = Color.WHITE
+				else:
+					hp_label.text = "HP: --"
+					hp_label.modulate = Color.WHITE
+			else:
+				hp_label.text = "HP: --"
+				hp_label.modulate = Color.WHITE
 	
 	# Update status label
 	if status_label:

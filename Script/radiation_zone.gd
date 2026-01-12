@@ -57,12 +57,6 @@ extends Area3D
 @export var grass_height_offset: float = 0.5  ## Height offset above ground
 
 # ---------------------------
-# Editor Snap-to-Floor Settings
-# ---------------------------
-@export_group("Editor Snap-to-Floor")
-@export var snap_to_floor_in_editor: bool = true  ## Automatically snap box zones to floor in editor
-
-# ---------------------------
 # State
 # ---------------------------
 var current_sunflowers: int = 0
@@ -85,10 +79,6 @@ signal sunflower_count_changed(current: int, required: int)
 
 
 func _ready() -> void:
-	# Editor snap-to-floor for box zones
-	if Engine.is_editor_hint() and snap_to_floor_in_editor:
-		_snap_to_floor_editor()
-	
 	# Add to Radiation group for GameManager compatibility
 	add_to_group("Radiation")
 	
@@ -116,58 +106,6 @@ func _process(delta: float) -> void:
 func _debug_print(message: String) -> void:
 	if debug_enabled:
 		print("[RadiationZone] ", message)
-
-
-func _snap_to_floor_editor() -> void:
-	# Only snap box-shaped zones, not spheres
-	if not collision_shape or not collision_shape.shape:
-		return
-	
-	if not collision_shape.shape is BoxShape3D:
-		return
-	
-	var box_shape = collision_shape.shape as BoxShape3D
-	var box_height = box_shape.size.y
-	
-	# Get current position
-	var current_pos = global_position
-	
-	# Raycast downward to find ground
-	# Start slightly above current position, cast downward
-	var ray_start = current_pos + Vector3.UP * 10.0
-	var ray_end = current_pos - Vector3.UP * 50.0  # Cast far enough to find ground
-	
-	# Get world 3D space state
-	var world_3d = get_world_3d()
-	if not world_3d:
-		return
-	
-	var space_state = world_3d.direct_space_state
-	if not space_state:
-		return
-	
-	var query = PhysicsRayQueryParameters3D.create(ray_start, ray_end)
-	query.collision_mask = 1  # Ground collision layer
-	query.collide_with_bodies = true
-	query.collide_with_areas = false
-	
-	var result = space_state.intersect_ray(query)
-	
-	if result.is_empty():
-		# No ground found, don't move the node
-		return
-	
-	# Get ground Y position
-	var ground_y = result.position.y
-	
-	# Calculate the Y position so the bottom of the box touches the ground
-	# Bottom of box is at: global_position.y - (box_height / 2)
-	# We want: ground_y = new_y - (box_height / 2)
-	# Therefore: new_y = ground_y + (box_height / 2)
-	var new_y = ground_y + (box_height / 2.0)
-	
-	# Update position
-	global_position.y = new_y
 
 
 func _update_light_settings() -> void:

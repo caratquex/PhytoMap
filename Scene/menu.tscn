@@ -20,6 +20,21 @@ texture = SubResource("MeshTexture_ffxp3")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fyf5i"]
 
+[sub_resource type="Animation" id="Animation_alu6o"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BG/SubViewportContainer/SubViewport/Camera3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.0404563, 5.2539487, 13.5064745)]
+}
+
 [sub_resource type="Animation" id="Animation_u2k45"]
 resource_name = "camera_animation"
 length = 4.0
@@ -35,21 +50,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector3(1.0404563, 5.2539487, 13.5064745), Vector3(1.4980626, 5.2539487, 13.5064745), Vector3(1.1505442, 5.7144346, 13.5064745), Vector3(0.8296921, 5.2692475, 13.5064745), Vector3(1.0404563, 5.2539487, 13.5064745)]
-}
-
-[sub_resource type="Animation" id="Animation_alu6o"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("BG/SubViewportContainer/SubViewport/Camera3D:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(1.0404563, 5.2539487, 13.5064745)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_alu6o"]
@@ -127,7 +127,14 @@ texture = ExtResource("2_alu6o")
 custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
 
-[node name="btn_statrGame" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="btn_statrGame" type="Button" parent="Control/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_hover_color = Color(0.71, 0.71, 0.71, 1)
@@ -141,7 +148,20 @@ theme_override_styles/disabled = SubResource("StyleBoxEmpty_6hgn1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_fyf5i")
 text = "Start Game"
 
-[node name="btn_options" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="Control/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_eas8t")
+theme_override_font_sizes/font_size = 18
+flat = true
+item_count = 3
+popup/item_0/text = "Level 1"
+popup/item_0/id = 0
+popup/item_1/text = "Level 2"
+popup/item_1/id = 1
+popup/item_2/text = "Level 3"
+popup/item_2/id = 2
+
+[node name="btn_credits" type="Button" parent="Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_hover_color = Color(0.71, 0.71, 0.71, 1)
@@ -153,9 +173,9 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_alu6o")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_ffxp3")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_6hgn1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_fyf5i")
-text = "Options"
+text = "Story"
 
-[node name="btn_credits" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+[node name="btn_credits2" type="Button" parent="Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_hover_color = Color(0.71, 0.71, 0.71, 1)

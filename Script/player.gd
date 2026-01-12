@@ -240,6 +240,21 @@ var current_grid_cell: Vector3i = Vector3i(-99999, -99999, -99999)  # Track curr
 
 
 # ---------------------------
+# HP System
+# ---------------------------
+@export var max_hp: int = 5  # Maximum HP
+@export var radiation_damage: int = 1  # Damage per radiation zone tick
+@export var radiation_damage_interval: float = 1.0  # Seconds between radiation damage
+@export var fall_damage_threshold: float = 5.0  # Minimum fall height to take damage
+@export var fall_damage_per_unit: float = 0.5  # Damage per unit fallen above threshold
+@export var void_death_y: float = -50.0  # Y position below which player dies and respawns
+var current_hp: int = 5  # Current HP
+var spawn_position: Vector3  # Store initial position for respawn
+var fall_start_y: float = 0.0  # Track Y position when leaving floor
+var radiation_damage_timer: float = 0.0  # Timer for radiation damage
+var is_in_radiation: bool = false  # Track if player is in radiation zone
+
+# ---------------------------
 # Movement
 # ---------------------------
 @export var gravity: float = 12.0  # جاذبية أسرع قليلاً من الأصل
@@ -362,6 +377,11 @@ func _ready() -> void:
 	else:
 		queue_free()
 		return
+
+	# Store spawn position for respawn
+	spawn_position = global_position
+	current_hp = max_hp
+	fall_start_y = global_position.y
 
 	# AnimationTree
 	if animation_tree:
@@ -710,6 +730,94 @@ func take_damage() -> void:
 
 
 # ---------------------------
+# HP SYSTEM
+# ---------------------------
+func take_hp_damage(amount: int) -> void:
+	if amount <= 0:
+		return
+	
+	current_hp -= amount
+	current_hp = max(current_hp, 0)
+	
+	# Play hurt animation and sound
+	play_hurt_animation()
+	if got_hurt:
+		got_hurt.play()
+	
+	# Check for death
+	if current_hp <= 0:
+		die()
+
+
+func heal(amount: int) -> void:
+	if amount <= 0:
+		return
+	
+	current_hp += amount
+	current_hp = min(current_hp, max_hp)
+
+
+func die() -> void:
+	# Respawn after a short delay
+	respawn()
+
+
+func respawn() -> void:
+	# Reset HP
+	current_hp = max_hp
+	
+	# Reset velocity
+	velocity = Vector3.ZERO
+	
+	# Teleport to spawn position
+	global_position = spawn_position
+	
+	# Reset fall tracking
+	fall_start_y = spawn_position.y
+	
+	# Reset double jump
+	has_double_jump = true
+
+
+func _check_radiation_damage(delta: float) -> void:
+	# Check if player is inside any radiation zone
+	var radiation_nodes = get_tree().get_nodes_in_group("Radiation")
+	is_in_radiation = false
+	
+	for node in radiation_nodes:
+		if node is Node3D:
+			var radiation_node = node as Node3D
+			var distance = global_position.distance_to(radiation_node.global_position)
+			
+			# Check if radiation zone has a collision shape for proper bounds
+			var zone_radius = 5.0  # Default radius
+			if radiation_node.has_method("get") and radiation_node.get("zone_radius"):
+				zone_radius = radiation_node.get("zone_radius")
+			
+			# Check if inside radiation zone
+			if distance <= zone_radius:
+				is_in_radiation = true
+				break
+	
+	# Apply radiation damage on interval
+	if is_in_radiation:
+		radiation_damage_timer += delta
+		if radiation_damage_timer >= radiation_damage_interval:
+			radiation_damage_timer = 0.0
+			take_hp_damage(radiation_damage)
+	else:
+		radiation_damage_timer = 0.0
+
+
+func get_current_hp() -> int:
+	return current_hp
+
+
+func get_max_hp() -> int:
+	return max_hp
+
+
+# ---------------------------
 # EXPLOSION FORCE
 # ---------------------------
 func apply_explosion_force(direction: Vector3, force: float) -> void:
@@ -837,13 +945,33 @@ func _physics_process(delta: float) -> void:
 	# -------- LANDING SOUND (state-change-based) --------
 	var on_floor := is_on_floor()
 
+	# Track fall start position when leaving floor
+	if prev_on_floor and not on_floor:
+		fall_start_y = global_position.y
+
 	if on_floor and not prev_on_floor:
 		if drop and not drop.playing:
 			drop.play()
 		# Reset double jump when landing
 		has_double_jump = true
+		
+		# Calculate fall damage
+		var fall_height = fall_start_y - global_position.y
+		if fall_height > fall_damage_threshold:
+			var excess_fall = fall_height - fall_damage_threshold
+			var damage = int(ceil(excess_fall * fall_damage_per_unit))
+			if damage > 0:
+				take_hp_damage(damage)
 
 	prev_on_floor = on_floor
+	
+	# -------- RADIATION ZONE DAMAGE --------
+	_check_radiation_damage(delta)
+	
+	# -------- VOID DEATH CHECK --------
+	if global_position.y < void_death_y:
+		die()
+		return
 
 	# ----- FOOTSTEP SFX -----
 	var on_ground: bool = is_on_floor()

@@ -35,6 +35,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Radiation: --"
 
+[node name="HPLabel" type="Label" parent="DebugUI/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "HP: --"
+
 [node name="StatusLabel" type="Label" parent="DebugUI/Panel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
