@@ -242,9 +242,16 @@ func clear_zone() -> void:
 		light_tween.tween_property(omni_light, "light_energy", 0.0, 0.5)
 		light_tween.tween_callback(func(): omni_light.visible = false)
 	
-	# Fade out the visual mesh
+	# Fade out the visual mesh (use unique material to avoid affecting other zones)
 	if zone_visual and zone_visual.mesh:
-		var mesh_material = zone_visual.mesh.surface_get_material(0)
+		var mesh_material = zone_visual.get_surface_override_material(0)
+		if not mesh_material:
+			# No override yet - create a unique copy from the mesh's material
+			var original_mat = zone_visual.mesh.surface_get_material(0)
+			if original_mat and original_mat is StandardMaterial3D:
+				mesh_material = original_mat.duplicate() as StandardMaterial3D
+				zone_visual.set_surface_override_material(0, mesh_material)
+		
 		if mesh_material and mesh_material is StandardMaterial3D:
 			var visual_tween = create_tween()
 			visual_tween.tween_property(mesh_material, "albedo_color:a", 0.0, 0.5)
