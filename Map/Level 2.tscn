@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=4 uid="uid://j57p8ed70c7i"]
+[gd_scene load_steps=60 format=4 uid="uid://j57p8ed70c7i"]
 
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_ibaua"]
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="2_754fx"]
@@ -45,6 +45,7 @@
 [ext_resource type="PackedScene" uid="uid://4p5bvlkog65k" path="res://Scene/RadiationZoneBox.tscn" id="43_nbbt7"]
 [ext_resource type="PackedScene" uid="uid://lxbulg28acws" path="res://Map Asset/Stone4.tscn" id="43_wjyvc"]
 [ext_resource type="PackedScene" uid="uid://qfkfvt6felnv" path="res://Scene/GameManager.tscn" id="44_ucx1a"]
+[ext_resource type="PackedScene" uid="uid://bweuh0jytwbxi" path="res://Scene/Pause menu.tscn" id="46_opm7f"]
 
 [sub_resource type="Animation" id="Animation_81gk7"]
 resource_name = "Moving Platform 2"
@@ -552,7 +553,7 @@ metadata/_custom_type_script = "uid://2juaclm8gc1n"
 metadata/SimpleGrassTextured = "2.0.5"
 
 [node name="SimpleGrassTextured" type="MultiMeshInstance3D" parent="Grass"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.071426, 19.760738, 18.699383)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.071426, 19.760809, 18.69941)
 multimesh = SubResource("MultiMesh_ywkyo")
 script = ExtResource("37_awp4g")
 texture_albedo = ExtResource("36_6od6c")
@@ -702,10 +703,14 @@ grass_height_offset = 0.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.551292, 2.2817965, -87.207405)
 
 [node name="Player" parent="." instance=ExtResource("21_jrhep")]
-transform = Transform3D(0.99812734, 0, -0.06117048, -0.004451267, 0.9973489, -0.07263195, 0.06100831, 0.07276822, 0.9954812, 62.91718, 10.264978, 23.075428)
+transform = Transform3D(0.99812734, 0, -0.06117048, -0.004451267, 0.9973489, -0.07263195, 0.06100831, 0.07276822, 0.9954812, 62.91718, 5.0871487, 23.075428)
 gun_projectile_arc = 0.2
 
 [node name="GameManager" parent="." node_paths=PackedStringArray("gridmap") instance=ExtResource("44_ucx1a")]
 time_limit = 240.0
 gridmap = NodePath("../GridMap")
 portal_spawn_position = Vector3(-33, 2.2, -87)
+
+[node name="Pause Menu" type="CanvasLayer" parent="."]
+
+[node name="Pause Menu" parent="Pause Menu" instance=ExtResource("46_opm7f")]

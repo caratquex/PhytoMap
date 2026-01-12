@@ -26,6 +26,8 @@ func _on_button_pressed() -> void:
 	resume()
 
 func _on_button_2_pressed() -> void:
+	get_tree().paused = false
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	get_tree().reload_current_scene()
 
 func _on_button_3_pressed() -> void:
