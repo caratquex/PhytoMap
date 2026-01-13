@@ -1,7 +1,6 @@
-[gd_scene load_steps=60 format=4 uid="uid://j57p8ed70c7i"]
+[gd_scene load_steps=59 format=4 uid="uid://j57p8ed70c7i"]
 
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_ibaua"]
-[ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="2_754fx"]
 [ext_resource type="PackedScene" uid="uid://p6nnonr03ork" path="res://Scene/directional_light_3d.tscn" id="2_hlkp1"]
 [ext_resource type="PackedScene" uid="uid://d1ixt37a64w2y" path="res://Map/Grass.tscn" id="2_jrhep"]
 [ext_resource type="MeshLibrary" uid="uid://ctlg4t84uuu0u" path="res://Tiles/Tiles11.tres" id="2_lmc8q"]
@@ -272,9 +271,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -84.84783, 0, 0)
 
 [node name="DirectionalLight3D3" parent="." instance=ExtResource("2_hlkp1")]
 transform = Transform3D(1, 0, 0, 0, 0.5208011, 0.8536781, 0, -0.8536781, 0.5208011, 100.63975, 0, 0)
-
-[node name="Node3D" parent="." instance=ExtResource("2_754fx")]
-transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 88.20286, -1.8950396, -48.822094)
 
 [node name="GridMap" type="GridMap" parent="."]
 mesh_library = ExtResource("2_lmc8q")
@@ -649,7 +645,7 @@ gridmap = NodePath("../../GridMap")
 grass_height_offset = 0.0
 
 [node name="RadiationZoneBox11" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
-transform = Transform3D(1.0899405, 0.011376198, 0, -0.011376198, 1.0899405, 0, 0, 0, 1.0899999, 5.112287, 8.078232, -2.016279)
+transform = Transform3D(1.0899407, 0.024057012, 0, -0.011376201, 2.3048744, 0, 0, 0, 1.09, 5.112287, 2.6660805, -2.016279)
 gridmap = NodePath("../../GridMap")
 grass_height_offset = 0.0
 
@@ -658,44 +654,24 @@ transform = Transform3D(1.03, 0, 0, 0, 1.03, 0, 0, 0, 1.03, 21.20739, 30.564339,
 gridmap = NodePath("../../GridMap")
 grass_height_offset = 0.0
 
-[node name="RadiationZoneBox9" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
-transform = Transform3D(0.86, 0, 0, 0, 0.86, 0, 0, 0, 0.86, 20.735106, 22.269703, -42.07128)
-gridmap = NodePath("../../GridMap")
-grass_height_offset = 0.0
-
-[node name="RadiationZoneBox2" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
-transform = Transform3D(0.99994445, 0, 0.010541593, 0, 1, 0, -0.010541593, 0, 0.99994445, -18.74166, 4.550555, -71.365425)
-required_sunflowers = 7
-gridmap = NodePath("../../GridMap")
-grass_height_offset = 0.0
-
 [node name="RadiationZoneBox3" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
-transform = Transform3D(2.33987, 0, 0.024667326, 0, 2.34, 0, -0.024667326, 0, 2.33987, -12.316876, 5.006274, -78.22248)
-required_sunflowers = 7
-gridmap = NodePath("../../GridMap")
-grass_height_offset = 0.0
-
-[node name="RadiationZoneBox5" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
-transform = Transform3D(1.4999167, 0, 0.010541593, 0, 1, 0, -0.01581239, 0, 0.99994445, -7.2429757, -27.23554, -71.81105)
+transform = Transform3D(2.6898506, 0, 0.024667326, 0, 4.025, 0, -0.028356886, 0, 2.33987, -14.153298, 6.7910843, -78.22248)
 required_sunflowers = 7
 gridmap = NodePath("../../GridMap")
 grass_height_offset = 0.0
 
 [node name="RadiationZoneBox6" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
 transform = Transform3D(0.6349647, 0, 0.0066939113, 0, 0.635, 0, -0.0066939113, 0, 0.6349647, -13.053869, 15.795919, -53.859684)
-required_sunflowers = 7
 gridmap = NodePath("../../GridMap")
 grass_height_offset = 0.0
 
 [node name="RadiationZoneBox7" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
 transform = Transform3D(0.4998965, -0.02279407, 0.0052699978, 0.008699544, 1.3098016, 9.1712136e-05, -0.005270796, -1.9063008e-11, 0.49997222, 2.0152335, 23.943756, -57.1516)
-required_sunflowers = 7
 gridmap = NodePath("../../GridMap")
 grass_height_offset = 0.0
 
 [node name="RadiationZoneBox10" parent="RadiantZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("43_nbbt7")]
 transform = Transform3D(0.52989024, -0.028710099, 0.0055861985, 0.009221518, 1.6497502, 9.721487e-05, -0.005587044, 9.604264e-11, 0.5299705, 8.561162, 26.393803, -43.007343)
-required_sunflowers = 7
 gridmap = NodePath("../../GridMap")
 grass_height_offset = 0.0
 
