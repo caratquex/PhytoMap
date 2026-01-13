@@ -13,6 +13,14 @@ static var instance: Node
 @export var radiation_tile_ids: Array[int] = []  # IDs for GrassRadiant2 and GrassRadiant3
 
 # ---------------------------
+# Dialogue System
+# ---------------------------
+@export_group("Dialogue")
+@export var intro_lines: Array[String] = []  ## Lines shown at level start
+@export var outro_lines: Array[String] = []  ## Lines shown before transitioning to next level
+@export var dialogue_ui: PackedScene  ## The dialogue overlay scene
+
+# ---------------------------
 # Portal / Level Progression
 # ---------------------------
 @export_group("Level Progression")
@@ -42,6 +50,7 @@ var total_radiation_count: int = 0
 var time_remaining: float = 0.0
 var game_active: bool = false
 var portal_spawned: bool = false
+var dialogue_ui_instance: Node = null  ## Active dialogue UI instance
 
 # ---------------------------
 # Signals for UI binding
@@ -100,9 +109,6 @@ func _initialize_for_current_level() -> void:
 			timer.timeout.disconnect(_on_timer_timeout)
 		timer.wait_time = 1.0
 		timer.timeout.connect(_on_timer_timeout)
-		timer.start()
-	
-	game_active = true
 	
 	# Update debug UI
 	_update_debug_ui()
@@ -111,6 +117,44 @@ func _initialize_for_current_level() -> void:
 	if get_tree() and get_tree().current_scene:
 		scene_path = get_tree().current_scene.scene_file_path
 	print("[GameManager] Initialized for level: %s. Radiation count: %d, Next level: %s" % [scene_path, total_radiation_count, next_level_path])
+	
+	# Show intro dialogue if configured
+	if intro_lines.size() > 0 and dialogue_ui:
+		_show_intro_dialogue()
+	else:
+		# No intro, start game immediately
+		_start_gameplay()
+
+
+func _show_intro_dialogue() -> void:
+	# Instantiate dialogue UI
+	_ensure_dialogue_ui()
+	
+	# Pause the game
+	get_tree().paused = true
+	
+	# Show intro text
+	if dialogue_ui_instance and dialogue_ui_instance.has_method("show_text"):
+		dialogue_ui_instance.show_text(intro_lines, _on_intro_complete)
+	else:
+		# Fallback if dialogue UI is missing
+		_on_intro_complete()
+
+
+func _on_intro_complete() -> void:
+	# Unpause the game
+	get_tree().paused = false
+	
+	# Start gameplay
+	_start_gameplay()
+
+
+func _start_gameplay() -> void:
+	game_active = true
+	
+	# Start the timer
+	if timer:
+		timer.start()
 
 
 func _apply_level_config() -> void:
@@ -305,11 +349,48 @@ func load_next_level(level_path: String) -> void:
 	
 	print("[GameManager] Loading level: %s" % level_path)
 	
+	# Show outro dialogue if configured
+	if outro_lines.size() > 0 and dialogue_ui:
+		_show_outro_dialogue(level_path)
+	else:
+		# No outro, proceed directly
+		_perform_level_transition(level_path)
+
+
+func _show_outro_dialogue(level_path: String) -> void:
+	# Ensure dialogue UI exists
+	_ensure_dialogue_ui()
+	
+	# Pause the game
+	get_tree().paused = true
+	
+	# Show outro text
+	if dialogue_ui_instance and dialogue_ui_instance.has_method("show_text"):
+		dialogue_ui_instance.show_text(outro_lines, func(): _on_outro_complete(level_path))
+	else:
+		# Fallback if dialogue UI is missing
+		_on_outro_complete(level_path)
+
+
+func _on_outro_complete(level_path: String) -> void:
+	# Unpause before scene transition
+	get_tree().paused = false
+	
+	# Proceed with level transition
+	_perform_level_transition(level_path)
+
+
+func _perform_level_transition(level_path: String) -> void:
 	# Store tree reference before scene change
 	var tree = get_tree()
 	if not tree:
 		print("[GameManager] ERROR: No tree available!")
 		return
+	
+	# Clean up dialogue UI before scene change
+	if dialogue_ui_instance and is_instance_valid(dialogue_ui_instance):
+		dialogue_ui_instance.queue_free()
+		dialogue_ui_instance = null
 	
 	# Change to the next level
 	tree.change_scene_to_file(level_path)
@@ -324,6 +405,19 @@ func load_next_level(level_path: String) -> void:
 		_initialize_for_current_level()
 	)
 	wait_timer.start()
+
+
+## Ensures the dialogue UI instance exists
+func _ensure_dialogue_ui() -> void:
+	if dialogue_ui_instance and is_instance_valid(dialogue_ui_instance):
+		return
+	
+	if not dialogue_ui:
+		print("[GameManager] WARNING: No dialogue_ui PackedScene assigned!")
+		return
+	
+	dialogue_ui_instance = dialogue_ui.instantiate()
+	add_child(dialogue_ui_instance)
 
 
 ## Called when player completes the final level (no more levels to go)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=4 uid="uid://sl5ib4d0b7c6"]
+[gd_scene load_steps=58 format=4 uid="uid://sl5ib4d0b7c6"]
 
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_s8enn"]
 [ext_resource type="MeshLibrary" uid="uid://ctlg4t84uuu0u" path="res://Tiles/Tiles11.tres" id="2_dn7vj"]
@@ -44,6 +44,7 @@
 [ext_resource type="AudioStream" uid="uid://bmpdyihcbhqkc" path="res://Sfx/throw plant grenade.mp3" id="42_ewipy"]
 [ext_resource type="PackedScene" uid="uid://4p5bvlkog65k" path="res://Scene/RadiationZoneBox.tscn" id="44_wwfh2"]
 [ext_resource type="PackedScene" uid="uid://qfkfvt6felnv" path="res://Scene/GameManager.tscn" id="45_8sq5o"]
+[ext_resource type="PackedScene" uid="uid://c5uoeewfgcleu" path="res://Scene/dialogue.tscn" id="45_ewipy"]
 [ext_resource type="PackedScene" uid="uid://bweuh0jytwbxi" path="res://Scene/Pause menu.tscn" id="45_opgf8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_we51m"]
@@ -579,7 +580,12 @@ grass_spawn_radius = 0.0
 grass_height_offset = 0.0
 
 [node name="GameManager" parent="." instance=ExtResource("45_8sq5o")]
+intro_lines = Array[String](["They really sent me alone for this huh?", "No partner? A manual? Or even carrots?", "Great…I’m lost. Where should I head first?"])
+outro_lines = Array[String](["…Hey. It worked. The land looks alive again.", "My face feels… warm? Probably fine.", "Alright. Next island."])
+dialogue_ui = ExtResource("45_ewipy")
 portal_spawn_position = Vector3(0.187, 0, -47)
+
+[node name="DialogueUI" parent="GameManager" instance=ExtResource("45_ewipy")]
 
 [node name="Pause Menu" type="CanvasLayer" parent="."]
 

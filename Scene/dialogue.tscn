@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5uoeewfgcleu"]
+
+[ext_resource type="Script" uid="uid://b75l2lourrpfm" path="res://Script/dialogue.gd" id="1_dialogue"]
+
+[node name="DialogueUI" type="CanvasLayer"]
+process_mode = 3
+layer = 99
+script = ExtResource("1_dialogue")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -180.0
+offset_right = -40.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Dialogue text goes here..."
+fit_content = true

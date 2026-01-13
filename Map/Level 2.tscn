@@ -1,6 +1,7 @@
-[gd_scene load_steps=59 format=4 uid="uid://j57p8ed70c7i"]
+[gd_scene load_steps=60 format=4 uid="uid://j57p8ed70c7i"]
 
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_ibaua"]
+[ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="2_754fx"]
 [ext_resource type="PackedScene" uid="uid://p6nnonr03ork" path="res://Scene/directional_light_3d.tscn" id="2_hlkp1"]
 [ext_resource type="PackedScene" uid="uid://d1ixt37a64w2y" path="res://Map/Grass.tscn" id="2_jrhep"]
 [ext_resource type="MeshLibrary" uid="uid://ctlg4t84uuu0u" path="res://Tiles/Tiles11.tres" id="2_lmc8q"]
@@ -690,3 +691,6 @@ portal_spawn_position = Vector3(-33, 2.2, -87)
 [node name="Pause Menu" type="CanvasLayer" parent="."]
 
 [node name="Pause Menu" parent="Pause Menu" instance=ExtResource("46_opm7f")]
+
+[node name="Water" parent="." instance=ExtResource("2_754fx")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -3.3974762, -2.193184, 2.9334235)

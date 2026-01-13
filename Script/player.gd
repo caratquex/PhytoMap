@@ -177,6 +177,9 @@ class FlowerProjectile extends RigidBody3D:
 				get_tree().current_scene.add_child(flower_instance)
 				flower_instance.global_position = floor_pos
 				
+				# Auto-delete flower after 15 seconds to improve performance
+				_setup_flower_auto_delete(flower_instance)
+				
 				# Check if planted on radiation location and notify GameManager
 				if GameManager.instance and GameManager.instance.is_radiation_location(floor_pos, landing_collider):
 					GameManager.instance.on_radiation_cleared()
@@ -207,6 +210,24 @@ class FlowerProjectile extends RigidBody3D:
 		# Apply explosion force to player
 		if player_instance.has_method("apply_explosion_force"):
 			player_instance.apply_explosion_force(direction_to_player, explosion_force)
+	
+	func _setup_flower_auto_delete(flower: Node3D) -> void:
+		"""Set up a timer to automatically delete the flower after 15 seconds."""
+		if not flower or not is_instance_valid(flower):
+			return
+		
+		# Create and configure the timer
+		var timer = Timer.new()
+		timer.wait_time = 15.0  # FLOWER_LIFETIME
+		timer.one_shot = true
+		timer.autostart = true
+		flower.add_child(timer)
+		
+		# Connect timeout to delete the flower
+		timer.timeout.connect(func(): 
+			if flower and is_instance_valid(flower):
+				flower.queue_free()
+		)
 
 
 # Factory method to create FlowerProjectile instances
@@ -1166,9 +1187,36 @@ func plant_flower_at_cursor() -> void:
 	get_tree().current_scene.add_child(flower)
 	flower.global_position = ground_pos
 	
+	# Auto-delete flower after 15 seconds to improve performance
+	_setup_flower_auto_delete(flower)
+	
 	# Check if planted on radiation location and notify GameManager
 	if GameManager.instance and GameManager.instance.is_radiation_location(ground_pos, floor_hit.collider):
 		GameManager.instance.on_radiation_cleared()
+
+
+# ---------------------------
+# FLOWER AUTO-DELETE (Performance Optimization)
+# ---------------------------
+const FLOWER_LIFETIME: float = 15.0  # Seconds before flower disappears
+
+func _setup_flower_auto_delete(flower: Node3D) -> void:
+	"""Set up a timer to automatically delete the flower after FLOWER_LIFETIME seconds."""
+	if not flower or not is_instance_valid(flower):
+		return
+	
+	# Create and configure the timer
+	var timer = Timer.new()
+	timer.wait_time = FLOWER_LIFETIME
+	timer.one_shot = true
+	timer.autostart = true
+	flower.add_child(timer)
+	
+	# Connect timeout to delete the flower
+	timer.timeout.connect(func(): 
+		if flower and is_instance_valid(flower):
+			flower.queue_free()
+	)
 
 
 func raycast_to_floor(mouse_pos: Vector2, viewport_size: Vector2, cam: Camera3D) -> Dictionary:

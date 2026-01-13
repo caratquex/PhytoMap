@@ -137,6 +137,8 @@ func land_on_floor(impact_pos: Vector3) -> void:
 		transform_to_flower(impact_pos)
 
 
+const FLOWER_LIFETIME: float = 15.0  # Seconds before flower disappears
+
 func transform_to_flower(flower_pos: Vector3) -> void:
 	if not flower_scene:
 		# Use the same Sunflower1.tscn scene that player uses for planting
@@ -155,8 +157,30 @@ func transform_to_flower(flower_pos: Vector3) -> void:
 	get_tree().current_scene.add_child(flower)
 	flower.global_position = flower_pos
 	
+	# Auto-delete flower after 15 seconds to improve performance
+	_setup_flower_auto_delete(flower)
+	
 	# Remove projectile after transformation
 	queue_free()
+
+
+func _setup_flower_auto_delete(flower: Node3D) -> void:
+	"""Set up a timer to automatically delete the flower after FLOWER_LIFETIME seconds."""
+	if not flower or not is_instance_valid(flower):
+		return
+	
+	# Create and configure the timer
+	var timer = Timer.new()
+	timer.wait_time = FLOWER_LIFETIME
+	timer.one_shot = true
+	timer.autostart = true
+	flower.add_child(timer)
+	
+	# Connect timeout to delete the flower
+	timer.timeout.connect(func(): 
+		if flower and is_instance_valid(flower):
+			flower.queue_free()
+	)
 
 
 func destroy_projectile() -> void:

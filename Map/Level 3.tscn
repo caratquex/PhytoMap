@@ -1398,9 +1398,6 @@ transform = Transform3D(-0.013019834, 0, 0.99991524, -0.26531488, 0.9641556, -0.
 
 [node name="Waterfall" type="Node" parent="."]
 
-[node name="Node3D15" parent="Waterfall" instance=ExtResource("1_fa38q")]
-transform = Transform3D(4.621706, 1.1390495, -4.978944e-08, 0, -2.0806621e-07, -4.76, -1.1390495, 4.621706, -2.0202118e-07, -10.442841, -11.990555, -43.936844)
-
 [node name="Node3D16" parent="Waterfall" instance=ExtResource("1_fa38q")]
 transform = Transform3D(0.04, 0, 0, 0, 0.04, 0, 0, 0, 0.04, 3.708788, 41.397022, -48.328022)
 
@@ -1786,6 +1783,9 @@ transform = Transform3D(0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, -40.733627, 97.68074
 
 [node name="RadiationZoneBox" parent="RadiationBox" instance=ExtResource("59_npuwj")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -1.702817, 28.01374, -15.789837)
+
+[node name="RadiationZoneBox6" parent="RadiationBox" instance=ExtResource("59_npuwj")]
+transform = Transform3D(2.205, 0, 0, 0, 1.215, 0, 0, 0, 2.205, -48.04538, 22.700031, 8.328209)
 
 [node name="RadiationZoneBox2" parent="RadiationBox" instance=ExtResource("59_npuwj")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 13.0246935, 19.967073, 79.19413)
