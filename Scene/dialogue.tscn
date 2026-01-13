@@ -1,6 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://c5uoeewfgcleu"]
+[gd_scene load_steps=3 format=3 uid="uid://c5uoeewfgcleu"]
 
 [ext_resource type="Script" uid="uid://b75l2lourrpfm" path="res://Script/dialogue.gd" id="1_dialogue"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.15, 0.15, 0.15, 0.85)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
 
 [node name="DialogueUI" type="CanvasLayer"]
 process_mode = 3
@@ -8,6 +19,7 @@ layer = 99
 script = ExtResource("1_dialogue")
 
 [node name="Panel" type="Panel" parent="."]
+visible = false
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -18,16 +30,13 @@ offset_right = -40.0
 offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Dialogue text goes here..."

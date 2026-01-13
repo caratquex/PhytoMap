@@ -127,6 +127,53 @@ func _initialize_for_current_level() -> void:
 
 
 func _show_intro_dialogue() -> void:
+	# Wait for player to land on floor first
+	_wait_for_player_landing()
+
+
+func _wait_for_player_landing() -> void:
+	# Get player instance
+	var player: CharacterBody3D = _find_player()
+	
+	# If player exists and is on floor, show dialogue immediately
+	if player and player.is_on_floor():
+		_show_intro_dialogue_now()
+		return
+	
+	# Otherwise, poll until player lands
+	var timer = Timer.new()
+	timer.wait_time = 0.05  # Check every 50ms
+	timer.one_shot = false
+	add_child(timer)
+	
+	timer.timeout.connect(func():
+		var p: CharacterBody3D = _find_player()
+		if p and p.is_on_floor():
+			timer.stop()
+			timer.queue_free()
+			_show_intro_dialogue_now()
+	)
+	timer.start()
+
+
+## Find the player node in the scene
+func _find_player() -> CharacterBody3D:
+	# Try player group first
+	var player_nodes = get_tree().get_nodes_in_group("player")
+	if player_nodes.size() > 0:
+		return player_nodes[0] as CharacterBody3D
+	
+	# Find by name (Player node is a CharacterBody3D named "Player")
+	var scene_root = get_tree().current_scene
+	if scene_root:
+		var player = scene_root.find_child("Player", true, false)
+		if player and player is CharacterBody3D:
+			return player as CharacterBody3D
+	
+	return null
+
+
+func _show_intro_dialogue_now() -> void:
 	# Instantiate dialogue UI
 	_ensure_dialogue_ui()
 	

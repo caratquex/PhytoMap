@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=4 uid="uid://j57p8ed70c7i"]
+[gd_scene load_steps=61 format=4 uid="uid://j57p8ed70c7i"]
 
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_ibaua"]
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="2_754fx"]
@@ -45,6 +45,7 @@
 [ext_resource type="PackedScene" uid="uid://4p5bvlkog65k" path="res://Scene/RadiationZoneBox.tscn" id="43_nbbt7"]
 [ext_resource type="PackedScene" uid="uid://lxbulg28acws" path="res://Map Asset/Stone4.tscn" id="43_wjyvc"]
 [ext_resource type="PackedScene" uid="uid://qfkfvt6felnv" path="res://Scene/GameManager.tscn" id="44_ucx1a"]
+[ext_resource type="PackedScene" uid="uid://c5uoeewfgcleu" path="res://Scene/dialogue.tscn" id="45_8kt5o"]
 [ext_resource type="PackedScene" uid="uid://bweuh0jytwbxi" path="res://Scene/Pause menu.tscn" id="46_opm7f"]
 
 [sub_resource type="Animation" id="Animation_81gk7"]
@@ -686,7 +687,12 @@ gun_projectile_arc = 0.2
 [node name="GameManager" parent="." node_paths=PackedStringArray("gridmap") instance=ExtResource("44_ucx1a")]
 time_limit = 240.0
 gridmap = NodePath("../GridMap")
+intro_lines = Array[String](["Oh hey the islands are floating. I’m definitely not scared of heights.", "The radiation feels stronger here… Like it knows I’m coming.", "Let’s stay close. I don’t want to fall."])
+outro_lines = Array[String](["That’s another one cleaned. Good job…", "The radiation here really got into my skin.Why does my face suddenly feel so itchy?", "Anyway, let's move before this place starts moving too."])
+dialogue_ui = ExtResource("45_8kt5o")
 portal_spawn_position = Vector3(-33, 2.2, -87)
+
+[node name="DialogueUI" parent="GameManager" instance=ExtResource("45_8kt5o")]
 
 [node name="Pause Menu" type="CanvasLayer" parent="."]
 
