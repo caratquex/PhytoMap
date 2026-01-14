@@ -33,13 +33,16 @@ static var instance: Node
 # ---------------------------
 const LEVEL_CONFIG: Dictionary = {
 	"res://Map/Level 1.tscn": {
-		"next_level": "res://Map/Level 2.tscn"
+		"next_level": "res://Map/Level 2.tscn",
+		"reversed_mechanics": false
 	},
 	"res://Map/Level 2.tscn": {
-		"next_level": "res://Map/Level 3.tscn"
+		"next_level": "res://Map/Level 3.tscn",
+		"reversed_mechanics": false
 	},
 	"res://Map/Level 3.tscn": {
-		"next_level": ""  # Final level - no next level
+		"next_level": "",  # Final level - no next level
+		"reversed_mechanics": true
 	}
 }
 
@@ -51,6 +54,7 @@ var time_remaining: float = 0.0
 var game_active: bool = false
 var portal_spawned: bool = false
 var dialogue_ui_instance: Node = null  ## Active dialogue UI instance
+var reversed_mechanics: bool = false  ## Whether current level uses reversed HP rules
 
 # ---------------------------
 # Signals for UI binding
@@ -93,6 +97,7 @@ func _initialize_for_current_level() -> void:
 	portal_spawned = false
 	game_active = false
 	total_radiation_count = 0
+	reversed_mechanics = false
 	
 	# Auto-detect level configuration
 	_apply_level_config()
@@ -221,7 +226,9 @@ func _apply_level_config() -> void:
 	if scene_path in LEVEL_CONFIG:
 		var config = LEVEL_CONFIG[scene_path]
 		next_level_path = config.get("next_level", "")
+		reversed_mechanics = config.get("reversed_mechanics", false)
 		print("[GameManager] Level config applied - Next: %s" % [next_level_path])
+		print("[GameManager] Reversed mechanics: %s" % [reversed_mechanics])
 	else:
 		print("[GameManager] No config found for scene: %s (using defaults)" % scene_path)
 
@@ -342,6 +349,11 @@ func is_radiation_location(position: Vector3, collider: Node = null) -> bool:
 				return true
 	
 	return false
+
+
+## Check if the current level has reversed HP mechanics
+func is_reversed_mechanics_level() -> bool:
+	return reversed_mechanics
 
 
 ## Get the current radiation count

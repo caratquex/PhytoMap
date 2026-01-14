@@ -1,4 +1,4 @@
-[gd_scene load_steps=115 format=4 uid="uid://5st2matn1qe3"]
+[gd_scene load_steps=116 format=4 uid="uid://5st2matn1qe3"]
 
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="1_fa38q"]
 [ext_resource type="PackedScene" uid="uid://p6nnonr03ork" path="res://Scene/directional_light_3d.tscn" id="2_630rr"]
@@ -40,6 +40,7 @@
 [ext_resource type="PackedScene" uid="uid://lxbulg28acws" path="res://Map Asset/Stone4.tscn" id="39_u1wey"]
 [ext_resource type="PackedScene" uid="uid://catld016h61fx" path="res://Map Asset/temple_debris_4.tscn" id="40_77jqn"]
 [ext_resource type="PackedScene" uid="uid://b10gmi43h60yi" path="res://Map Asset/Stone2.tscn" id="42_hijhp"]
+[ext_resource type="PackedScene" uid="uid://bnyn27gwead4w" path="res://Scene/RadiationHeart1.tscn" id="47_gx12f"]
 [ext_resource type="PackedScene" uid="uid://f1q0ykhjjrjh" path="res://Map Asset/Stone1.tscn" id="49_l8wyj"]
 [ext_resource type="MultiMesh" uid="uid://ck5mlps4s7g0s" path="res://Generated Multimesh/8.tres" id="50_srcnb"]
 [ext_resource type="MultiMesh" uid="uid://bnfk0gy40cw1b" path="res://Generated Multimesh/1.tres" id="51_8yai8"]
@@ -1324,50 +1325,57 @@ transform = Transform3D(0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, -40.733627, 97.68074
 
 [node name="RadiationZoneBox" parent="RadiationBox" instance=ExtResource("59_npuwj")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -1.702817, 28.01374, -15.789837)
-visible = false
 
-[node name="RadiationZoneBox6" parent="RadiationBox" instance=ExtResource("59_npuwj")]
+[node name="RadiationZoneBox6" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
 transform = Transform3D(2.205, 0, 0, 0, 1.215, 0, 0, 0, 2.205, -48.04538, 22.700031, 8.328209)
-visible = false
+gridmap = NodePath("../../GridMap")
 
-[node name="RadiationZoneBox2" parent="RadiationBox" instance=ExtResource("59_npuwj")]
+[node name="RadiationZoneBox2" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 13.0246935, 19.967073, 79.19413)
 visible = false
+gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
 
-[node name="RadiationZoneBox7" parent="RadiationBox" instance=ExtResource("59_npuwj")]
+[node name="RadiationZoneBox7" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
 transform = Transform3D(1.4, 0, 0, 0, 1.3155696, 0.47882816, 0, -0.47882816, 1.3155696, -11.385137, 8.885725, 44.410343)
 visible = false
+gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
 
-[node name="RadiationZoneBox8" parent="RadiationBox" instance=ExtResource("59_npuwj")]
+[node name="RadiationZoneBox8" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
 transform = Transform3D(1.4, 0, 0, 0, 1.3155696, 0.47882816, 0, -0.47882816, 1.3155696, -11.385137, 8.885725, 44.410343)
 visible = false
+gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
 
-[node name="RadiationZoneBox9" parent="RadiationBox" instance=ExtResource("59_npuwj")]
+[node name="RadiationZoneBox9" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
 transform = Transform3D(1.4, 0, 0, 0, 1.2688309, -0.59166557, 0, 0.59166557, 1.2688309, -21.64638, 10.460384, 32.833035)
 visible = false
+gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
 
-[node name="RadiationZoneBox10" parent="RadiationBox" instance=ExtResource("59_npuwj")]
+[node name="RadiationZoneBox10" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
 transform = Transform3D(1.6358856, 0.31026924, -0.69687617, 0, 1.6489495, 0.7341596, 0.7628259, -0.6653745, 1.4944558, -30.782198, 10.450092, 47.51134)
 visible = false
+gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
 
-[node name="RadiationZoneBox3" parent="RadiationBox" instance=ExtResource("59_npuwj")]
+[node name="RadiationZoneBox3" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 15.507899, 36.891487, 108.205215)
 visible = false
+gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
 
-[node name="RadiationZoneBox4" parent="RadiationBox" instance=ExtResource("59_npuwj")]
+[node name="RadiationZoneBox4" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -20.506023, 45.26963, 118.44647)
 visible = false
+gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
 
-[node name="RadiationZoneBox5" parent="RadiationBox" instance=ExtResource("59_npuwj")]
+[node name="RadiationZoneBox5" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -35.021053, 55.667, 99.24545)
 visible = false
+gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
 
 [node name="GameManager" parent="." instance=ExtResource("59_kdx7h")]
@@ -1439,6 +1447,20 @@ multimesh = ExtResource("51_8yai8")
 script = ExtResource("51_tp466")
 
 [node name="WorldEnvironment" parent="." instance=ExtResource("61_npuwj")]
+
+[node name="RadiationHeart" type="Node" parent="."]
+
+[node name="Node3D15" parent="RadiationHeart" instance=ExtResource("47_gx12f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3910847, 93.370575, 97.42089)
+
+[node name="Node3D16" parent="RadiationHeart" instance=ExtResource("47_gx12f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3910847, 93.370575, 97.42089)
+
+[node name="Node3D17" parent="RadiationHeart" instance=ExtResource("47_gx12f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3910847, 93.370575, 97.42089)
+
+[node name="Node3D" parent="RadiationHeart" instance=ExtResource("47_gx12f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.978793, 40.15415, -25.130713)
 
 [editable path="toxic barrel"]
 [editable path="toxic barrel2"]
