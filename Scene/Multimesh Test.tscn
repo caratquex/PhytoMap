@@ -1,9 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://pcvx4ibbysyw"]
+[gd_scene load_steps=2 format=3 uid="uid://pcvx4ibbysyw"]
 
 [ext_resource type="Script" uid="uid://c2gvw51hs6k7p" path="res://Script/Multimesh Combiner.gd" id="1_cngqb"]
-[ext_resource type="PackedScene" uid="uid://d1ixt37a64w2y" path="res://Map/Grass.tscn" id="2_cngqb"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D2" type="Node3D"]
 
 [node name="Node3D" type="Node3D" parent="."]
 script = ExtResource("1_cngqb")
@@ -14,30 +13,3 @@ rock_texture_path = "res://Map Asset/grassRadiant2_albedo.tres"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -61.70497)
 
 [node name="ScatterItem" type="Node3D" parent="."]
-
-[node name="Grass" parent="ScatterItem" instance=ExtResource("2_cngqb")]
-transform = Transform3D(-0.8976076, 0.010790513, 0.105778135, 0, 0.8899016, -0.09262874, -0.10636274, -0.091062404, -0.89267415, 1.447743, 0.8443878, -3.0979562)
-
-[node name="Grass2" parent="ScatterItem" instance=ExtResource("2_cngqb")]
-transform = Transform3D(-1.205267, 0.0011270785, 0.008433329, 0, 0.982056, -0.19117923, -0.008575953, -0.15839995, -1.1852225, -6.173609, 2.8643286, 1.4588995)
-
-[node name="Grass3" parent="ScatterItem" instance=ExtResource("2_cngqb")]
-transform = Transform3D(0.34991, 0.33205965, -1.2476416, 0, 0.9925869, 0.4463977, 1.3271937, -0.08754636, 0.32893637, 15.2732315, -3.0570078, 7.9516997)
-
-[node name="Grass4" parent="ScatterItem" instance=ExtResource("2_cngqb")]
-transform = Transform3D(-0.76628494, -0.14757416, -0.4554721, 0, 0.85022956, -0.28107947, 0.47935534, -0.23590823, -0.72810584, 14.159815, -9.378314, -2.2209249)
-
-[node name="Grass5" parent="ScatterItem" instance=ExtResource("2_cngqb")]
-transform = Transform3D(1.3885642, -0.105870284, -0.4110936, 0, 1.0188057, -0.47299832, 0.43752468, 0.33599862, 1.3046805, 13.853628, -2.459728, 7.559939)
-
-[node name="Grass6" parent="ScatterItem" instance=ExtResource("2_cngqb")]
-transform = Transform3D(1.4713086, 0.0656247, -0.56527996, 0, 1.1047586, 0.25229192, 0.5764983, -0.1674839, 1.442678, -10.385293, -7.338023, 16.722012)
-
-[node name="Grass7" parent="ScatterItem" instance=ExtResource("2_cngqb")]
-transform = Transform3D(-0.74178, 0.107438184, -0.8680253, 0, 0.96656317, 0.16501941, 0.8801402, 0.09054864, -0.7315695, -7.5460386, -2.9802034, -1.772059)
-
-[node name="Grass8" parent="ScatterItem" instance=ExtResource("2_cngqb")]
-transform = Transform3D(0.92278033, -0.2830929, 1.3030266, 0, 1.0923632, 0.4898781, -1.3745553, -0.19004875, 0.8747609, -8.1352005, -1.3502141, 6.831702)
-
-[node name="Grass9" parent="ScatterItem" instance=ExtResource("2_cngqb")]
-transform = Transform3D(-0.81829894, -0.26609796, -1.3260387, 0, 1.0865319, -0.4376466, 1.3878994, -0.15689011, -0.78182614, -2.3605664, -4.65882, 5.7831993)

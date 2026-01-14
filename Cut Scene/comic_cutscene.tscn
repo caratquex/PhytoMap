@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://dcwfmsa01bd1y"]
+[gd_scene load_steps=9 format=3 uid="uid://dcwfmsa01bd1y"]
 
 [ext_resource type="Texture2D" uid="uid://c4hjft07lh10i" path="res://Cut Scene/Sketch04.jpg" id="1_4752v"]
+[ext_resource type="Script" uid="uid://wxsppn4yxj1n" path="res://Script/comic_cutscene.gd" id="1_cutscene"]
 [ext_resource type="Texture2D" uid="uid://bhbifipy0jplq" path="res://Cut Scene/Sketch06.jpg" id="2_tkmr6"]
 [ext_resource type="AudioStream" uid="uid://yevsg4xvy18w" path="res://Cut Scene/Audio4.mp3" id="3_tkmr6"]
 [ext_resource type="AudioStream" uid="uid://no3qg2ra1ss6" path="res://Cut Scene/Audio6.mp3" id="4_eopqf"]
@@ -146,6 +147,7 @@ _data = {
 }
 
 [node name="ComicCutscene" type="Node2D"]
+script = ExtResource("1_cutscene")
 
 [node name="Page1" type="Sprite2D" parent="."]
 scale = Vector2(0.997286, 1.0333288)

@@ -35,7 +35,7 @@ Shortcuts/density_decrement=Object(Shortcut,"resource_local_to_scene":false,"res
 [application]
 
 config/name="Phyto_Map"
-run/main_scene="uid://sl5ib4d0b7c6"
+run/main_scene="res://Scene/menu.tscn"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://Map Asset/icon.svg"
 

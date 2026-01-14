@@ -1,5 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://c6tgerrehffjf"]
+[gd_scene load_steps=16 format=3 uid="uid://c6tgerrehffjf"]
 
+[ext_resource type="Script" uid="uid://cwb3hs66okvt7" path="res://Script/menu.gd" id="1_menu"]
 [ext_resource type="Texture2D" uid="uid://blanc1mp52gil" path="res://GUI/Title 4.png" id="2_alu6o"]
 [ext_resource type="FontFile" uid="uid://dn6lk74wvhckb" path="res://GUI/Pixelify_Sans (1)/static/PixelifySans-Bold.ttf" id="2_eas8t"]
 [ext_resource type="PackedScene" uid="uid://b44y8jny6lpue" path="res://Map/MenuBG.tscn" id="3_u2k45"]
@@ -59,6 +60,7 @@ _data = {
 }
 
 [node name="Menu" type="CanvasLayer"]
+script = ExtResource("1_menu")
 
 [node name="BG" type="Node3D" parent="."]
 
