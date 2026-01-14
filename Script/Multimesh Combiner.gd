@@ -11,9 +11,19 @@ extends Node3D
 @export var rock_texture_path: String = "res://test_text.tres"
 
 func _ready():
-	# Uncomment to autoâ€‘run in the editor:
+	# Uncomment to autoâ€'run in the editor:
 	merge()
 	pass
+
+# Recursively find the first MeshInstance3D with a mesh in the node tree
+func _find_mesh_instance_recursive(node: Node) -> MeshInstance3D:
+	for child in node.get_children():
+		if child is MeshInstance3D and child.mesh:
+			return child
+		var result = _find_mesh_instance_recursive(child)
+		if result:
+			return result
+	return null
 func merge():
 	print("ðŸ” Merging rocks into MultiMeshInstances + combined collisionâ€¦")
 
@@ -38,13 +48,12 @@ func merge():
 	# --- 2) Group each rock's global_transform by its mesh resource ---
 	var mesh_to_transforms = {}
 	for rock in rocks:
-		for child in rock.get_children():
-			if child is MeshInstance3D and child.mesh:
-				var mesh = child.mesh
-				if not mesh_to_transforms.has(mesh):
-					mesh_to_transforms[mesh] = []  # plain Array of Transform3D
-				mesh_to_transforms[mesh].append(rock.global_transform)
-				break
+		var mesh_instance = _find_mesh_instance_recursive(rock)
+		if mesh_instance and mesh_instance.mesh:
+			var mesh = mesh_instance.mesh
+			if not mesh_to_transforms.has(mesh):
+				mesh_to_transforms[mesh] = []  # plain Array of Transform3D
+			mesh_to_transforms[mesh].append(rock.global_transform)
 
 	if mesh_to_transforms.is_empty():
 		push_error("âŒ Couldn't find any MeshInstance3D children with a mesh.")

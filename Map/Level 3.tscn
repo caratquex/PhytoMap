@@ -1,4 +1,4 @@
-[gd_scene load_steps=105 format=4 uid="uid://5st2matn1qe3"]
+[gd_scene load_steps=106 format=4 uid="uid://5st2matn1qe3"]
 
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="1_fa38q"]
 [ext_resource type="PackedScene" uid="uid://p6nnonr03ork" path="res://Scene/directional_light_3d.tscn" id="2_630rr"]
@@ -41,7 +41,9 @@
 [ext_resource type="PackedScene" uid="uid://catld016h61fx" path="res://Map Asset/temple_debris_4.tscn" id="40_77jqn"]
 [ext_resource type="PackedScene" uid="uid://b10gmi43h60yi" path="res://Map Asset/Stone2.tscn" id="42_hijhp"]
 [ext_resource type="PackedScene" uid="uid://f1q0ykhjjrjh" path="res://Map Asset/Stone1.tscn" id="49_l8wyj"]
+[ext_resource type="MultiMesh" uid="uid://bnfk0gy40cw1b" path="res://Generated Multimesh/multimesh_RadiantGrass.tres" id="51_8yai8"]
 [ext_resource type="PackedScene" uid="uid://bfcjigq0vdl4d" path="res://addons/proton_scatter/demos/assets/fence_planks.tscn" id="51_idcw0"]
+[ext_resource type="MultiMesh" uid="uid://ksnrqeto1y8r" path="res://Generated Multimesh/multimesh_RadiantGrass2.tres" id="51_l1xpb"]
 [ext_resource type="PackedScene" uid="uid://df44qbjskigqv" path="res://Map Asset/temple_debris_1.tscn" id="53_71g5e"]
 [ext_resource type="PackedScene" uid="uid://caqxfqurbp3ku" path="res://addons/proton_scatter/demos/assets/pine_tree.tscn" id="53_qmm36"]
 [ext_resource type="PackedScene" uid="uid://i7rvwskvhtnd" path="res://Map Asset/TreeRadiant2.tscn" id="54_71g5e"]
@@ -490,67 +492,67 @@ step = 0.016666668
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScatterOutput/ScatterOutput/ScatterItem:position:z")
+tracks/0/path = NodePath("ScatterOutput/ScatterOutput9:position:z")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 4.4722443, -0.16666667, -0.7453741, 0, 0),
+"points": PackedFloat32Array(87.11806, -0.25, 0, 0.25, 0, 87.11806, -0.16666667, 0, 0, 0),
 "times": PackedFloat32Array(0, 2.9833333)
 }
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ScatterOutput/ScatterOutput/ScatterItem:position:y")
+tracks/1/path = NodePath("ScatterOutput/ScatterOutput9:position:y")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 21.24694, -0.16666667, -3.5411568, 0, 0),
+"points": PackedFloat32Array(93.966866, -0.25, 0, 0.25, 0, 69.966866, -0.16666667, 4, 0, 0),
 "times": PackedFloat32Array(0, 2.9833333)
 }
 tracks/2/type = "bezier"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("ScatterOutput/ScatterOutput/ScatterItem:position:x")
+tracks/2/path = NodePath("ScatterOutput/ScatterOutput9:position:x")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, -6.5598297, -0.16666667, 1.093305, 0, 0),
+"points": PackedFloat32Array(-7.918249, -0.25, 0, 0.25, 0, -7.918249, -0.16666667, 0, 0, 0),
 "times": PackedFloat32Array(0, 2.9833333)
 }
 tracks/3/type = "bezier"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("ScatterOutput/ScatterOutput9:position:x")
+tracks/3/path = NodePath("ScatterOutput/ScatterOutput/ScatterItem:position:x")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(-7.918249, -0.25, 0, 0.25, 0, -7.918249, -0.16666667, 0, 0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, -6.5598297, -0.16666667, 1.093305, 0, 0),
 "times": PackedFloat32Array(0, 2.9833333)
 }
 tracks/4/type = "bezier"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("ScatterOutput/ScatterOutput9:position:y")
+tracks/4/path = NodePath("ScatterOutput/ScatterOutput/ScatterItem:position:y")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(93.966866, -0.25, 0, 0.25, 0, 69.966866, -0.16666667, 4, 0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 21.24694, -0.16666667, -3.5411568, 0, 0),
 "times": PackedFloat32Array(0, 2.9833333)
 }
 tracks/5/type = "bezier"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("ScatterOutput/ScatterOutput9:position:z")
+tracks/5/path = NodePath("ScatterOutput/ScatterOutput/ScatterItem:position:z")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(87.11806, -0.25, 0, 0.25, 0, 87.11806, -0.16666667, 0, 0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 4.4722443, -0.16666667, -0.7453741, 0, 0),
 "times": PackedFloat32Array(0, 2.9833333)
 }
 
@@ -589,67 +591,67 @@ tracks/0/keys = {
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ScatterOutput/ScatterOutput/ScatterItem:position:z")
+tracks/1/path = NodePath("ScatterOutput/ScatterOutput9:position:z")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(87.11806, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 tracks/2/type = "bezier"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("ScatterOutput/ScatterOutput/ScatterItem:position:y")
+tracks/2/path = NodePath("ScatterOutput/ScatterOutput9:position:y")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(93.966866, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 tracks/3/type = "bezier"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("ScatterOutput/ScatterOutput/ScatterItem:position:x")
+tracks/3/path = NodePath("ScatterOutput/ScatterOutput9:position:x")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(-7.918249, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 tracks/4/type = "bezier"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("ScatterOutput/ScatterOutput9:position:x")
+tracks/4/path = NodePath("ScatterOutput/ScatterOutput/ScatterItem:position:x")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(-7.918249, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 tracks/5/type = "bezier"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("ScatterOutput/ScatterOutput9:position:y")
+tracks/5/path = NodePath("ScatterOutput/ScatterOutput/ScatterItem:position:y")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(93.966866, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 tracks/6/type = "bezier"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("ScatterOutput/ScatterOutput9:position:z")
+tracks/6/path = NodePath("ScatterOutput/ScatterOutput/ScatterItem:position:z")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(87.11806, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 
@@ -921,9 +923,6 @@ shadow_mesh = SubResource("ArrayMesh_hfilx")
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_082xo"]
 data = PackedVector3Array(0, 4.6017, 0, -2.0321, 2.6355, 0.4701, -1.8554, 2.8701, -0.7427, 0, 4.6017, 0, -0.922, 2.8573, 1.3974999, -2.0321, 2.6355, 0.4701, 0.4613, 3.1283, -1.7699, 0, 4.6017, 0, -1.8554, 2.8701, -0.7427, 0.4613, 3.1283, -1.7699, -1.8554, 2.8701, -0.7427, -0.4206, 2.4826, -1.9899, 2.0237, 2.7575, -0.46249998, 0, 4.6017, 0, 0.4613, 3.1283, -1.7699, 2.0237, 2.7575, -0.46249998, 1.6092, 2.7825, 0.7252, 0, 4.6017, 0, 1.6092, 2.7825, 0.7252, -0.922, 2.8573, 1.3974999, 0, 4.6017, 0, 1.6092, 2.7825, 0.7252, 0.426, 2.6048, 1.8136, -0.922, 2.8573, 1.3974999, 0.0341, 3.9984999, -0.0201, 1.5288999, 1.9824, -0.6556, 1.867, 2.214, -0.067, 0.0341, 3.9984999, -0.0201, 0.8131, 1.7867, -1.4468, 1.5288999, 1.9824, -0.6556, 0.0176, 2.0195, 1.7265999, 0.0341, 3.9984999, -0.0201, 1.867, 2.214, -0.067, 0.0176, 2.0195, 1.7265999, 1.867, 2.214, -0.067, 1.5573, 1.6086999, 1.5030999, -1.7614, 1.8075, 1.5030999, 0.0341, 3.9984999, -0.0201, 0.0176, 2.0195, 1.7265999, -1.7614, 1.8075, 1.5030999, -2.0723999, 2.1836998, -0.7399, 0.0341, 3.9984999, -0.0201, -2.0723999, 2.1836998, -0.7399, 0.8131, 1.7867, -1.4468, 0.0341, 3.9984999, -0.0201, -2.0723999, 2.1836998, -0.7399, -0.9988, 1.7427, -1.4488, 0.8131, 1.7867, -1.4468, -0.0069, 5.2262, 0.008599999, 0.6745, 3.7501, -1.6193999, 1.1438, 3.7603, -0.45929998, -0.0069, 5.2262, 0.008599999, -0.50409997, 3.7765, -1.3269, 0.6745, 3.7501, -1.6193999, 0.461, 3.7607, 1.1594, -0.0069, 5.2262, 0.008599999, 1.1438, 3.7603, -0.45929998, 0.461, 3.7607, 1.1594, 1.1438, 3.7603, -0.45929998, 1.6116999, 3.2770998, 0.6915, -0.6893, 3.7568998, 1.6272, -0.0069, 5.2262, 0.008599999, 0.461, 3.7607, 1.1594, -0.6893, 3.7568998, 1.6272, -1.3422999, 3.7607, 0.47649997, -0.0069, 5.2262, 0.008599999, -1.3422999, 3.7607, 0.47649997, -0.50409997, 3.7765, -1.3269, -0.0069, 5.2262, 0.008599999, -1.3422999, 3.7607, 0.47649997, -1.6259999, 3.2774, -0.6771, -0.50409997, 3.7765, -1.3269, 0, 1.8477999, -0.269, 0.1401, 4.0144, -0.1401, 0, 4.0144, -0.1982, 0, 1.8477999, -0.269, 0.1902, 1.8477999, -0.1902, 0.1401, 4.0144, -0.1401, 0.1902, 1.8477999, -0.1902, 0.1982, 4.0144, 0, 0.1401, 4.0144, -0.1401, 0, 0.105399996, -0.519, 0.1902, 1.8477999, -0.1902, 0, 1.8477999, -0.269, 0.1902, 1.8477999, -0.1902, 0.269, 1.8477999, 0, 0.1982, 4.0144, 0, 0, 0.105399996, -0.519, 0.36699998, 0.105399996, -0.36699998, 0.1902, 1.8477999, -0.1902, 0.36699998, 0.105399996, -0.36699998, 0.269, 1.8477999, 0, 0.1902, 1.8477999, -0.1902, 0, -0.0082, -0.4464, 0.36699998, 0.105399996, -0.36699998, 0, 0.105399996, -0.519, 0.36699998, 0.105399996, -0.36699998, 0.519, 0.105399996, 0, 0.269, 1.8477999, 0, 0, -0.0082, -0.4464, 0.3157, -0.0082, -0.3157, 0.36699998, 0.105399996, -0.36699998, 0.3157, -0.0082, -0.3157, 0.519, 0.105399996, 0, 0.36699998, 0.105399996, -0.36699998, 0.3157, -0.0082, -0.3157, 0.4464, -0.0082, 0, 0.519, 0.105399996, 0, 0.269, 1.8477999, 0, 0.1401, 4.0144, 0.1401, 0.1982, 4.0144, 0, 0.269, 1.8477999, 0, 0.1902, 1.8477999, 0.1902, 0.1401, 4.0144, 0.1401, 0.1902, 1.8477999, 0.1902, 0, 4.0144, 0.1982, 0.1401, 4.0144, 0.1401, 0.519, 0.105399996, 0, 0.1902, 1.8477999, 0.1902, 0.269, 1.8477999, 0, 0.1902, 1.8477999, 0.1902, 0, 1.8477999, 0.269, 0, 4.0144, 0.1982, 0.519, 0.105399996, 0, 0.36699998, 0.105399996, 0.36699998, 0.1902, 1.8477999, 0.1902, 0.36699998, 0.105399996, 0.36699998, 0, 1.8477999, 0.269, 0.1902, 1.8477999, 0.1902, 0.4464, -0.0082, 0, 0.36699998, 0.105399996, 0.36699998, 0.519, 0.105399996, 0, 0.36699998, 0.105399996, 0.36699998, 0, 0.105399996, 0.519, 0, 1.8477999, 0.269, 0.4464, -0.0082, 0, 0.3157, -0.0082, 0.3157, 0.36699998, 0.105399996, 0.36699998, 0.3157, -0.0082, 0.3157, 0, 0.105399996, 0.519, 0.36699998, 0.105399996, 0.36699998, 0.3157, -0.0082, 0.3157, 0, -0.0082, 0.4464, 0, 0.105399996, 0.519, 0, 1.8477999, 0.269, -0.1401, 4.0144, 0.1401, 0, 4.0144, 0.1982, 0, 1.8477999, 0.269, -0.1902, 1.8477999, 0.1902, -0.1401, 4.0144, 0.1401, -0.1902, 1.8477999, 0.1902, -0.1982, 4.0144, 0, -0.1401, 4.0144, 0.1401, 0, 0.105399996, 0.519, -0.1902, 1.8477999, 0.1902, 0, 1.8477999, 0.269, -0.1902, 1.8477999, 0.1902, -0.269, 1.8477999, 0, -0.1982, 4.0144, 0, 0, 0.105399996, 0.519, -0.36699998, 0.105399996, 0.36699998, -0.1902, 1.8477999, 0.1902, -0.36699998, 0.105399996, 0.36699998, -0.269, 1.8477999, 0, -0.1902, 1.8477999, 0.1902, 0, -0.0082, 0.4464, -0.36699998, 0.105399996, 0.36699998, 0, 0.105399996, 0.519, -0.36699998, 0.105399996, 0.36699998, -0.519, 0.105399996, 0, -0.269, 1.8477999, 0, 0, -0.0082, 0.4464, -0.3157, -0.0082, 0.3157, -0.36699998, 0.105399996, 0.36699998, -0.3157, -0.0082, 0.3157, -0.519, 0.105399996, 0, -0.36699998, 0.105399996, 0.36699998, -0.3157, -0.0082, 0.3157, -0.4464, -0.0082, 0, -0.519, 0.105399996, 0, 0.1982, 4.0144, 0, 0, 4.0144, -0.1982, 0.1401, 4.0144, -0.1401, 0.1982, 4.0144, 0, -0.1982, 4.0144, 0, 0, 4.0144, -0.1982, 0, 4.0144, -0.1982, -0.1982, 4.0144, 0, -0.1401, 4.0144, -0.1401, -0.1982, 4.0144, 0, 0.1982, 4.0144, 0, 0, 4.0144, 0.1982, 0, 4.0144, 0.1982, 0.1982, 4.0144, 0, 0.1401, 4.0144, 0.1401, -0.1982, 4.0144, 0, 0, 4.0144, 0.1982, -0.1401, 4.0144, 0.1401, -0.269, 1.8477999, 0, -0.1401, 4.0144, -0.1401, -0.1982, 4.0144, 0, -0.269, 1.8477999, 0, -0.1902, 1.8477999, -0.1902, -0.1401, 4.0144, -0.1401, -0.1902, 1.8477999, -0.1902, 0, 4.0144, -0.1982, -0.1401, 4.0144, -0.1401, -0.519, 0.105399996, 0, -0.1902, 1.8477999, -0.1902, -0.269, 1.8477999, 0, -0.1902, 1.8477999, -0.1902, 0, 1.8477999, -0.269, 0, 4.0144, -0.1982, -0.519, 0.105399996, 0, -0.36699998, 0.105399996, -0.36699998, -0.1902, 1.8477999, -0.1902, -0.36699998, 0.105399996, -0.36699998, 0, 1.8477999, -0.269, -0.1902, 1.8477999, -0.1902, -0.4464, -0.0082, 0, -0.36699998, 0.105399996, -0.36699998, -0.519, 0.105399996, 0, -0.36699998, 0.105399996, -0.36699998, 0, 0.105399996, -0.519, 0, 1.8477999, -0.269, -0.4464, -0.0082, 0, -0.3157, -0.0082, -0.3157, -0.36699998, 0.105399996, -0.36699998, -0.3157, -0.0082, -0.3157, 0, 0.105399996, -0.519, -0.36699998, 0.105399996, -0.36699998, -0.3157, -0.0082, -0.3157, 0, -0.0082, -0.4464, 0, 0.105399996, -0.519, -0.3157, -0.0082, -0.3157, 0.3157, -0.0082, -0.3157, 0, -0.0082, -0.4464, -0.3157, -0.0082, -0.3157, 0.3157, -0.0082, 0.3157, 0.3157, -0.0082, -0.3157, 0.3157, -0.0082, -0.3157, 0.3157, -0.0082, 0.3157, 0.4464, -0.0082, 0, 0.3157, -0.0082, 0.3157, -0.3157, -0.0082, -0.3157, -0.3157, -0.0082, 0.3157, -0.3157, -0.0082, 0.3157, -0.3157, -0.0082, -0.3157, -0.4464, -0.0082, 0, 0.3157, -0.0082, 0.3157, -0.3157, -0.0082, 0.3157, 0, -0.0082, 0.4464, 0.2951, 5.3271, -0.3378, 0.6946, 4.5345, 0.636, 0.2828, 5.3206, 0.2778, 0.0213, 4.2788997, 1.201, 0.2828, 5.3206, 0.2778, 0.6946, 4.5345, 0.636, 0.6946, 4.5345, 0.636, 0.2951, 5.3271, -0.3378, 0.7224, 4.5413, -0.79359996, 0.6946, 4.5345, 0.636, 0.7224, 4.5413, -0.79359996, 1.1765, 4.2994, -0.0765, -0.0311, 5.9729, 0.012499999, 0.2951, 5.3271, -0.3378, 0.2828, 5.3206, 0.2778, -0.3384, 5.3184, -0.26229998, 0.7224, 4.5413, -0.79359996, 0.2951, 5.3271, -0.3378, -0.3384, 5.3184, -0.26229998, 0.2951, 5.3271, -0.3378, -0.0311, 5.9729, 0.012499999, -0.3384, 5.3184, -0.26229998, -0.1153, 4.1541, -1.3433, 0.7224, 4.5413, -0.79359996, -0.1153, 4.1541, -1.3433, -0.3384, 5.3184, -0.26229998, -0.74869996, 4.5284, -0.6186, 0.0213, 4.2788997, 1.201, -0.3002, 5.3203, 0.317, 0.2828, 5.3206, 0.2778, -0.3002, 5.3203, 0.317, -0.0311, 5.9729, 0.012499999, 0.2828, 5.3206, 0.2778, -0.3384, 5.3184, -0.26229998, -0.0311, 5.9729, 0.012499999, -0.3002, 5.3203, 0.317, -0.3002, 5.3203, 0.317, 0.0213, 4.2788997, 1.201, -0.6599, 4.5348, 0.72709996, -0.6599, 4.5348, 0.72709996, -0.3384, 5.3184, -0.26229998, -0.3002, 5.3203, 0.317, -0.6599, 4.5348, 0.72709996, -0.74869996, 4.5284, -0.6186, -0.3384, 5.3184, -0.26229998, -0.74869996, 4.5284, -0.6186, -0.6599, 4.5348, 0.72709996, -1.2202, 4.1503997, 0.0884)
-
-[sub_resource type="MultiMesh" id="MultiMesh_8yai8"]
-transform_format = 1
 
 [node name="Node3D" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.959484, -5.5975494, 0)
@@ -1636,68 +1635,6 @@ transform = Transform3D(0.92278033, -0.2830929, 1.3030266, 0, 1.0923632, 0.48987
 [node name="Grass9" parent="ScatterOutput/ScatterOutput3/ScatterItem" instance=ExtResource("3_kk6wx")]
 transform = Transform3D(-0.81829894, -0.26609796, -1.3260387, 0, 1.0865319, -0.4376466, 1.3878994, -0.15689011, -0.78182614, -2.3605664, -4.65882, 5.7831993)
 
-[node name="ScatterOutput4" type="Marker3D" parent="ScatterOutput"]
-transform = Transform3D(0.4603293, -0.16417524, 0.8724354, -0.22070423, 0.93073136, 0.29159722, -0.8598761, -0.32678095, 0.39220864, 5.9909554, 10.126226, 63.963882)
-
-[node name="ScatterItem" type="Node3D" parent="ScatterOutput/ScatterOutput4"]
-
-[node name="Node3D" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-0.8976076, 0.010790513, 0.105778135, 0, 0.8899016, -0.09262874, -0.10636274, -0.091062404, -0.89267415, -7.328213, 3.257494, 17.461946)
-
-[node name="Node3D2" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-1.205267, 0.0011270785, 0.008433329, 0, 0.982056, -0.19117923, -0.008575953, -0.15839995, -1.1852225, -3.3350186, 4.686526, 15.010465)
-
-[node name="Node3D3" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(0.34991, 0.33205965, -1.2476416, 0, 0.9925869, 0.4463977, 1.3271937, -0.08754636, 0.32893637, -13.894493, -4.735352, 17.375278)
-
-[node name="Node3D4" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-0.76628494, -0.14757416, -0.4554721, 0, 0.85022956, -0.28107947, 0.47935534, -0.23590823, -0.72810584, -8.325804, -6.7225575, 2.5741324)
-
-[node name="Node3D5" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(1.3885642, -0.105870284, -0.4110936, 0, 1.0188057, -0.47299832, 0.43752468, 0.33599862, 1.3046805, -7.124887, 1.361768, 7.138048)
-
-[node name="Node3D6" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(1.4713086, 0.0656247, -0.56527996, 0, 1.1047586, 0.25229192, 0.5764983, -0.1674839, 1.442678, -0.44396073, 0.17050985, 20.490307)
-
-[node name="Node3D7" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-0.74178, 0.107438184, -0.8680253, 0, 0.96656317, 0.16501941, 0.8801402, 0.09054864, -0.7315695, -4.23108, 0.49346817, 4.1687384)
-
-[node name="Node3D8" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(0.92278033, -0.2830929, 1.3030266, 0, 1.0923632, 0.4898781, -1.3745553, -0.19004875, 0.8747609, -8.408195, 2.8692126, 1.5712895)
-
-[node name="Node3D9" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-0.81829894, -0.26609796, -1.3260387, 0, 1.0865319, -0.4376466, 1.3878994, -0.15689011, -0.78182614, 1.3891064, 4.9227977, -5.798938)
-
-[node name="Node3D10" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-0.8779911, -0.114135474, -1.1206431, 0, 1.0619372, -0.19221343, 1.1374134, -0.088103354, -0.86504585, -4.2143745, 6.45593, -4.4574122)
-
-[node name="Node3D11" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-0.10578961, 0.16197799, 1.0136817, 0, 0.92456925, -0.17945789, -1.0314714, -0.016612763, -0.10396506, -9.393949, 1.1715983, -4.7392006)
-
-[node name="Node3D12" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-0.46226355, -0.18494399, -1.0601296, 0, 0.9660139, -0.23967892, 1.0868442, -0.07866156, -0.45090118, -14.634258, -0.4614557, 2.2442744)
-
-[node name="Node3D13" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-0.6587736, -0.30267632, -1.2002394, 0, 1.0149273, -0.453749, 1.2733291, -0.15659355, -0.62095964, -1.0035717, -6.60874, 2.2088335)
-
-[node name="Node3D14" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-1.3461238, 0.019603767, -0.18210936, 0, 1.0357512, 0.18629497, 0.18481952, 0.14278305, -1.3263844, -9.513953, -4.1333885, 6.4070907)
-
-[node name="Node3D15" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-1.4561504, 0.054633323, 0.44069868, 0, 1.0849756, -0.25468826, -0.44987014, -0.17683846, -1.4264641, 1.7590449, -5.3841977, -1.8205714)
-
-[node name="Node3D16" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-0.57181543, 0.23007615, -0.9023431, 0, 0.9221603, 0.30796444, 0.9427003, 0.1395577, -0.54733586, -12.132305, 6.7968287, 1.4228631)
-
-[node name="Node3D17" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-1.0515741, -0.13308534, -0.53562444, 0, 0.9490675, -0.33899805, 0.5610172, -0.24945597, -1.0039778, -13.345489, -2.850905, -6.3862376)
-
-[node name="Node3D18" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(-1.6245173, 0.098518595, -1.0263004, 0, 1.2227677, 0.2821165, 1.0460596, 0.15299815, -1.5938315, 0.24068677, -5.7356005, 21.601263)
-
-[node name="Node3D19" type="StaticBody3D" parent="ScatterOutput/ScatterOutput4/ScatterItem" instance=ExtResource("4_d37qt")]
-transform = Transform3D(1.158452, -0.11541876, 0.77353835, 0, 1.0407777, 0.26900655, -0.7926607, -0.16868138, 1.1305052, -12.659813, 3.2996032, 18.568975)
-
 [node name="ScatterOutput5" type="Marker3D" parent="ScatterOutput"]
 transform = Transform3D(0.8072958, -0.05988817, 0.5871008, 0.05045583, 0.9981991, 0.032443643, -0.5879865, 0.003431052, 0.80886346, 11.948687, 22.154348, 87.45063)
 
@@ -1759,122 +1696,6 @@ transform = Transform3D(-1.6245173, 0.098518595, -1.0263004, 0, 1.2227677, 0.282
 
 [node name="Node3D19" type="StaticBody3D" parent="ScatterOutput/ScatterOutput5/ScatterItem" instance=ExtResource("4_d37qt")]
 transform = Transform3D(1.158452, -0.11541876, 0.77353835, 0, 1.0407777, 0.26900655, -0.7926607, -0.16868138, 1.1305052, -7.91054, 1.3564456, 9.291162)
-
-[node name="ScatterOutput6" type="Marker3D" parent="ScatterOutput"]
-transform = Transform3D(0.9180361, -0.033563007, -0.39507404, 0.050455827, 0.9981991, 0.03244364, 0.39327392, -0.049718097, 0.9180762, 5.1180954, 38.50201, 107.500114)
-
-[node name="ScatterItem" type="Node3D" parent="ScatterOutput/ScatterOutput6"]
-
-[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="ScatterOutput/ScatterOutput6/ScatterItem"]
-multimesh = SubResource("MultiMesh_8yai8")
-
-[node name="Node3D" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-0.89760756, 0.010790519, 0.10577816, -3.7252903e-09, 0.8899016, -0.09262875, -0.10636276, -0.0910624, -0.8926741, -6.1387177, -7.6393166, 9.931442)
-
-[node name="Node3D2" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-1.205267, 0.0011270866, 0.008433312, -7.450581e-09, 0.9820561, -0.19117922, -0.008575946, -0.15839994, -1.1852225, 12.59996, 2.9682884, 5.001236)
-
-[node name="Node3D3" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(0.34990993, 0.33205965, -1.2476416, 7.450581e-09, 0.99258703, 0.44639772, 1.3271936, -0.08754636, 0.3289364, -9.608566, -6.1251984, -11.537094)
-
-[node name="Node3D4" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-0.766285, -0.14757416, -0.4554721, 9.313226e-10, 0.8502296, -0.2810795, 0.47935534, -0.23590821, -0.72810584, 18.140732, -3.4348392, -15.061195)
-
-[node name="Node3D5" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(1.3885643, -0.105870284, -0.41109365, 0, 1.0188057, -0.47299832, 0.43752462, 0.3359986, 1.3046805, -1.4765701, -5.1979046, -1.720993)
-
-[node name="Node3D6" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(1.4713086, 0.06562469, -0.56527996, 3.7252903e-09, 1.1047587, 0.25229195, 0.57649827, -0.1674839, 1.4426779, -8.343121, -6.7296295, -5.182312)
-
-[node name="Node3D7" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-0.7417799, 0.10743818, -0.8680253, -5.5879354e-09, 0.9665634, 0.16501941, 0.8801402, 0.090548635, -0.7315695, 11.126968, -6.1709995, 16.623337)
-
-[node name="Node3D8" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(0.92278033, -0.28309286, 1.3030264, 7.450581e-09, 1.0923634, 0.48987815, -1.3745553, -0.19004875, 0.87476087, -7.0093117, 3.6367111, 8.337227)
-
-[node name="Node3D9" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-0.81829894, -0.26609796, -1.3260387, -3.7252903e-09, 1.086532, -0.43764663, 1.3878994, -0.1568901, -0.781826, -8.387886, 1.5388832, 9.811539)
-
-[node name="Node3D10" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-0.8779911, -0.11413546, -1.120643, 0, 1.0619372, -0.19221342, 1.1374133, -0.08810334, -0.8650459, 2.1578178, -4.894724, 5.2843246)
-
-[node name="Node3D11" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-0.10578957, 0.16197798, 1.0136817, 0, 0.9245693, -0.17945789, -1.0314714, -0.01661276, -0.103965074, 1.0915451, -6.477125, -4.2871094)
-
-[node name="Node3D12" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-0.46226355, -0.18494399, -1.0601296, -3.7252903e-09, 0.9660139, -0.23967896, 1.0868442, -0.07866156, -0.45090115, 11.959667, 2.4992332, 7.7778397)
-
-[node name="Node3D13" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-0.6587736, -0.3026763, -1.2002394, 3.7252903e-09, 1.0149273, -0.45374906, 1.273329, -0.15659356, -0.62095964, 11.666576, -6.8630123, 7.5905075)
-
-[node name="Node3D14" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-1.3461237, 0.019603759, -0.18210927, -5.5879354e-09, 1.0357511, 0.18629497, 0.18481952, 0.14278305, -1.3263843, -5.9751434, -11.186726, -0.18604279)
-
-[node name="Node3D16" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-0.5718155, 0.23007616, -0.90234315, 0, 0.9221604, 0.30796444, 0.9427004, 0.13955769, -0.54733586, 9.50618, -4.7402134, 7.442978)
-
-[node name="Node3D17" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-1.0515741, -0.13308534, -0.53562444, -2.7939677e-09, 0.9490676, -0.33899808, 0.5610172, -0.24945599, -1.0039778, 7.1688614, 0.29085922, -14.342209)
-
-[node name="Node3D18" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-1.6245174, 0.098518595, -1.0263004, -1.8626451e-09, 1.2227678, 0.28211647, 1.0460596, 0.15299815, -1.5938314, 5.401409, -7.3885384, -5.474739)
-
-[node name="Node3D19" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(1.158452, -0.11541873, 0.77353835, 6.519258e-09, 1.0407777, 0.26900655, -0.7926607, -0.16868135, 1.1305053, 7.296917, -0.27257156, 1.8780365)
-
-[node name="Node3D20" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-1.3859446, -0.012877792, -0.1610049, -7.450581e-09, 1.0521524, -0.14483742, 0.16277257, -0.10964936, -1.3708942, -3.6002922, -12.74691, -5.5060425)
-
-[node name="Node3D21" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-1.0914227, 0.03381554, 0.14546514, -5.5879354e-09, 0.92811126, -0.28235185, -0.15095589, -0.24448897, -1.051724, 14.715843, -5.4948463, 9.44249)
-
-[node name="Node3D22" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(1.0675569, 0.028629443, 0.8960149, 3.7252903e-09, 1.0576438, -0.05825101, -0.9017103, 0.0338951, 1.060814, -3.529747, -0.92829514, 5.135727)
-
-[node name="Node3D23" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-0.54748666, 0.18209732, -1.060021, 0, 0.9776961, 0.24749598, 1.0872049, 0.09169921, -0.5337975, -3.1789322, -1.6471729, 9.828819)
-
-[node name="Node3D24" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(0.47438502, -0.037989706, 0.8147665, 0, 0.9069565, 0.045650527, -0.81642497, -0.02207397, 0.4734214, 3.8360977, -1.2479706, -10.834114)
-
-[node name="Node3D25" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-1.3808782, -0.086399406, 0.61591387, -3.7252903e-09, 1.0788927, 0.2854224, -0.6311527, 0.18903038, -1.3475375, 12.989769, -10.013973, -3.823883)
-
-[node name="Node3D26" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-0.9119549, 0.016184898, -1.6791776, -3.7252903e-09, 1.2330464, 0.02843611, 1.6929946, 0.008718222, -0.9045122, -6.845646, -3.4985085, 14.079018)
-
-[node name="Node3D27" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(0.89394605, -0.02771569, 0.10435431, 4.656613e-09, 0.8630989, 0.23274672, -0.10804546, -0.22931403, 0.86340636, 11.920227, -6.4291687, 6.358856)
-
-[node name="Node3D28" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-1.4254013, -0.049991395, 0.36859614, -1.1175871e-08, 1.0663779, 0.26432258, -0.37697998, 0.1890227, -1.3937011, 9.404373, -7.1674576, 7.7884216)
-
-[node name="Node3D29" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(0.16460335, -0.2514959, -1.3718568, 0, 1.0388451, -0.33657774, 1.4200433, 0.029151984, 0.15901786, 14.169243, -7.0800724, -3.0892563)
-
-[node name="Node3D30" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(1.3335394, 0.092111155, -1.1973227, 7.450581e-09, 1.185684, 0.20516059, 1.2144861, -0.10114059, 1.3146935, 6.683506, -12.493383, -10.089439)
-
-[node name="Node3D31" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-1.5905389, -0.009144667, 0.48108724, -1.4901161e-08, 1.1462917, 0.045175135, -0.484643, 0.030011663, -1.578869, 15.452896, -0.19984055, -15.547058)
-
-[node name="Node3D32" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(0.16304362, -0.18573284, 0.90154105, 3.7252903e-09, 0.8856694, 0.19496772, -0.9224475, -0.032828465, 0.15934837, -4.1863976, -5.002716, 12.754036)
-
-[node name="Node3D33" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-1.1594853, 0.13121614, -0.4814924, -7.043127e-09, 0.96160847, 0.4044817, 0.5106177, 0.29795915, -1.0933493, -11.50565, -5.0093384, 7.9102554)
-
-[node name="Node3D34" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(0.14085418, 0.11924473, -1.2135358, 0, 0.9975843, 0.14696841, 1.2274323, -0.013683945, 0.13925952, 4.163479, -12.235149, -12.360916)
-
-[node name="Node3D35" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(-0.619221, 0.21367899, -0.92323995, -3.7252903e-09, 0.93994343, 0.29727522, 0.95960736, 0.137884, -0.59575355, -5.896206, -4.2882614, -14.832581)
-
-[node name="Node3D36" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(0.4265165, 0.086501904, -1.1579301, 3.7252903e-09, 1.0031313, 0.113170564, 1.1677722, -0.03159392, 0.4229219, 10.023602, -7.5452633, -2.5067139)
-
-[node name="Node3D37" type="StaticBody3D" parent="ScatterOutput/ScatterOutput6/ScatterItem/MultiMeshInstance3D" instance=ExtResource("15_h0j0t")]
-transform = Transform3D(0.7565709, 0.042040285, -1.3308995, 0, 1.1046891, 0.06677927, 1.3406458, -0.023724724, 0.75107074, 18.601044, -6.5364437, -6.2922897)
 
 [node name="ScatterOutput7" type="Marker3D" parent="ScatterOutput"]
 transform = Transform3D(0.28518054, 0.016732689, -0.9583278, 0.050455827, 0.99819905, 0.032443635, 0.9571451, -0.057605397, 0.28382286, -22.772385, 54.46586, 107.038055)
@@ -2078,6 +1899,14 @@ transform = Transform3D(-0.76628494, -0.14757416, -0.4554721, 0, 0.85022956, -0.
 
 [node name="temple_debris_7" type="Node3D" parent="ScatterOutput/ScatterOutput10/ScatterItem" instance=ExtResource("60_npuwj")]
 transform = Transform3D(1.3885642, -0.105870284, -0.4110936, 0, 1.0188057, -0.47299832, 0.43752468, 0.33599862, 1.3046805, 1.912289, 3.1818001, -10.495336)
+
+[node name="MultiMeshInstance3D2" type="MultiMeshInstance3D" parent="ScatterOutput"]
+transform = Transform3D(0.46032926, -0.16417527, 0.8724354, 0.017935608, 0.98427033, 0.17575702, -0.88756716, -0.06525849, 0.45603293, -55.851276, -14.041294, 35.239014)
+multimesh = ExtResource("51_l1xpb")
+
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="ScatterOutput"]
+transform = Transform3D(0.91793364, -0.033369314, -0.39532804, 0.050565124, 0.99817026, 0.03315518, 0.39349833, -0.05042407, 0.9179414, 5.118, 38.5, 107.5)
+multimesh = ExtResource("51_8yai8")
 
 [editable path="toxic barrel"]
 [editable path="toxic barrel2"]
