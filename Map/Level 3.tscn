@@ -1,4 +1,4 @@
-[gd_scene load_steps=114 format=4 uid="uid://5st2matn1qe3"]
+[gd_scene load_steps=115 format=4 uid="uid://5st2matn1qe3"]
 
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="1_fa38q"]
 [ext_resource type="PackedScene" uid="uid://p6nnonr03ork" path="res://Scene/directional_light_3d.tscn" id="2_630rr"]
@@ -60,6 +60,7 @@
 [ext_resource type="PackedScene" uid="uid://qfkfvt6felnv" path="res://Scene/GameManager.tscn" id="59_kdx7h"]
 [ext_resource type="PackedScene" uid="uid://4p5bvlkog65k" path="res://Scene/RadiationZoneBox.tscn" id="59_npuwj"]
 [ext_resource type="PackedScene" uid="uid://bweuh0jytwbxi" path="res://Scene/Pause menu.tscn" id="60_tp466"]
+[ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="61_npuwj"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_l52ou"]
 load_path = "res://.godot/imported/toxic barrel_radiaoctive barrel.png-b83f0969d7c884d6bc927945f6eab3f2.s3tc.ctex"
@@ -1108,9 +1109,6 @@ transform = Transform3D(2.155, 0, 0, 0, 3.145, 0, 0, 0, 2.155, -2.0998092, 43.73
 [node name="Node3D2" parent="Waterfall" instance=ExtResource("22_byp4e")]
 transform = Transform3D(11.145727, 0, 14.060728, 0, 11.290999, 0, -13.530473, 0, 11.582527, -132.15198, -15.319416, 22.044205)
 
-[node name="Node3D3" parent="Waterfall" instance=ExtResource("22_byp4e")]
-transform = Transform3D(2.2902446, 0, 28.540264, 0, 8.136, 0, -17.37975, 0, 3.7609396, -102.99681, -15.143154, -0.7672844)
-
 [node name="rock_big" parent="Waterfall" instance=ExtResource("27_dtdwj")]
 transform = Transform3D(0.5613459, 0, -0.4943192, 0, 1, 0, 0.7414788, 0, 0.3742306, 2.0976405, 48.08013, -49.104683)
 
@@ -1374,7 +1372,7 @@ spawn_grass_on_clear = true
 
 [node name="GameManager" parent="." instance=ExtResource("59_kdx7h")]
 time_limit = 360.0
-intro_lines = Array[String](["These islands get weirder the higher I go. Feels like I’m climbing into someone’s nightmare.", "My body also feels… off today.", "My chest is heavy… and something’s shifting under my skin.", "Whatever happens next… let’s finish it."])
+intro_lines = Array[String](["These islands get weirder the higher I go. Feels like I’m climbing into someone’s nightmare.", "My chest is heavy… and something’s shifting under my skin.", "I can't see the radiation now... Why?", "Whatever happens next… let’s finish it."])
 outro_lines = Array[String](["…It’s done. But… Why do I feel less like myself?", "Every time I plant a seed, my body feels weaker (?) That can’t be normal...", ""])
 dialogue_ui = ExtResource("59_gx12f")
 portal_spawn_position = Vector3(-6, 90, 97)
@@ -1400,37 +1398,47 @@ script = ExtResource("51_tp466")
 [node name="MultiMeshInstance3D10" type="MultiMeshInstance3D" parent="ScatterOutput"]
 transform = Transform3D(0.27931768, 0.50408626, 0.8172384, -0.37440315, 0.84092283, -0.39073113, -0.88419706, -0.19683842, 0.4236161, -12.398, 21.938, -0.416)
 multimesh = ExtResource("52_kdx7h")
+script = ExtResource("51_tp466")
 
 [node name="MultiMeshInstance3D4" type="MultiMeshInstance3D" parent="ScatterOutput"]
 transform = Transform3D(0.28518054, 0.016732689, -0.9583278, 0.050455827, 0.99819905, 0.032443635, 0.9571451, -0.057605397, 0.28382286, -22.772, 54.466, 107.038)
 multimesh = ExtResource("51_pol3b")
+script = ExtResource("51_tp466")
 
 [node name="MultiMeshInstance3D5" type="MultiMeshInstance3D" parent="ScatterOutput"]
 transform = Transform3D(-0.6812157, -0.34610674, 0.64510113, -0.28921118, 0.93673855, 0.19717292, -0.67253447, -0.05225321, -0.73821914, -7.8, 60, 104)
 material_override = ExtResource("28_dtdwj")
 multimesh = ExtResource("52_cjsqj")
+script = ExtResource("51_tp466")
 
 [node name="MultiMeshInstance3D6" type="MultiMeshInstance3D" parent="ScatterOutput"]
 transform = Transform3D(-0.5371323, 0.20233323, 0.81887144, 0.317196, 0.9479984, -0.026176954, -0.7815856, 0.24568205, -0.57338, -8, 94, 97)
 material_override = ExtResource("28_dtdwj")
 multimesh = ExtResource("53_cud3p")
+script = ExtResource("51_tp466")
 
 [node name="MultiMeshInstance3D7" type="MultiMeshInstance3D" parent="ScatterOutput"]
 transform = Transform3D(-0.5878011, 0.19033617, 0.78629655, -0.20857102, 0.9034199, -0.3746066, -0.78165746, -0.38419256, -0.4913327, -8, 89, 124.39208)
 material_override = ExtResource("28_dtdwj")
 multimesh = ExtResource("54_fbhpp")
+script = ExtResource("51_tp466")
 
 [node name="MultiMeshInstance3D3" type="MultiMeshInstance3D" parent="ScatterOutput"]
 transform = Transform3D(0.8072958, -0.05988817, 0.5871008, 0.05045583, 0.9981991, 0.032443643, -0.5879865, 0.003431052, 0.80886346, 12, 22, 87)
 multimesh = ExtResource("51_p1dtq")
+script = ExtResource("51_tp466")
 
 [node name="MultiMeshInstance3D2" type="MultiMeshInstance3D" parent="ScatterOutput"]
 transform = Transform3D(0.46032926, -0.16417527, 0.8724354, 0.017935608, 0.98427033, 0.17575702, -0.88756716, -0.06525849, 0.45603293, -55.851276, -14.041294, 35.239014)
 multimesh = ExtResource("51_l1xpb")
+script = ExtResource("51_tp466")
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="ScatterOutput"]
 transform = Transform3D(0.91793364, -0.033369314, -0.39532804, 0.050565124, 0.99817026, 0.03315518, 0.39349833, -0.05042407, 0.9179414, 5.118, 38.5, 107.5)
 multimesh = ExtResource("51_8yai8")
+script = ExtResource("51_tp466")
+
+[node name="WorldEnvironment" parent="." instance=ExtResource("61_npuwj")]
 
 [editable path="toxic barrel"]
 [editable path="toxic barrel2"]
