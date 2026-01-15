@@ -97,11 +97,35 @@ signal all_levels_complete()
 
 
 func _ready() -> void:
-	# Set up singleton
+	# Check if this is a scene instance (not the autoload)
+	# Scene instances have a parent that is the scene root, autoload's parent is root
+	if instance != null and instance != self:
+		# This is a scene instance - copy its settings to the autoload and remove self
+		_copy_settings_to_autoload()
+		queue_free()
+		return
+	
+	# Set up singleton (this is the autoload)
 	instance = self
 	
 	# Wait a frame for the scene to be fully loaded, then initialize
 	call_deferred("_initialize_for_current_level")
+
+
+func _copy_settings_to_autoload() -> void:
+	# Copy exported settings from this scene instance to the autoload
+	if instance == null:
+		return
+	
+	# Copy level-specific settings
+	instance.time_limit = time_limit
+	instance.portal_spawn_position = portal_spawn_position
+	instance.force_reversed_mechanics = force_reversed_mechanics
+	instance.intro_lines = intro_lines.duplicate()
+	instance.outro_lines = outro_lines.duplicate()
+	instance.gridmap = gridmap
+	instance.dialogue_ui = dialogue_ui
+	instance.radiation_tile_ids = radiation_tile_ids.duplicate()
 
 
 func _initialize_for_current_level() -> void:
