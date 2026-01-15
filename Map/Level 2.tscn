@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=4 uid="uid://j57p8ed70c7i"]
+[gd_scene load_steps=61 format=4 uid="uid://j57p8ed70c7i"]
 
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_ibaua"]
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="2_754fx"]
@@ -44,6 +44,7 @@
 [ext_resource type="Texture2D" uid="uid://qjm7jmewl6c1" path="res://addons/simplegrasstextured/textures/Grass Grey.png" id="39_p3yci"]
 [ext_resource type="PackedScene" uid="uid://4p5bvlkog65k" path="res://Scene/RadiationZoneBox.tscn" id="43_nbbt7"]
 [ext_resource type="PackedScene" uid="uid://lxbulg28acws" path="res://Map Asset/Stone4.tscn" id="43_wjyvc"]
+[ext_resource type="PackedScene" uid="uid://qfkfvt6felnv" path="res://Scene/GameManager.tscn" id="44_ucx1a"]
 [ext_resource type="PackedScene" uid="uid://bweuh0jytwbxi" path="res://Scene/Pause menu.tscn" id="46_opm7f"]
 [ext_resource type="PackedScene" uid="uid://bwtdn0m42xiy7" path="res://Scene/BGM.tscn" id="48_msfil"]
 
@@ -691,3 +692,7 @@ gun_projectile_arc = 0.2
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -3.3974762, -2.193184, 2.9334235)
 
 [node name="AudioStreamPlayer" parent="." instance=ExtResource("48_msfil")]
+
+[node name="GameManager" parent="." instance=ExtResource("44_ucx1a")]
+time_limit = 240.0
+portal_spawn_position = Vector3(-33.5, 2.3, -87)

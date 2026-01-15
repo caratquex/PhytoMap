@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://dcwfmsa01bd1y"]
+[gd_scene load_steps=10 format=3 uid="uid://dcwfmsa01bd1y"]
 
 [ext_resource type="Texture2D" uid="uid://c4hjft07lh10i" path="res://Cut Scene/Sketch04.jpg" id="1_4752v"]
 [ext_resource type="Script" uid="uid://wxsppn4yxj1n" path="res://Script/comic_cutscene.gd" id="1_cutscene"]
 [ext_resource type="Texture2D" uid="uid://bhbifipy0jplq" path="res://Cut Scene/Sketch06.jpg" id="2_tkmr6"]
 [ext_resource type="AudioStream" uid="uid://yevsg4xvy18w" path="res://Cut Scene/Audio4.mp3" id="3_tkmr6"]
 [ext_resource type="AudioStream" uid="uid://no3qg2ra1ss6" path="res://Cut Scene/Audio6.mp3" id="4_eopqf"]
+[ext_resource type="FontFile" uid="uid://dn6lk74wvhckb" path="res://GUI/Pixelify_Sans (1)/static/PixelifySans-Bold.ttf" id="5_font"]
 
 [sub_resource type="Animation" id="Animation_tkmr6"]
 length = 0.001
@@ -173,3 +174,25 @@ libraries = {
 &"": SubResource("AnimationLibrary_tkmr6")
 }
 autoplay = "cutscene"
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="SkipLabel" type="Label" parent="UILayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -50.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 0.8)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 16
+text = "Press any key to skip"
+horizontal_alignment = 2
+vertical_alignment = 2

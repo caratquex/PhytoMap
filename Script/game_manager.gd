@@ -112,12 +112,12 @@ func _initialize_for_current_level() -> void:
 		return
 	
 	# Check if we're on a gameplay level
-	var scene_path = ""
+	var current_scene_path = ""
 	if get_tree() and get_tree().current_scene:
-		scene_path = get_tree().current_scene.scene_file_path
+		current_scene_path = get_tree().current_scene.scene_file_path
 	
 	# Hide debug UI if not on a gameplay level
-	var is_gameplay_level = scene_path in LEVEL_CONFIG
+	var is_gameplay_level = current_scene_path in LEVEL_CONFIG
 	if debug_ui:
 		debug_ui.visible = is_gameplay_level
 	
@@ -150,6 +150,9 @@ func _initialize_for_current_level() -> void:
 	# Update debug UI
 	_update_debug_ui()
 	
+	var scene_path = ""
+	if get_tree() and get_tree().current_scene:
+		scene_path = get_tree().current_scene.scene_file_path
 	print("[GameManager] Initialized for level: %s. Radiation count: %d, Next level: %s" % [scene_path, total_radiation_count, next_level_path])
 	
 	# Show intro dialogue if configured
