@@ -28,6 +28,7 @@ normal_grass_texture = ExtResource("2_8vtec")
 normal_tree1_texture = ExtResource("3_bqqrv")
 normal_tree2_texture = ExtResource("4_rav60")
 normal_simple_grass_texture = ExtResource("5_bqqrv")
+detect_scatter_output = true
 radiation_tile_ids = Array[int]([1, 2])
 spawn_grass_on_clear = false
 grass_spawn_count = 6

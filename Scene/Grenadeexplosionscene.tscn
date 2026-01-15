@@ -129,10 +129,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.012081146)
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00012207031, 6.1035156e-05)
-emitting = false
 amount = 20
 lifetime = 0.7
-one_shot = true
 explosiveness = 1.0
 randomness = 1.0
 fixed_fps = 60
@@ -141,10 +139,8 @@ process_material = SubResource("ParticleProcessMaterial_jbsmd")
 draw_pass_1 = SubResource("CylinderMesh_bddrs")
 
 [node name="GPUParticles3D3" type="GPUParticles3D" parent="."]
-emitting = false
 amount = 12
 lifetime = 2.0
-one_shot = true
 explosiveness = 1.0
 randomness = 1.0
 fixed_fps = 60
@@ -154,7 +150,6 @@ draw_pass_1 = SubResource("SphereMesh_full2")
 [node name="GPUParticles3D2" type="GPUParticles3D" parent="."]
 emitting = false
 amount = 12
-one_shot = true
 explosiveness = 1.0
 randomness = 1.0
 fixed_fps = 60

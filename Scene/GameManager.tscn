@@ -23,10 +23,14 @@ layout_mode = 2
 [node name="Title" type="Label" parent="DebugUI/Panel/VBox"]
 layout_mode = 2
 text = "=== DEBUG ==="
-horizontal_alignment = 1[node name="TimeLabel" type="Label" parent="DebugUI/Panel/VBox"]
+horizontal_alignment = 1
+
+[node name="TimeLabel" type="Label" parent="DebugUI/Panel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Time: --:--"[node name="RadiationLabel" type="Label" parent="DebugUI/Panel/VBox"]
+text = "Time: --:--"
+
+[node name="RadiationLabel" type="Label" parent="DebugUI/Panel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Radiation: --"
@@ -34,7 +38,9 @@ text = "Radiation: --"
 [node name="HPLabel" type="Label" parent="DebugUI/Panel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "HP: --"[node name="StatusLabel" type="Label" parent="DebugUI/Panel/VBox"]
+text = "HP: --"
+
+[node name="StatusLabel" type="Label" parent="DebugUI/Panel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Status: Playing"

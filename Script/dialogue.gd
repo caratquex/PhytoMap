@@ -4,7 +4,7 @@ extends CanvasLayer
 # Node References
 # ---------------------------
 @onready var panel: Panel = $Panel
-@onready var label: RichTextLabel = $Panel/RichTextLabel
+@onready var label: RichTextLabel = $Panel/MarginContainer/RichTextLabel
 
 # ---------------------------
 # State

@@ -214,7 +214,11 @@ class FlowerProjectile extends RigidBody3D:
 		queue_free()
 	
 	func trigger_explosion(explosion_pos: Vector3) -> void:
-		# Check if player instance exists and is within explosion radius
+		# Spawn explosion VFX at the explosion position
+		if player_instance and player_instance.has_method("spawn_explosion_vfx"):
+			player_instance.spawn_explosion_vfx(explosion_pos)
+		
+		# Check if player instance exists for force application
 		if not player_instance:
 			return
 		
@@ -299,6 +303,17 @@ var radiation_damage_timer: float = 0.0  # Timer for radiation damage
 var grass_damage_timer: float = 0.0  # Timer for grass damage
 var is_in_radiation: bool = false  # Track if player is in radiation zone
 var is_on_normal_grass: bool = false  # Track if player is on normal grass in reversed levels
+var is_healing_in_radiation: bool = false  # Track if player is currently healing in radiation zone
+
+# ---------------------------
+# Healing VFX
+# ---------------------------
+var healing_vfx: GPUParticles3D = null  # Reference to healing particle effect
+
+# ---------------------------
+# Explosion VFX
+# ---------------------------
+var explosion_vfx_scene: PackedScene = null  # Grenade explosion visual effect
 
 # ---------------------------
 # Movement
@@ -444,6 +459,11 @@ func _ready() -> void:
 	if not sunflower_scene:
 		push_error("Failed to load Sunflower1.tscn!")
 	
+	# Load explosion VFX scene for grenades
+	explosion_vfx_scene = load("res://Scene/Grenadeexplosionscene.tscn")
+	if not explosion_vfx_scene:
+		push_error("Failed to load Grenadeexplosionscene.tscn!")
+	
 	# Initialize SpringArm3D for first-person camera mode
 	if not spring_arm:
 		spring_arm = get_node_or_null("SpringArm3D") as SpringArm3D
@@ -457,6 +477,11 @@ func _ready() -> void:
 	
 	# Create planting cursor UI
 	_create_plant_cursor()
+	
+	# Initialize healing VFX reference
+	healing_vfx = get_node_or_null("HealingVFX") as GPUParticles3D
+	if healing_vfx:
+		healing_vfx.emitting = false
 
 
 func hide_all_weapons() -> void:
@@ -554,6 +579,8 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("grenade jump") and current_weapon == WeaponType.GRENADE and can_act:
 		# Check if player is on floor - if yes, do grenade jump, if no, throw grenade
 		if is_on_floor():
+			# Spawn explosion VFX under the player
+			spawn_explosion_vfx(global_position)
 			# Apply 3x jump height upward velocity
 			velocity.y = jump_velocity * 3.0
 			if jump: jump.play()
@@ -803,6 +830,56 @@ func heal(amount: int) -> void:
 	current_hp = min(current_hp, max_hp)
 
 
+# ---------------------------
+# HEALING VFX
+# ---------------------------
+func _start_healing_vfx() -> void:
+	if healing_vfx and is_instance_valid(healing_vfx):
+		healing_vfx.emitting = true
+		print("[Player] Healing VFX started")
+
+
+func _stop_healing_vfx() -> void:
+	if healing_vfx and is_instance_valid(healing_vfx):
+		healing_vfx.emitting = false
+		print("[Player] Healing VFX stopped")
+
+
+# ---------------------------
+# EXPLOSION VFX
+# ---------------------------
+func spawn_explosion_vfx(spawn_position: Vector3) -> void:
+	if not explosion_vfx_scene:
+		push_warning("Explosion VFX scene not loaded!")
+		return
+	
+	var vfx_instance = explosion_vfx_scene.instantiate()
+	if not vfx_instance:
+		push_warning("Failed to instantiate explosion VFX!")
+		return
+	
+	# Add to scene tree
+	if get_tree() and get_tree().current_scene:
+		get_tree().current_scene.add_child(vfx_instance)
+		vfx_instance.global_position = spawn_position
+		
+		# Start all particle emitters in the VFX scene
+		for child in vfx_instance.get_children():
+			if child is GPUParticles3D:
+				child.emitting = true
+		
+		# Auto-delete after particles finish (2.5 seconds to account for longest lifetime)
+		var timer = Timer.new()
+		timer.wait_time = 2.5
+		timer.one_shot = true
+		timer.autostart = true
+		vfx_instance.add_child(timer)
+		timer.timeout.connect(func():
+			if vfx_instance and is_instance_valid(vfx_instance):
+				vfx_instance.queue_free()
+		)
+
+
 func die() -> void:
 	# Respawn after a short delay
 	respawn()
@@ -866,8 +943,20 @@ func _check_radiation_damage(delta: float) -> void:
 			else:
 				print("[Player] NORMAL: Taking damage in radiation zone")
 				take_hp_damage(radiation_damage)
+		
+		# Control healing VFX - only show when healing (reversed mode in radiation)
+		if reversed and not is_healing_in_radiation:
+			is_healing_in_radiation = true
+			_start_healing_vfx()
+		elif not reversed and is_healing_in_radiation:
+			is_healing_in_radiation = false
+			_stop_healing_vfx()
 	else:
 		radiation_damage_timer = 0.0
+		# Stop healing VFX when leaving radiation zone
+		if is_healing_in_radiation:
+			is_healing_in_radiation = false
+			_stop_healing_vfx()
 	
 	# Also check for grass damage in reversed mode
 	if reversed and not is_in_radiation:

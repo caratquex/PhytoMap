@@ -1095,7 +1095,7 @@ transform = Transform3D(5.41, 0, 0, 0, 3.6252315, -2.8907094, 0, 1.6904733, 6.19
 transform = Transform3D(5.41, 0, 0, 0, 3.640077, -2.8356328, 0, 1.6582649, 6.224532, -42.35975, 14.207535, 32.888226)
 
 [node name="Player" parent="." instance=ExtResource("25_vbow3")]
-transform = Transform3D(0.9999973, -0.0023038324, 0, 0.0023038324, 0.9999973, 0, 0, 0, 1, -14.633113, 49.330513, -33.52083)
+transform = Transform3D(0.9999973, -0.0023038324, 0, 0.0023038324, 0.9999973, 0, 0, 0, 1, -19.212576, 100.78211, 106.31194)
 
 [node name="Node3D6" parent="." instance=ExtResource("22_byp4e")]
 transform = Transform3D(1.315, 0, 0, 0, 1.3082705, 0.13286619, 0, -0.13286619, 1.3082705, -20.744293, 43.60518, -43.24989)
@@ -1391,12 +1391,13 @@ transform = Transform3D(0.019999571, 0, -0.00013089877, 0, 0.02, 0, 0.0001308987
 
 [node name="RadiationBox" type="Node" parent="."]
 
-[node name="RadiationZoneBox" parent="RadiationBox" instance=ExtResource("59_npuwj")]
-transform = Transform3D(3.19, 0, 0, 0, 3.884, 0, 0, 0, 3.884, 2.0969296, 28.071777, -15.930914)
+[node name="RadiationZoneBox" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
+transform = Transform3D(3.19, 0, 0, 0, 3.884, 0, 0, 0, 3.884, 2.0969296, 28.793705, -15.930914)
 visible = false
+gridmap = NodePath("../../GridMap")
 
 [node name="RadiationZoneBox6" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
-transform = Transform3D(1.365, 0, 0, 0, 0.752, 0, 0, 0, 1.365, -42.555893, 22.700031, 12.416285)
+transform = Transform3D(1.365, 0, 0, 0, 2.077, 0, 0, 0, 1.365, -42.555893, 25.265656, 12.416285)
 visible = false
 gridmap = NodePath("../../GridMap")
 
@@ -1412,6 +1413,12 @@ visible = false
 gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
 
+[node name="RadiationZoneBox11" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
+transform = Transform3D(0.8219735, -0.40219504, 0.40323526, 0.33257008, 0.91372883, 0.2334454, -0.46233827, -0.057781965, 0.884819, -8.603369, 8.285012, 62.08515)
+visible = false
+gridmap = NodePath("../../GridMap")
+spawn_grass_on_clear = true
+
 [node name="RadiationZoneBox8" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
 transform = Transform3D(0.6575788, -0.32175604, 0.3225882, 0.26605606, 0.7309831, 0.18675633, -0.36987063, -0.046225574, 0.70785517, -8.90341, 8.823849, 61.741013)
 visible = false
@@ -1419,13 +1426,13 @@ gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
 
 [node name="RadiationZoneBox9" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
-transform = Transform3D(1.4, 0, 0, 0, 1.2688309, -0.59166557, 0, 0.59166557, 1.2688309, -21.64638, 10.460384, 32.833035)
+transform = Transform3D(1.4, 0, 0, 0, 1.2688309, -0.59166557, 0, 0.59166557, 1.2688309, -21.64638, 11.794588, 33.57825)
 visible = false
 gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
 
 [node name="RadiationZoneBox10" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
-transform = Transform3D(1.6358856, 0.31026924, -0.69687617, 0, 1.6489495, 0.7341596, 0.7628259, -0.6653745, 1.4944558, -30.782198, 10.450092, 47.51134)
+transform = Transform3D(1.6358856, 0.31026924, -0.69687617, 0, 1.6489495, 0.7341596, 0.7628259, -0.6653745, 1.4944558, -30.782198, 11.782064, 47.09493)
 visible = false
 gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
@@ -1563,6 +1570,7 @@ final_choice_overlay_scene = ExtResource("65_rec2d")
 
 [node name="GameManager" parent="." instance=ExtResource("59_kdx7h")]
 time_limit = 240.0
+force_reversed_mechanics = true
 portal_spawn_position = Vector3(-33.5, 2.3, -87)
 
 [editable path="toxic barrel"]

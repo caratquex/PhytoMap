@@ -18,8 +18,8 @@ extends CanvasLayer
 # ---------------------------
 @onready var panel: PanelContainer = $Panel
 @onready var title_label: Label = $Panel/VBoxContainer/TitleLabel
-@onready var ending_a_button: Button = $Panel/VBoxContainer/EndingAButton
-@onready var ending_b_button: Button = $Panel/VBoxContainer/EndingBButton
+@onready var ending_a_button: Button = $Panel/VBoxContainer/HBoxContainer/EndingAButton
+@onready var ending_b_button: Button = $Panel/VBoxContainer/HBoxContainer/EndingBButton
 @onready var background: ColorRect = $Background
 
 

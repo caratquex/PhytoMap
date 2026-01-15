@@ -36,6 +36,8 @@ extends Area3D
 @export_group("SimpleGrassTextured Conversion")
 @export var convert_simple_grass_on_clear: bool = true  ## Convert SimpleGrassTextured textures when cleared
 @export var normal_simple_grass_texture: Texture2D  ## Normal grass texture for SimpleGrassTextured
+@export var detect_scatter_output: bool = true  ## Also detect MultiMeshInstance3D under ScatterOutput nodes
+@export var scatter_normal_material: Material  ## Material to apply to ScatterOutput MultiMesh when cleared
 
 # ---------------------------
 # GridMap Conversion Settings
@@ -333,6 +335,10 @@ func clear_zone() -> void:
 	# Convert SimpleGrassTextured textures
 	if convert_simple_grass_on_clear:
 		_convert_simple_grass_textured_in_zone()
+	
+	# Convert ScatterOutput MultiMesh textures
+	if detect_scatter_output:
+		_convert_scatter_output_in_zone()
 	
 	# Convert GridMap tiles to normal grass
 	if gridmap and radiation_tile_ids.size() > 0:
@@ -688,6 +694,108 @@ func _find_simple_grass_textured_recursive(node: Node, result: Array[MultiMeshIn
 	# Recursively check children
 	for child in node.get_children():
 		_find_simple_grass_textured_recursive(child, result)
+
+
+func _find_scatter_output_multimesh_recursive(node: Node, result: Array[MultiMeshInstance3D]) -> void:
+	# Check if this is a ScatterOutput container node
+	var is_scatter_output = node.name.to_lower().contains("scatteroutput") or node.name.to_lower().contains("scatter_output")
+	
+	if is_scatter_output:
+		# Find all MultiMeshInstance3D children of this ScatterOutput node
+		for child in node.get_children():
+			if child is MultiMeshInstance3D:
+				var multi_mesh = child as MultiMeshInstance3D
+				# Skip if it already has SimpleGrassTextured meta (handled separately)
+				if not multi_mesh.has_meta("SimpleGrassTextured"):
+					result.append(multi_mesh)
+					_debug_print("  Found ScatterOutput MultiMesh: %s" % multi_mesh.name)
+	else:
+		# Recursively check children
+		for child in node.get_children():
+			_find_scatter_output_multimesh_recursive(child, result)
+
+
+func _convert_scatter_output_in_zone() -> void:
+	# Find all ScatterOutput MultiMesh nodes in the scene
+	var scene_root = get_tree().current_scene
+	if not scene_root:
+		return
+	
+	var scatter_nodes: Array[MultiMeshInstance3D] = []
+	_find_scatter_output_multimesh_recursive(scene_root, scatter_nodes)
+	
+	_debug_print("Found %d ScatterOutput MultiMesh nodes in scene" % scatter_nodes.size())
+	
+	if scatter_nodes.size() == 0:
+		return
+	
+	# Get scaled bounds for detection
+	var bounds = _get_scaled_zone_bounds()
+	var converted_count = 0
+	
+	# Load normal grass texture as fallback if no scatter_normal_material is set
+	var fallback_texture = normal_simple_grass_texture
+	if not fallback_texture:
+		fallback_texture = load("res://Map Asset/grass_albedo.tres")
+	
+	for scatter_node in scatter_nodes:
+		var scatter_pos = scatter_node.global_position
+		var is_inside = _is_point_inside_zone(scatter_pos, bounds)
+		
+		if is_inside:
+			_convert_scatter_multimesh_material(scatter_node, fallback_texture)
+			converted_count += 1
+			_debug_print("Converted ScatterOutput MultiMesh '%s' at %s" % [scatter_node.name, scatter_pos])
+	
+	_debug_print("Converted %d ScatterOutput MultiMesh nodes" % converted_count)
+
+
+func _convert_scatter_multimesh_material(multi_mesh_instance: MultiMeshInstance3D, fallback_texture: Texture2D) -> void:
+	# If scatter_normal_material is set, use it as material_override
+	if scatter_normal_material:
+		multi_mesh_instance.material_override = scatter_normal_material
+		_debug_print("  Applied scatter_normal_material to %s" % multi_mesh_instance.name)
+		return
+	
+	# Otherwise, try to modify the existing material's texture
+	# First check if there's a material_override
+	if multi_mesh_instance.material_override:
+		var mat = multi_mesh_instance.material_override
+		if mat is StandardMaterial3D:
+			var mat_copy = mat.duplicate() as StandardMaterial3D
+			mat_copy.albedo_texture = fallback_texture
+			multi_mesh_instance.material_override = mat_copy
+			_debug_print("  Updated material_override texture on %s" % multi_mesh_instance.name)
+			return
+		elif mat is ShaderMaterial:
+			var mat_copy = mat.duplicate() as ShaderMaterial
+			_update_shader_material(mat_copy, fallback_texture)
+			multi_mesh_instance.material_override = mat_copy
+			_debug_print("  Updated ShaderMaterial override on %s" % multi_mesh_instance.name)
+			return
+	
+	# Check MultiMesh mesh materials
+	if multi_mesh_instance.multimesh and multi_mesh_instance.multimesh.mesh:
+		var mesh = multi_mesh_instance.multimesh.mesh
+		for i in range(mesh.get_surface_count()):
+			var material = mesh.surface_get_material(i)
+			if material:
+				if material is StandardMaterial3D:
+					var mat_copy = material.duplicate() as StandardMaterial3D
+					mat_copy.albedo_texture = fallback_texture
+					# For MultiMeshInstance3D, we need to set material_override since
+					# we can't directly override surface materials
+					multi_mesh_instance.material_override = mat_copy
+					_debug_print("  Created material_override from mesh material on %s" % multi_mesh_instance.name)
+					return
+				elif material is ShaderMaterial:
+					var mat_copy = material.duplicate() as ShaderMaterial
+					_update_shader_material(mat_copy, fallback_texture)
+					multi_mesh_instance.material_override = mat_copy
+					_debug_print("  Created ShaderMaterial override from mesh on %s" % multi_mesh_instance.name)
+					return
+	
+	_debug_print("  WARNING: Could not find material to modify on %s" % multi_mesh_instance.name)
 
 
 # ---------------------------

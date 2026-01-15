@@ -126,6 +126,9 @@ func _copy_settings_to_autoload() -> void:
 	instance.gridmap = gridmap
 	instance.dialogue_ui = dialogue_ui
 	instance.radiation_tile_ids = radiation_tile_ids.duplicate()
+	
+	# Trigger reinitialization on the autoload for this level
+	instance.call_deferred("_initialize_for_current_level")
 
 
 func _initialize_for_current_level() -> void:

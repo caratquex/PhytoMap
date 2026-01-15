@@ -32,13 +32,17 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 0
+offset_right = 1071.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/MarginContainer"]
+layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_qgi3a")
 text = "Dialogue text goes here..."
 fit_content = true
