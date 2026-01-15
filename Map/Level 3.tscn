@@ -1,4 +1,4 @@
-[gd_scene load_steps=119 format=4 uid="uid://5st2matn1qe3"]
+[gd_scene load_steps=120 format=4 uid="uid://5st2matn1qe3"]
 
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="1_fa38q"]
 [ext_resource type="PackedScene" uid="uid://p6nnonr03ork" path="res://Scene/directional_light_3d.tscn" id="2_630rr"]
@@ -65,6 +65,7 @@
 [ext_resource type="PackedScene" uid="uid://bxjmk3kcmk1da" path="res://Scene/RadiationHeart2.tscn" id="63_k35cw"]
 [ext_resource type="PackedScene" uid="uid://dh7m2ycqp5kxr" path="res://Scene/RadiationHeartZone.tscn" id="64_yugbn"]
 [ext_resource type="PackedScene" uid="uid://bv8qf2h6mnp4c" path="res://Scene/FinalChoiceOverlay.tscn" id="65_rec2d"]
+[ext_resource type="PackedScene" uid="uid://bwtdn0m42xiy7" path="res://Scene/BGM.tscn" id="66_l4k5s"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_l52ou"]
 load_path = "res://.godot/imported/toxic barrel_radiaoctive barrel.png-b83f0969d7c884d6bc927945f6eab3f2.s3tc.ctex"
@@ -1568,6 +1569,8 @@ transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, -18.771069, 92.2522,
 [node name="RadiationHeartZone" parent="Final Choice" instance=ExtResource("64_yugbn")]
 transform = Transform3D(0.64, 0, 0, 0, 0.64, 0, 0, 0, 0.64, -6.3170204, 93.61192, 98.92932)
 final_choice_overlay_scene = ExtResource("65_rec2d")
+
+[node name="AudioStreamPlayer" parent="." instance=ExtResource("66_l4k5s")]
 
 [editable path="toxic barrel"]
 [editable path="toxic barrel2"]

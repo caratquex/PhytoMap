@@ -413,7 +413,6 @@ transform = Transform3D(1.355, 0, 0, 0, 1.355, 0, 0, 0, 1.355, 23.087032, 2.6499
 transform = Transform3D(2.53772, 0, -2.6442769, 0, 3.6649997, 0, 2.6442769, 0, 2.53772, 19.76534, -5.0775156, -14.11599)
 
 [node name="AudioStreamPlayer" parent="." instance=ExtResource("22_ao60k")]
-autoplay = false
 
 [node name="Grass" type="Node3D" parent="."]
 

@@ -1,11 +1,13 @@
-[gd_scene load_steps=21 format=4 uid="uid://b5jc8ahp7hn07"]
+[gd_scene load_steps=23 format=4 uid="uid://b5jc8ahp7hn07"]
 
 [ext_resource type="PackedScene" uid="uid://bhe6uyygmjigi" path="res://Map Asset/Sunflower1.glb" id="1_eiou4"]
+[ext_resource type="Script" uid="uid://d0jt6ofjuurn0" path="res://Script/sunflower.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://b1fsp5cnfj1fn" path="res://Map Asset/Sunflower1_disk floret_texture.png" id="2_sjuj7"]
 [ext_resource type="Texture2D" uid="uid://begiu3hys55y0" path="res://Map Asset/Sunflower1_petal_texture2.png" id="3_r5yh2"]
 [ext_resource type="Texture2D" uid="uid://csc0ve26lag34" path="res://Map Asset/Sunflower1_Leaf_texture.png" id="4_rrrsj"]
 [ext_resource type="Texture2D" uid="uid://iyb2euqwf4jw" path="res://Map Asset/Sunflower1_petal1under_texture.png" id="5_n5y1a"]
 [ext_resource type="Shader" uid="uid://d12tejsfkk0k5" path="res://Shader/sunflowershadertres.res" id="6_ivcnj"]
+[ext_resource type="PackedScene" uid="uid://blbgheo0ayx1" path="res://Scene/sunflowershootinganimation.tscn" id="7_18p2n"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sjuj7"]
 load_path = "res://.godot/imported/Sunflower1_petalunder2_texture.png-bb85e427b21a98d8db7e6973a07fa7bf.s3tc.ctex"
@@ -302,7 +304,8 @@ anim_offset_max = 0.29999998
 
 [sub_resource type="QuadMesh" id="QuadMesh_x1rt3"]
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D2" type="Node3D"]
+script = ExtResource("1_script")
 
 [node name="Sunflower1" parent="." instance=ExtResource("1_eiou4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.024255753, 0, -0.0420115)
@@ -320,5 +323,9 @@ lifetime = 3.0
 randomness = 1.0
 process_material = SubResource("ParticleProcessMaterial_ravrc")
 draw_pass_1 = SubResource("QuadMesh_x1rt3")
+
+[node name="ShootingVFX" parent="." instance=ExtResource("7_18p2n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.23964, -0.9301928, 0.7542775)
+visible = false
 
 [editable path="Sunflower1"]

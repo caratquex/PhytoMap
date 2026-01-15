@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=4 uid="uid://j57p8ed70c7i"]
+[gd_scene load_steps=62 format=4 uid="uid://j57p8ed70c7i"]
 
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="1_ibaua"]
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="2_754fx"]
@@ -47,6 +47,7 @@
 [ext_resource type="PackedScene" uid="uid://qfkfvt6felnv" path="res://Scene/GameManager.tscn" id="44_ucx1a"]
 [ext_resource type="PackedScene" uid="uid://c5uoeewfgcleu" path="res://Scene/dialogue.tscn" id="45_8kt5o"]
 [ext_resource type="PackedScene" uid="uid://bweuh0jytwbxi" path="res://Scene/Pause menu.tscn" id="46_opm7f"]
+[ext_resource type="PackedScene" uid="uid://bwtdn0m42xiy7" path="res://Scene/BGM.tscn" id="48_msfil"]
 
 [sub_resource type="Animation" id="Animation_81gk7"]
 resource_name = "Moving Platform 2"
@@ -700,3 +701,5 @@ portal_spawn_position = Vector3(-33, 2.2, -87)
 
 [node name="Water" parent="." instance=ExtResource("2_754fx")]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -3.3974762, -2.193184, 2.9334235)
+
+[node name="AudioStreamPlayer" parent="." instance=ExtResource("48_msfil")]

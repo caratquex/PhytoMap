@@ -34,8 +34,8 @@ offset_right = -1.0
 offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
+size_flags_horizontal = 2
+size_flags_vertical = 6
 theme = SubResource("Theme_adi8s")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
@@ -65,6 +65,7 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.27789465, 0.2790289)
 theme_override_constants/separation = 8
+alignment = 1
 script = ExtResource("2_6a8u2")
 grenade_button = NodePath("GrenadeButton")
 gun_button = NodePath("GunButton")
@@ -73,6 +74,7 @@ bullet_bar = NodePath("Bullet Bar")
 grenade_bar = NodePath("Grenade Bar")
 
 [node name="Bullet Bar" type="TextureProgressBar" parent="NinePatchRect/HBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -104,6 +106,7 @@ texture_normal = ExtResource("9_3lbyp")
 texture_pressed = ExtResource("10_svnl3")
 
 [node name="Grenade Bar" type="TextureProgressBar" parent="NinePatchRect/HBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0

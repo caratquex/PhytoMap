@@ -53,6 +53,9 @@ class FlowerProjectile extends RigidBody3D:
 		if scene_to_use:
 			flower_instance = scene_to_use.instantiate()
 			add_child(flower_instance)
+			# Enable shooting VFX on the sunflower
+			if flower_instance.has_method("start_shooting"):
+				flower_instance.start_shooting(initial_velocity)
 		else:
 			push_error("Failed to load Sunflower1.tscn for projectile!")
 		
@@ -73,6 +76,20 @@ class FlowerProjectile extends RigidBody3D:
 		var current_distance = global_position.distance_to(last_position)
 		distance_traveled += current_distance
 		last_position = global_position
+		
+		# Orient VFX in direction of travel (fireball leads, particles follow)
+		if flower_instance and is_instance_valid(flower_instance) and linear_velocity.length() > 0.1:
+			var shooting_vfx = flower_instance.get_node_or_null("ShootingVFX")
+			if shooting_vfx:
+				# Calculate rotation to face velocity direction
+				var vel = linear_velocity
+				# Calculate pitch (rotation around X) and yaw (rotation around Y)
+				var horizontal_length = Vector2(vel.x, vel.z).length()
+				var pitch = atan2(-vel.y, horizontal_length)  # Negative because we rotate around X
+				var yaw = atan2(vel.x, vel.z)  # Rotation around Y to face horizontal direction
+				
+				# Apply rotation (yaw first, then pitch)
+				shooting_vfx.rotation = Vector3(pitch, yaw, 0)
 		
 		# Check max range
 		if distance_traveled > max_range:
@@ -169,6 +186,10 @@ class FlowerProjectile extends RigidBody3D:
 		
 		# Place the flower directly (it's already instantiated as a child)
 		if flower_instance and is_instance_valid(flower_instance):
+			# Stop shooting VFX when landing
+			if flower_instance.has_method("stop_shooting_vfx"):
+				flower_instance.stop_shooting_vfx()
+			
 			# Remove the flower from this RigidBody3D
 			remove_child(flower_instance)
 			

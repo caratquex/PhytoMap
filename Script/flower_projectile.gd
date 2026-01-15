@@ -22,6 +22,7 @@ var has_landed: bool = false
 # Node References
 # ---------------------------
 @onready var mesh_instance: MeshInstance3D = $MeshInstance3D
+@onready var shooting_vfx: Node3D = $ShootingVFX
 
 
 func _ready() -> void:
@@ -39,6 +40,9 @@ func _ready() -> void:
 	
 	# Configure physics
 	gravity_scale = 1.0  # Use default gravity
+	
+	# Enable shooting VFX on spawn
+	_start_shooting_vfx()
 
 
 func _physics_process(delta: float) -> void:
@@ -49,6 +53,15 @@ func _physics_process(delta: float) -> void:
 	var current_distance = global_position.distance_to(last_position)
 	distance_traveled += current_distance
 	last_position = global_position
+	
+	# Orient VFX in direction of travel
+	if shooting_vfx and linear_velocity.length() > 0.1:
+		var velocity_dir = linear_velocity.normalized()
+		# Use a safe up vector that's not parallel to velocity
+		var up_vector = Vector3.UP
+		if abs(velocity_dir.dot(Vector3.UP)) > 0.99:
+			up_vector = Vector3.RIGHT
+		shooting_vfx.look_at(global_position + velocity_dir, up_vector)
 	
 	# Check max range
 	if distance_traveled > max_range:
@@ -103,6 +116,9 @@ func land_on_floor(impact_pos: Vector3) -> void:
 	# Stop physics
 	freeze = true
 	linear_velocity = Vector3.ZERO
+	
+	# Stop VFX particles
+	_stop_shooting_vfx()
 	
 	# Raycast down to find exact floor
 	var space_state = get_world_3d().direct_space_state
@@ -181,6 +197,42 @@ func _setup_flower_auto_delete(flower: Node3D) -> void:
 		if flower and is_instance_valid(flower):
 			flower.queue_free()
 	)
+
+
+func _start_shooting_vfx() -> void:
+	if not shooting_vfx:
+		return
+	
+	# Make VFX visible
+	shooting_vfx.visible = true
+	
+	# Start GPU particles emitting
+	var particles = shooting_vfx.get_node_or_null("GPUParticles3D")
+	if particles and particles is GPUParticles3D:
+		particles.emitting = true
+	
+	# Show the fireball mesh
+	var fireball = shooting_vfx.get_node_or_null("Fireballmeshobj")
+	if fireball:
+		fireball.visible = true
+
+
+func _stop_shooting_vfx() -> void:
+	if not shooting_vfx:
+		return
+	
+	# Hide entire VFX node
+	shooting_vfx.visible = false
+	
+	# Stop GPU particles emitting
+	var particles = shooting_vfx.get_node_or_null("GPUParticles3D")
+	if particles and particles is GPUParticles3D:
+		particles.emitting = false
+	
+	# Hide the fireball mesh
+	var fireball = shooting_vfx.get_node_or_null("Fireballmeshobj")
+	if fireball:
+		fireball.visible = false
 
 
 func destroy_projectile() -> void:

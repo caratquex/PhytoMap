@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://c5uoeewfgcleu"]
+[gd_scene load_steps=4 format=3 uid="uid://c5uoeewfgcleu"]
 
 [ext_resource type="Script" uid="uid://b75l2lourrpfm" path="res://Script/dialogue.gd" id="1_dialogue"]
+[ext_resource type="FontFile" uid="uid://csecnmwssvfm4" path="res://GUI/Pixelify_Sans (1)/static/PixelifySans-Regular.ttf" id="2_qgi3a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
 content_margin_left = 20.0
@@ -38,5 +39,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("2_qgi3a")
 text = "Dialogue text goes here..."
 fit_content = true

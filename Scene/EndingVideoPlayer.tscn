@@ -7,7 +7,6 @@
 process_mode = 3
 layer = 101
 script = ExtResource("1_ending_video")
-allow_skip = true
 
 [node name="Background" type="ColorRect" parent="."]
 anchors_preset = 15
