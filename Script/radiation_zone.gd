@@ -40,6 +40,14 @@ extends Area3D
 @export var scatter_normal_material: Material  ## Material to apply to ScatterOutput MultiMesh when cleared
 
 # ---------------------------
+# Toxic Barrel Settings
+# ---------------------------
+@export_group("Toxic Barrel")
+@export var explode_barrels_on_clear: bool = true  ## Explode ToxicBarrel instances when zone is cleared
+@export var barrel_explosion_scene: PackedScene  ## Explosion effect scene (defaults to Grenadeexplosionscene.tscn)
+@export var barrel_explosion_delay: float = 0.1  ## Delay between each barrel explosion for dramatic effect
+
+# ---------------------------
 # GridMap Conversion Settings
 # ---------------------------
 @export_group("GridMap Conversion")
@@ -339,6 +347,10 @@ func clear_zone() -> void:
 	# Convert ScatterOutput MultiMesh textures
 	if detect_scatter_output:
 		_convert_scatter_output_in_zone()
+	
+	# Explode toxic barrels in the zone
+	if explode_barrels_on_clear:
+		_explode_toxic_barrels_in_zone()
 	
 	# Convert GridMap tiles to normal grass
 	if gridmap and radiation_tile_ids.size() > 0:
@@ -796,6 +808,114 @@ func _convert_scatter_multimesh_material(multi_mesh_instance: MultiMeshInstance3
 					return
 	
 	_debug_print("  WARNING: Could not find material to modify on %s" % multi_mesh_instance.name)
+
+
+# ---------------------------
+# Toxic Barrel Explosion
+# ---------------------------
+
+func _explode_toxic_barrels_in_zone() -> void:
+	# Find all ToxicBarrel instances in the scene
+	var scene_root = get_tree().current_scene
+	if not scene_root:
+		return
+	
+	var toxic_barrels: Array[Node3D] = []
+	_find_toxic_barrels_recursive(scene_root, toxic_barrels)
+	
+	_debug_print("Found %d ToxicBarrel instances in scene" % toxic_barrels.size())
+	
+	if toxic_barrels.size() == 0:
+		return
+	
+	# Get scaled bounds for detection
+	var bounds = _get_scaled_zone_bounds()
+	var barrels_to_explode: Array[Node3D] = []
+	
+	for barrel in toxic_barrels:
+		var barrel_pos = barrel.global_position
+		var is_inside = _is_point_inside_zone(barrel_pos, bounds)
+		
+		if is_inside:
+			barrels_to_explode.append(barrel)
+			_debug_print("ToxicBarrel '%s' at %s is inside zone" % [barrel.name, barrel_pos])
+	
+	_debug_print("Exploding %d ToxicBarrel instances" % barrels_to_explode.size())
+	
+	# Explode each barrel with a slight delay for dramatic effect
+	for i in range(barrels_to_explode.size()):
+		var barrel = barrels_to_explode[i]
+		var delay = i * barrel_explosion_delay
+		_schedule_barrel_explosion(barrel, delay)
+
+
+func _find_toxic_barrels_recursive(node: Node, result: Array[Node3D]) -> void:
+	# Check if this node is a ToxicBarrel
+	if node is Node3D and _is_toxic_barrel(node as Node3D):
+		result.append(node as Node3D)
+		return  # Don't check children
+	
+	# Recursively check children
+	for child in node.get_children():
+		_find_toxic_barrels_recursive(child, result)
+
+
+func _is_toxic_barrel(node: Node3D) -> bool:
+	# Check by scene filename
+	var scene_path = node.scene_file_path.to_lower()
+	if "toxicbarrel" in scene_path or "toxic_barrel" in scene_path:
+		return true
+	
+	# Check by node name
+	var node_name = node.name.to_lower()
+	if "toxicbarrel" in node_name or "toxic_barrel" in node_name:
+		return true
+	
+	return false
+
+
+func _schedule_barrel_explosion(barrel: Node3D, delay: float) -> void:
+	if delay > 0:
+		var timer = get_tree().create_timer(delay)
+		timer.timeout.connect(func(): _explode_barrel(barrel))
+	else:
+		_explode_barrel(barrel)
+
+
+func _explode_barrel(barrel: Node3D) -> void:
+	if not is_instance_valid(barrel):
+		return
+	
+	var barrel_pos = barrel.global_position
+	var scene_root = get_tree().current_scene
+	
+	# Load explosion scene
+	var explosion_scene = barrel_explosion_scene
+	if not explosion_scene:
+		explosion_scene = load("res://Scene/Grenadeexplosionscene.tscn")
+	
+	if explosion_scene and scene_root:
+		# Spawn explosion effect at barrel position
+		var explosion = explosion_scene.instantiate()
+		scene_root.add_child(explosion)
+		explosion.global_position = barrel_pos
+		
+		# Start all GPUParticles3D in the explosion
+		for child in explosion.get_children():
+			if child is GPUParticles3D:
+				child.emitting = true
+		
+		# Auto-delete explosion after particles finish (2 seconds should be enough)
+		var cleanup_timer = get_tree().create_timer(3.0)
+		cleanup_timer.timeout.connect(func(): 
+			if is_instance_valid(explosion):
+				explosion.queue_free()
+		)
+		
+		_debug_print("Exploded ToxicBarrel at %s" % barrel_pos)
+	
+	# Remove the barrel
+	barrel.queue_free()
 
 
 # ---------------------------
