@@ -824,61 +824,54 @@ func _check_radiation_damage(delta: float) -> void:
 				is_in_radiation = true
 				break
 	
+	# Check for reversed mechanics
+	var reversed = GameManager.instance != null and GameManager.instance.is_reversed_mechanics_level()
+	
 	# Apply radiation damage/heal on interval
 	if is_in_radiation:
 		radiation_damage_timer += delta
 		if radiation_damage_timer >= radiation_damage_interval:
 			radiation_damage_timer = 0.0
 			
-			# Check for reversed mechanics
-			if GameManager.instance and GameManager.instance.is_reversed_mechanics_level():
+			if reversed:
+				print("[Player] REVERSED: Healing in radiation zone")
 				heal(radiation_damage)
 			else:
+				print("[Player] NORMAL: Taking damage in radiation zone")
 				take_hp_damage(radiation_damage)
 	else:
 		radiation_damage_timer = 0.0
+	
+	# Also check for grass damage in reversed mode
+	if reversed and not is_in_radiation:
+		_apply_grass_damage_reversed(delta)
+	elif not reversed:
+		grass_damage_timer = 0.0
 
 
 func _check_grass_damage(delta: float) -> void:
-	if not GameManager.instance or not GameManager.instance.is_reversed_mechanics_level():
-		is_on_normal_grass = false
-		grass_damage_timer = 0.0
-		return
-	
+	# This is now called by _apply_grass_damage_reversed() instead
+	pass
+
+
+## Apply damage when on normal grass in reversed mechanics mode
+func _apply_grass_damage_reversed(delta: float) -> void:
 	# Only damage if on floor
 	if not is_on_floor():
 		is_on_normal_grass = false
 		grass_damage_timer = 0.0
 		return
-		
-	# Raycast down to find what we're standing on
-	var space_state = get_world_3d().direct_space_state
-	var query = PhysicsRayQueryParameters3D.create(
-		global_position + Vector3.UP * 0.1,
-		global_position + Vector3.DOWN * 0.5
-	)
-	query.collision_mask = ground_collision_mask
-	query.exclude = [get_rid()]
 	
-	var result = space_state.intersect_ray(query)
+	# If we're on the floor and NOT in a radiation zone, we're on normal grass
+	# (The is_in_radiation check is done before calling this function)
+	is_on_normal_grass = true
 	
-	is_on_normal_grass = false
-	if not result.is_empty():
-		var collider = result.collider
-		var pos = result.position
-		
-		# Check if it's NOT a radiation location (meaning it's normal grass/ground)
-		if not GameManager.instance.is_radiation_location(pos, collider):
-			is_on_normal_grass = true
-			
 	# Apply damage on interval
-	if is_on_normal_grass:
-		grass_damage_timer += delta
-		if grass_damage_timer >= grass_damage_interval:
-			grass_damage_timer = 0.0
-			take_hp_damage(grass_damage)
-	else:
+	grass_damage_timer += delta
+	if grass_damage_timer >= grass_damage_interval:
 		grass_damage_timer = 0.0
+		print("[Player] REVERSED: Taking damage on normal grass")
+		take_hp_damage(grass_damage)
 
 
 func get_current_hp() -> int:
@@ -1037,12 +1030,8 @@ func _physics_process(delta: float) -> void:
 
 	prev_on_floor = on_floor
 	
-	# -------- RADIATION ZONE DAMAGE --------
+	# -------- RADIATION ZONE DAMAGE / REVERSED MECHANICS --------
 	_check_radiation_damage(delta)
-	
-	# -------- NORMAL GRASS DAMAGE (Reversed Level) --------
-	if GameManager.instance and GameManager.instance.is_reversed_mechanics_level():
-		_check_grass_damage(delta)
 	
 	# -------- VOID DEATH CHECK --------
 	if global_position.y < void_death_y:

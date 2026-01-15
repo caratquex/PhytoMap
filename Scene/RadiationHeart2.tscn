@@ -1,14 +1,21 @@
-[gd_scene load_steps=12 format=4 uid="uid://bnyn27gwead4w"]
+[gd_scene load_steps=14 format=4 uid="uid://bxjmk3kcmk1da"]
 
-[ext_resource type="PackedScene" uid="uid://ej26sw8f5swk" path="res://Map Asset/RadiationHeart 1.glb" id="1_t5u3n"]
-[ext_resource type="Texture2D" uid="uid://b741twrhamgv3" path="res://addons/proton_scatter/demos/assets/metal_texture.png" id="2_ocfan"]
+[ext_resource type="PackedScene" uid="uid://ej26sw8f5swk" path="res://Map Asset/RadiationHeart 1.glb" id="1_8755d"]
+[ext_resource type="Texture2D" uid="uid://b741twrhamgv3" path="res://addons/proton_scatter/demos/assets/metal_texture.png" id="2_0p8ji"]
+
+[sub_resource type="Gradient" id="Gradient_8755d"]
+offsets = PackedFloat32Array(0.31658292, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0p8ji"]
+gradient = SubResource("Gradient_8755d")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t5u3n"]
 resource_name = "RadaitionHeart"
 cull_mode = 2
-albedo_color = Color(0.582621, 0.6221515, 0.48814154, 1)
-albedo_texture = ExtResource("2_ocfan")
-roughness_texture = ExtResource("2_ocfan")
+albedo_color = Color(1, 0, 0, 1)
+albedo_texture = SubResource("GradientTexture1D_0p8ji")
+roughness_texture = ExtResource("2_0p8ji")
+emission_enabled = true
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ocfan"]
 _surfaces = [{
@@ -53,7 +60,10 @@ metallic = 0.5
 emission_enabled = true
 emission = Color(0.9659689, 0.81379974, 0.50147384, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_3j0gd"]
+[sub_resource type="TorusMesh" id="TorusMesh_8755d"]
+inner_radius = 0.9
+rings = 12
+ring_segments = 8
 
 [sub_resource type="Animation" id="Animation_ocfan"]
 resource_name = "Heart Ball"
@@ -138,7 +148,7 @@ _data = {
 [node name="Node3D" type="Node3D"]
 transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 0, 0)
 
-[node name="RadiationHeart 1" parent="." instance=ExtResource("1_t5u3n")]
+[node name="RadiationHeart 1" parent="." instance=ExtResource("1_8755d")]
 
 [node name="RadiationHeart" parent="RadiationHeart 1" index="0"]
 mesh = SubResource("ArrayMesh_3j0gd")
@@ -149,9 +159,9 @@ mesh = SubResource("ArrayMesh_3j0gd")
 shape = SubResource("ConcavePolygonShape3D_ocfan")
 
 [node name="Ball" type="MeshInstance3D" parent="RadiationHeart 1"]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 2.0881264, 0)
+transform = Transform3D(0.38497326, -0.004535569, 0, 0.004535569, 0.38497326, 0, 0, 0, 0.38499996, 0, 2.0881264, 0)
 material_override = SubResource("StandardMaterial3D_ocfan")
-mesh = SubResource("SphereMesh_3j0gd")
+mesh = SubResource("TorusMesh_8755d")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

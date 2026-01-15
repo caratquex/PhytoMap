@@ -11,6 +11,8 @@ static var instance: Node
 @export var time_limit: float = 120.0
 @export var gridmap: GridMap
 @export var radiation_tile_ids: Array[int] = []  # IDs for GrassRadiant2 and GrassRadiant3
+@export_group("Reversed Mechanics")
+@export var force_reversed_mechanics: bool = false  ## Override to force reversed HP mechanics for this level
 
 # ---------------------------
 # Dialogue System
@@ -212,25 +214,34 @@ func _start_gameplay() -> void:
 func _apply_level_config() -> void:
 	# Check if tree is available
 	if not is_inside_tree() or not get_tree():
+		print("[GameManager] _apply_level_config: Tree not ready")
 		return
 	
 	# Get current scene path
 	var scene_root = get_tree().current_scene
 	if not scene_root:
+		print("[GameManager] _apply_level_config: No scene root")
 		return
 	
 	var scene_path = scene_root.scene_file_path
-	print("[GameManager] Applying config for scene: %s" % scene_path)
+	print("[GameManager] Applying config for scene: '%s'" % scene_path)
+	print("[GameManager] Available configs: %s" % str(LEVEL_CONFIG.keys()))
 	
 	# Look up configuration for this level
 	if scene_path in LEVEL_CONFIG:
 		var config = LEVEL_CONFIG[scene_path]
 		next_level_path = config.get("next_level", "")
 		reversed_mechanics = config.get("reversed_mechanics", false)
-		print("[GameManager] Level config applied - Next: %s" % [next_level_path])
-		print("[GameManager] Reversed mechanics: %s" % [reversed_mechanics])
+		print("[GameManager] Level config applied - Next: %s" % next_level_path)
+		print("[GameManager] Reversed mechanics from config: %s" % reversed_mechanics)
 	else:
-		print("[GameManager] No config found for scene: %s (using defaults)" % scene_path)
+		print("[GameManager] No config found for scene: '%s' (using defaults)" % scene_path)
+	
+	# Check inspector override
+	if force_reversed_mechanics:
+		print("[GameManager] force_reversed_mechanics is ON (inspector override)")
+	
+	print("[GameManager] Final is_reversed_mechanics_level(): %s" % is_reversed_mechanics_level())
 
 
 func _count_radiation_targets() -> void:
@@ -353,6 +364,9 @@ func is_radiation_location(position: Vector3, collider: Node = null) -> bool:
 
 ## Check if the current level has reversed HP mechanics
 func is_reversed_mechanics_level() -> bool:
+	# Inspector override takes priority
+	if force_reversed_mechanics:
+		return true
 	return reversed_mechanics
 
 

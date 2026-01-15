@@ -89,7 +89,18 @@ func _ready() -> void:
 	# Emit initial count
 	sunflower_count_changed.emit(current_sunflowers, required_sunflowers)
 	
-	_debug_print("RadiationZone initialized at %s. Required sunflowers: %d, Zone radius: %.1f" % [global_position, required_sunflowers, zone_radius])
+	# Get and display scaled bounds for debugging
+	var bounds = _get_scaled_zone_bounds()
+	var node_scale = global_transform.basis.get_scale()
+	
+	_debug_print("RadiationZone initialized at %s" % global_position)
+	_debug_print("  Node scale: %s" % node_scale)
+	if bounds.is_box:
+		_debug_print("  Box shape - Scaled half size: %s" % bounds.half_size)
+		_debug_print("  Effective box dimensions: %s" % (bounds.half_size * 2))
+	else:
+		_debug_print("  Sphere shape - Scaled radius: %.2f" % bounds.radius)
+	_debug_print("  Required sunflowers: %d" % required_sunflowers)
 
 
 func _process(delta: float) -> void:
@@ -106,6 +117,60 @@ func _process(delta: float) -> void:
 func _debug_print(message: String) -> void:
 	if debug_enabled:
 		print("[RadiationZone] ", message)
+
+
+## Get the zone bounds accounting for node scale
+## Returns a Dictionary with: is_box (bool), half_size (Vector3), radius (float)
+func _get_scaled_zone_bounds() -> Dictionary:
+	var result = {
+		"is_box": false,
+		"half_size": Vector3.ZERO,
+		"radius": zone_radius
+	}
+	
+	# Get the node's global scale
+	var node_scale = global_transform.basis.get_scale()
+	
+	if collision_shape and collision_shape.shape:
+		if collision_shape.shape is BoxShape3D:
+			result.is_box = true
+			var box_size = (collision_shape.shape as BoxShape3D).size
+			# Apply scale to box size
+			result.half_size = Vector3(
+				box_size.x * 0.5 * node_scale.x,
+				box_size.y * 0.5 * node_scale.y,
+				box_size.z * 0.5 * node_scale.z
+			)
+		elif collision_shape.shape is SphereShape3D:
+			var sphere_radius = (collision_shape.shape as SphereShape3D).radius
+			# For sphere, use the largest scale component
+			result.radius = sphere_radius * max(node_scale.x, max(node_scale.y, node_scale.z))
+	else:
+		# Fallback to zone_radius with scale
+		result.radius = zone_radius * max(node_scale.x, max(node_scale.y, node_scale.z))
+	
+	return result
+
+
+## Check if a world-space point is inside the zone bounds
+func _is_point_inside_zone(world_pos: Vector3, bounds: Dictionary = {}) -> bool:
+	if bounds.is_empty():
+		bounds = _get_scaled_zone_bounds()
+	
+	var zone_pos = global_position
+	
+	if bounds.is_box:
+		# Box detection: check if point is within scaled box bounds
+		var diff = world_pos - zone_pos
+		return (
+			abs(diff.x) <= bounds.half_size.x and
+			abs(diff.y) <= bounds.half_size.y and
+			abs(diff.z) <= bounds.half_size.z
+		)
+	else:
+		# Sphere detection: use distance check with scaled radius
+		var distance = world_pos.distance_to(zone_pos)
+		return distance <= bounds.radius
 
 
 func _update_light_settings() -> void:
@@ -126,11 +191,11 @@ func _scan_for_sunflowers() -> void:
 	var found_sunflowers: Array[Node3D] = []
 	_find_sunflowers_recursive(scene_root, found_sunflowers)
 	
-	# Determine zone shape for detection
-	var is_box_shape = collision_shape and collision_shape.shape is BoxShape3D
-	var box_size: Vector3 = Vector3.ZERO
-	if is_box_shape:
-		box_size = (collision_shape.shape as BoxShape3D).size
+	# Get the scaled bounds for detection
+	var bounds = _get_scaled_zone_bounds()
+	var is_box_shape = bounds.is_box
+	var box_half_size = bounds.half_size
+	var effective_radius = bounds.radius
 	
 	# Check which sunflowers are within the zone bounds
 	var sunflowers_in_zone: Array[Node3D] = []
@@ -141,18 +206,18 @@ func _scan_for_sunflowers() -> void:
 		var sunflower_pos = sunflower.global_position
 		
 		if is_box_shape:
-			# Box detection: check if point is within box bounds
-			var local_pos = to_local(sunflower_pos)
-			var half_size = box_size * 0.5
+			# Box detection: check if point is within scaled box bounds
+			# Use world-space distance comparison to account for scale
+			var diff = sunflower_pos - zone_pos
 			is_inside = (
-				abs(local_pos.x) <= half_size.x and
-				abs(local_pos.y) <= half_size.y and
-				abs(local_pos.z) <= half_size.z
+				abs(diff.x) <= box_half_size.x and
+				abs(diff.y) <= box_half_size.y and
+				abs(diff.z) <= box_half_size.z
 			)
 		else:
-			# Sphere detection: use distance check
+			# Sphere detection: use distance check with scaled radius
 			var distance = sunflower_pos.distance_to(zone_pos)
-			is_inside = distance <= zone_radius
+			is_inside = distance <= effective_radius
 		
 		if is_inside:
 			sunflowers_in_zone.append(sunflower)
@@ -313,16 +378,19 @@ func _convert_radiant_grass_in_zone() -> void:
 	
 	_debug_print("Found %d RadiantGrass blocks in scene" % radiant_grass_blocks.size())
 	
-	# Convert blocks within zone radius
+	# Get scaled bounds for detection
+	var bounds = _get_scaled_zone_bounds()
 	var zone_pos = global_position
 	var converted_count = 0
 	
 	for grass_block in radiant_grass_blocks:
-		var distance = grass_block.global_position.distance_to(zone_pos)
-		if distance <= zone_radius:
+		var grass_pos = grass_block.global_position
+		var is_inside = _is_point_inside_zone(grass_pos, bounds)
+		
+		if is_inside:
 			_convert_single_grass_block(grass_block, grass_texture)
 			converted_count += 1
-			_debug_print("Converted RadiantGrass '%s' at distance %.2f" % [grass_block.name, distance])
+			_debug_print("Converted RadiantGrass '%s' at %s" % [grass_block.name, grass_pos])
 	
 	_debug_print("Converted %d RadiantGrass blocks to normal grass" % converted_count)
 
@@ -448,33 +516,13 @@ func _convert_radiant_trees_in_zone() -> void:
 	
 	_debug_print("Found %d RadiantTree blocks in scene" % radiant_trees.size())
 	
-	# Determine zone shape for detection
-	var is_box_shape = collision_shape and collision_shape.shape is BoxShape3D
-	var box_size: Vector3 = Vector3.ZERO
-	if is_box_shape:
-		box_size = (collision_shape.shape as BoxShape3D).size
-	
-	# Convert trees within zone bounds
-	var zone_pos = global_position
+	# Get scaled bounds for detection
+	var bounds = _get_scaled_zone_bounds()
 	var converted_count = 0
 	
 	for tree in radiant_trees:
 		var tree_pos = tree.global_position
-		var is_inside: bool = false
-		
-		if is_box_shape:
-			# Box detection: check if point is within box bounds
-			var local_pos = to_local(tree_pos)
-			var half_size = box_size * 0.5
-			is_inside = (
-				abs(local_pos.x) <= half_size.x and
-				abs(local_pos.y) <= half_size.y and
-				abs(local_pos.z) <= half_size.z
-			)
-		else:
-			# Sphere detection: use distance check
-			var distance = tree_pos.distance_to(zone_pos)
-			is_inside = distance <= zone_radius
+		var is_inside = _is_point_inside_zone(tree_pos, bounds)
 		
 		if is_inside:
 			# Determine which texture to use based on tree type
@@ -612,33 +660,13 @@ func _convert_simple_grass_textured_in_zone() -> void:
 	
 	_debug_print("Found %d SimpleGrassTextured nodes in scene" % simple_grass_nodes.size())
 	
-	# Determine zone shape for detection
-	var is_box_shape = collision_shape and collision_shape.shape is BoxShape3D
-	var box_size: Vector3 = Vector3.ZERO
-	if is_box_shape:
-		box_size = (collision_shape.shape as BoxShape3D).size
-	
-	# Convert SimpleGrassTextured nodes within zone bounds
-	var zone_pos = global_position
+	# Get scaled bounds for detection
+	var bounds = _get_scaled_zone_bounds()
 	var converted_count = 0
 	
 	for grass_node in simple_grass_nodes:
 		var grass_pos = grass_node.global_position
-		var is_inside: bool = false
-		
-		if is_box_shape:
-			# Box detection: check if point is within box bounds
-			var local_pos = to_local(grass_pos)
-			var half_size = box_size * 0.5
-			is_inside = (
-				abs(local_pos.x) <= half_size.x and
-				abs(local_pos.y) <= half_size.y and
-				abs(local_pos.z) <= half_size.z
-			)
-		else:
-			# Sphere detection: use distance check
-			var distance = grass_pos.distance_to(zone_pos)
-			is_inside = distance <= zone_radius
+		var is_inside = _is_point_inside_zone(grass_pos, bounds)
 		
 		if is_inside:
 			# Change the texture_albedo property (the setter will handle the material update)
@@ -694,11 +722,8 @@ func _convert_gridmap_tiles_in_zone() -> void:
 	var zone_pos = global_position
 	var converted_count = 0
 	
-	# Determine if we're using a box or sphere shape
-	var is_box_shape = collision_shape and collision_shape.shape is BoxShape3D
-	var box_size: Vector3 = Vector3.ZERO
-	if is_box_shape:
-		box_size = (collision_shape.shape as BoxShape3D).size
+	# Get scaled bounds for detection
+	var bounds = _get_scaled_zone_bounds()
 	
 	# Process each cell
 	var radiation_tiles_found = 0
@@ -743,23 +768,10 @@ func _convert_gridmap_tiles_in_zone() -> void:
 				# Test mode: convert all radiation tiles
 				is_inside = true
 				_debug_print("  IGNORE_ZONE_BOUNDS enabled - converting regardless of position")
-			elif is_box_shape:
-				# For box: check if point is within box bounds
-				var local_to_zone = to_local(world_pos)
-				var half_size = box_size * 0.5
-				is_inside = (
-					abs(local_to_zone.x) <= half_size.x and
-					abs(local_to_zone.y) <= half_size.y and
-					abs(local_to_zone.z) <= half_size.z
-				)
-				if is_inside:
-					_debug_print("  Cell %s at %s is INSIDE box (local: %s)" % [cell_coords, world_pos, local_to_zone])
 			else:
-				# For sphere: check distance
-				var distance = world_pos.distance_to(zone_pos)
-				is_inside = distance <= zone_radius
+				is_inside = _is_point_inside_zone(world_pos, bounds)
 				if is_inside:
-					_debug_print("  Cell %s at %s is INSIDE sphere (distance: %.2f)" % [cell_coords, world_pos, distance])
+					_debug_print("  Cell %s at %s is INSIDE zone" % [cell_coords, world_pos])
 			
 			if is_inside:
 				# Get the cell's orientation to preserve it
@@ -770,13 +782,7 @@ func _convert_gridmap_tiles_in_zone() -> void:
 				converted_count += 1
 				_debug_print("✓ Converted GridMap tile at %s from ID %d to %d" % [cell_coords, tile_item, normal_grass_tile_id])
 			else:
-				# Debug: show why it wasn't converted
-				if is_box_shape:
-					var local_to_zone = to_local(world_pos)
-					_debug_print("✗ Radiation tile at %s is OUTSIDE box (local: %s, box size: %s)" % [cell_coords, local_to_zone, box_size])
-				else:
-					var distance = world_pos.distance_to(zone_pos)
-					_debug_print("✗ Radiation tile at %s is OUTSIDE sphere (distance: %.2f > %.2f)" % [cell_coords, distance, zone_radius])
+				_debug_print("✗ Radiation tile at %s is OUTSIDE zone" % cell_coords)
 	
 	_debug_print("=== GRIDMAP CONVERSION SUMMARY ===")
 	_debug_print("Total radiation tiles found: %d" % radiation_tiles_found)
@@ -819,14 +825,10 @@ func _spawn_grass_in_zone() -> void:
 	_debug_print("=== SPAWNING GRASS IN ZONE ===")
 	
 	var zone_pos = global_position
-	var spawn_radius = zone_radius * grass_spawn_radius
 	var spawned_count = 0
 	
-	# Determine if we're using a box or sphere shape
-	var is_box_shape = collision_shape and collision_shape.shape is BoxShape3D
-	var box_size: Vector3 = Vector3.ZERO
-	if is_box_shape:
-		box_size = (collision_shape.shape as BoxShape3D).size
+	# Get scaled bounds for spawning
+	var bounds = _get_scaled_zone_bounds()
 	
 	# Get space state for raycasting
 	var space_state = get_world_3d().direct_space_state
@@ -836,16 +838,17 @@ func _spawn_grass_in_zone() -> void:
 		# Generate random position within spawn area
 		var random_pos: Vector3
 		
-		if is_box_shape:
-			# For box: random position within box bounds (using spawn_radius multiplier)
-			var half_size = box_size * 0.5 * grass_spawn_radius
+		if bounds.is_box:
+			# For box: random position within scaled box bounds (using spawn_radius multiplier)
+			var spawn_half_size = bounds.half_size * grass_spawn_radius
 			random_pos = zone_pos + Vector3(
-				randf_range(-half_size.x, half_size.x),
+				randf_range(-spawn_half_size.x, spawn_half_size.x),
 				0.0,  # Will be adjusted by raycast
-				randf_range(-half_size.z, half_size.z)
+				randf_range(-spawn_half_size.z, spawn_half_size.z)
 			)
 		else:
-			# For sphere: random position within circle
+			# For sphere: random position within scaled circle
+			var spawn_radius = bounds.radius * grass_spawn_radius
 			var angle = randf() * TAU
 			var distance = randf() * spawn_radius
 			random_pos = zone_pos + Vector3(
