@@ -1,4 +1,4 @@
-[gd_scene load_steps=117 format=4 uid="uid://5st2matn1qe3"]
+[gd_scene load_steps=119 format=4 uid="uid://5st2matn1qe3"]
 
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="1_fa38q"]
 [ext_resource type="PackedScene" uid="uid://p6nnonr03ork" path="res://Scene/directional_light_3d.tscn" id="2_630rr"]
@@ -63,6 +63,8 @@
 [ext_resource type="PackedScene" uid="uid://bweuh0jytwbxi" path="res://Scene/Pause menu.tscn" id="60_tp466"]
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="61_npuwj"]
 [ext_resource type="PackedScene" uid="uid://bxjmk3kcmk1da" path="res://Scene/RadiationHeart2.tscn" id="63_k35cw"]
+[ext_resource type="PackedScene" uid="uid://dh7m2ycqp5kxr" path="res://Scene/RadiationHeartZone.tscn" id="64_yugbn"]
+[ext_resource type="PackedScene" uid="uid://bv8qf2h6mnp4c" path="res://Scene/FinalChoiceOverlay.tscn" id="65_rec2d"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_l52ou"]
 load_path = "res://.godot/imported/toxic barrel_radiaoctive barrel.png-b83f0969d7c884d6bc927945f6eab3f2.s3tc.ctex"
@@ -1093,7 +1095,7 @@ transform = Transform3D(5.41, 0, 0, 0, 3.6252315, -2.8907094, 0, 1.6904733, 6.19
 transform = Transform3D(5.41, 0, 0, 0, 3.640077, -2.8356328, 0, 1.6582649, 6.224532, -42.35975, 14.207535, 32.888226)
 
 [node name="Player" parent="." instance=ExtResource("25_vbow3")]
-transform = Transform3D(0.9999973, -0.0023038324, 0, 0.0023038324, 0.9999973, 0, 0, 0, 1, -16.541698, 48.20787, -29.182476)
+transform = Transform3D(0.9999973, -0.0023038324, 0, 0.0023038324, 0.9999973, 0, 0, 0, 1, -37.453938, 100.05682, 98.499596)
 
 [node name="Node3D6" parent="." instance=ExtResource("22_byp4e")]
 transform = Transform3D(1.315, 0, 0, 0, 1.3082705, 0.13286619, 0, -0.13286619, 1.3082705, -20.744293, 43.60518, -43.24989)
@@ -1554,6 +1556,14 @@ transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, -4.7196865, 92.2522,
 
 [node name="Node3D4" parent="RadiationHeart" instance=ExtResource("63_k35cw")]
 transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, -18.771069, 92.2522, 114.522514)
+
+[node name="Final Choice" type="Node" parent="."]
+
+[node name="RadiationHeartZone" parent="Final Choice" instance=ExtResource("64_yugbn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.3170204, 92.47675, 95.269325)
+final_choice_overlay_scene = ExtResource("65_rec2d")
+
+[node name="FinalChoiceOverlay" parent="Final Choice" instance=ExtResource("65_rec2d")]
 
 [editable path="toxic barrel"]
 [editable path="toxic barrel2"]

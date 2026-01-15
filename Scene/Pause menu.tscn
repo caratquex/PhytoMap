@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bweuh0jytwbxi"]
 
-[ext_resource type="Shader" uid="uid://cyfuiv8jlikwx" path="res://Scene/Pause menu.gdshader" id="1_bj7s3"]
-[ext_resource type="Script" uid="uid://deh0bfagumav6" path="res://Scene/pause_menu.gd" id="1_qnslq"]
+[ext_resource type="Shader" uid="uid://cyfuiv8jlikwx" path="res://Shader/Pause menu.gdshader" id="1_bj7s3"]
+[ext_resource type="Script" uid="uid://deh0bfagumav6" path="res://Script/pause_menu.gd" id="1_qnslq"]
 [ext_resource type="FontFile" uid="uid://dn6lk74wvhckb" path="res://GUI/Pixelify_Sans (1)/static/PixelifySans-Bold.ttf" id="1_xa0cb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qnslq"]
