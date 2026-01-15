@@ -53,8 +53,14 @@ func _on_ending_b_pressed() -> void:
 
 
 func _play_ending_video(video_path: String) -> void:
-	# Hide this overlay
-	visible = false
+	# Hide this overlay - CanvasLayer doesn't have visible property, hide children instead
+	if panel:
+		panel.hide()
+	if background:
+		background.hide()
+	
+	# Move this layer behind everything
+	layer = -100
 	
 	if ending_video_player_scene:
 		# Instantiate the video player scene
@@ -68,12 +74,10 @@ func _play_ending_video(video_path: String) -> void:
 		var scene_root = get_tree().current_scene
 		if scene_root:
 			scene_root.add_child(video_player_node)
-			
-			# Call set_video_path after adding to tree to trigger loading
-			if video_player_node.has_method("set_video_path"):
-				video_player_node.set_video_path(video_path)
+			print("[FinalChoiceOverlay] Added EndingVideoPlayer to scene")
 		
-		# Clean up this overlay
+		# Clean up this overlay immediately (not deferred)
+		get_parent().remove_child(self)
 		queue_free()
 	else:
 		# No video player scene configured, fallback to menu

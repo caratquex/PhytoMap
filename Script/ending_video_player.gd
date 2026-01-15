@@ -17,7 +17,6 @@ extends CanvasLayer
 # State
 # ---------------------------
 var _video_started: bool = false
-var _active_player: VideoStreamPlayer = null
 
 # ---------------------------
 # Node References
@@ -33,12 +32,17 @@ func _ready() -> void:
 	
 	print("[EndingVideoPlayer] _ready() called, video_path = '%s'" % video_path)
 	
-	# Stop all video players first to prevent autoplay conflicts
-	_stop_all_video_players()
+	# Make sure we're visible
+	visible = true
+	show()
 	
-	# Connect video finished signal
+	# Ensure video player is set up correctly
 	if video_player:
+		video_player.visible = true
 		video_player.finished.connect(_on_video_finished)
+		# Disable autoplay - we control playback
+		video_player.autoplay = false
+		video_player.stop()
 	
 	# Show/hide skip label
 	if skip_label:
@@ -46,19 +50,7 @@ func _ready() -> void:
 	
 	# If video_path was set before adding to tree, load it now
 	if video_path != "":
-		# Use call_deferred to ensure scene is fully ready
 		call_deferred("_load_and_play_video")
-	else:
-		print("[EndingVideoPlayer] WARNING: No video_path set in _ready()")
-
-
-func _stop_all_video_players() -> void:
-	# Stop all VideoStreamPlayer nodes to prevent autoplay conflicts
-	for child in get_children():
-		if child is VideoStreamPlayer:
-			child.stop()
-			child.autoplay = false
-			print("[EndingVideoPlayer] Stopped video player: %s" % child.name)
 
 
 func set_video_path(path: String) -> void:
@@ -79,7 +71,7 @@ func _load_and_play_video() -> void:
 		push_error("[EndingVideoPlayer] No video_path set!")
 		return
 	
-	# Find or create video player
+	# Find video player
 	if not video_player:
 		video_player = get_node_or_null("VideoStreamPlayer")
 	
@@ -93,30 +85,20 @@ func _load_and_play_video() -> void:
 	
 	var video_stream = load(video_path)
 	if video_stream:
-		print("[EndingVideoPlayer] Video stream loaded successfully: %s" % video_stream)
+		print("[EndingVideoPlayer] Video stream loaded: %s" % video_stream)
 		_video_started = true
-		_active_player = video_player
 		
-		# Stop any other video players
-		_stop_all_video_players()
-		
-		# Set up and play
+		# Configure and play
 		video_player.stream = video_stream
+		video_player.visible = true
+		video_player.expand = true
 		video_player.play()
 		
-		print("[EndingVideoPlayer] Video playback started, is_playing: %s" % video_player.is_playing())
+		print("[EndingVideoPlayer] Called play(), is_playing: %s" % video_player.is_playing())
+		print("[EndingVideoPlayer] VideoStreamPlayer visible: %s, size: %s" % [video_player.visible, video_player.size])
 	else:
 		push_error("[EndingVideoPlayer] Failed to load video: %s" % video_path)
-		push_error("[EndingVideoPlayer] Make sure the .ogv file exists and Godot has imported it")
 		_return_to_menu()
-
-
-func _process(_delta: float) -> void:
-	# Debug: Check if video is actually playing
-	if _active_player and _video_started:
-		if not _active_player.is_playing() and _active_player.stream_position > 0:
-			# Video stopped but had progressed - it finished
-			print("[EndingVideoPlayer] Video stopped at position: %s" % _active_player.stream_position)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -125,19 +107,22 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventKey and event.pressed:
 			if event.keycode == KEY_ESCAPE or event.keycode == KEY_SPACE or event.keycode == KEY_ENTER:
 				_skip_video()
-				get_viewport().set_input_as_handled()
+				var viewport = get_viewport()
+				if viewport:
+					viewport.set_input_as_handled()
 		elif event is InputEventMouseButton and event.pressed:
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				_skip_video()
-				get_viewport().set_input_as_handled()
+				var viewport = get_viewport()
+				if viewport:
+					viewport.set_input_as_handled()
 
 
 func _skip_video() -> void:
 	print("[EndingVideoPlayer] Video skipped by player")
 	
-	# Stop video
-	if _active_player:
-		_active_player.stop()
+	if video_player:
+		video_player.stop()
 	
 	_return_to_menu()
 
@@ -157,7 +142,6 @@ func _return_to_menu() -> void:
 	if menu_scene_path != "":
 		get_tree().change_scene_to_file(menu_scene_path)
 	else:
-		# Fallback: quit game
 		get_tree().quit()
 	
 	# Clean up

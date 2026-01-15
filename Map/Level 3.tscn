@@ -1095,7 +1095,7 @@ transform = Transform3D(5.41, 0, 0, 0, 3.6252315, -2.8907094, 0, 1.6904733, 6.19
 transform = Transform3D(5.41, 0, 0, 0, 3.640077, -2.8356328, 0, 1.6582649, 6.224532, -42.35975, 14.207535, 32.888226)
 
 [node name="Player" parent="." instance=ExtResource("25_vbow3")]
-transform = Transform3D(0.9999973, -0.0023038324, 0, 0.0023038324, 0.9999973, 0, 0, 0, 1, -37.453938, 100.05682, 98.499596)
+transform = Transform3D(0.9999973, -0.0023038324, 0, 0.0023038324, 0.9999973, 0, 0, 0, 1, -14.633113, 49.330513, -33.52083)
 
 [node name="Node3D6" parent="." instance=ExtResource("22_byp4e")]
 transform = Transform3D(1.315, 0, 0, 0, 1.3082705, 0.13286619, 0, -0.13286619, 1.3082705, -20.744293, 43.60518, -43.24989)
@@ -1407,7 +1407,13 @@ gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
 
 [node name="RadiationZoneBox7" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
-transform = Transform3D(1.4, 0, 0, 0, 1.3155696, 0.47882816, 0, -0.47882816, 1.3155696, -11.385137, 8.885725, 44.410343)
+transform = Transform3D(0.9905975, 0, 0.6772863, 0, 1.2, 0, -0.6772863, 0, 0.9905975, -22.01542, 6.3765783, 56.77733)
+visible = false
+gridmap = NodePath("../../GridMap")
+spawn_grass_on_clear = true
+
+[node name="RadiationZoneBox8" parent="RadiationBox" node_paths=PackedStringArray("gridmap") instance=ExtResource("59_npuwj")]
+transform = Transform3D(0.6575788, -0.32175604, 0.3225882, 0.26605606, 0.7309831, 0.18675633, -0.36987063, -0.046225574, 0.70785517, -8.90341, 8.823849, 61.741013)
 visible = false
 gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
@@ -1464,7 +1470,7 @@ multimesh = ExtResource("50_srcnb")
 script = ExtResource("51_tp466")
 
 [node name="MultiMeshInstance3D9" type="MultiMeshInstance3D" parent="ScatterOutput"]
-transform = Transform3D(0.33051452, 0, 0.9438009, 0, 0.9999998, 0, -0.94380116, 0, 0.33051443, 0.686, 31.13, -19.516)
+transform = Transform3D(0.33051452, 0, 0.9438009, 0, 0.9999998, 0, -0.94380116, 0, 0.33051443, 0.686, 28.561193, -19.516)
 multimesh = ExtResource("51_srcnb")
 script = ExtResource("51_tp466")
 
@@ -1502,7 +1508,7 @@ multimesh = ExtResource("51_p1dtq")
 script = ExtResource("51_tp466")
 
 [node name="MultiMeshInstance3D2" type="MultiMeshInstance3D" parent="ScatterOutput"]
-transform = Transform3D(0.46032926, -0.16417527, 0.8724354, 0.017935608, 0.98427033, 0.17575702, -0.88756716, -0.06525849, 0.45603293, -55.851276, -14.041294, 35.239014)
+transform = Transform3D(0.46032926, -0.16417527, 0.8724354, 0.017935608, 0.98427033, 0.17575702, -0.88756716, -0.06525849, 0.45603293, -52.75378, -14.041294, 38.32058)
 multimesh = ExtResource("51_l1xpb")
 script = ExtResource("51_tp466")
 
@@ -1560,10 +1566,8 @@ transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, -18.771069, 92.2522,
 [node name="Final Choice" type="Node" parent="."]
 
 [node name="RadiationHeartZone" parent="Final Choice" instance=ExtResource("64_yugbn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.3170204, 92.47675, 95.269325)
+transform = Transform3D(0.64, 0, 0, 0, 0.64, 0, 0, 0, 0.64, -6.3170204, 93.61192, 98.92932)
 final_choice_overlay_scene = ExtResource("65_rec2d")
-
-[node name="FinalChoiceOverlay" parent="Final Choice" instance=ExtResource("65_rec2d")]
 
 [editable path="toxic barrel"]
 [editable path="toxic barrel2"]
