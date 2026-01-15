@@ -36,15 +36,30 @@ static var instance: Node
 const LEVEL_CONFIG: Dictionary = {
 	"res://Map/Level 1.tscn": {
 		"next_level": "res://Map/Level 2.tscn",
-		"reversed_mechanics": false
+		"reversed_mechanics": false,
+		"time_limit": 120.0,
+		"portal_spawn_position": Vector3(0.187, 0, -47),
+		"gridmap_path": "",
+		"intro_lines": ["They really sent me alone for this huh?", "No partner? A manual? Or even carrots?", "Great…I'm lost. Where should I head first?"],
+		"outro_lines": ["…Hey. It worked. The land looks alive again.", "My face feels… warm? Probably fine.", "Alright. Next island."]
 	},
 	"res://Map/Level 2.tscn": {
 		"next_level": "res://Map/Level 3.tscn",
-		"reversed_mechanics": false
+		"reversed_mechanics": false,
+		"time_limit": 240.0,
+		"portal_spawn_position": Vector3(-33, 2.2, -87),
+		"gridmap_path": "GridMap",
+		"intro_lines": ["Oh hey the islands are floating. I'm definitely not scared of heights.", "The radiation feels stronger here… Like it knows I'm coming.", "Let's stay close. I don't want to fall."],
+		"outro_lines": ["That's another one cleaned. Good job…", "The radiation here really got into my skin.Why does my face suddenly feel so itchy?", "Anyway, let's move before this place starts moving too."]
 	},
 	"res://Map/Level 3.tscn": {
 		"next_level": "",  # Final level - no next level
-		"reversed_mechanics": true
+		"reversed_mechanics": true,
+		"time_limit": 360.0,
+		"portal_spawn_position": Vector3(-6, 90, 97),
+		"gridmap_path": "GridMap",
+		"intro_lines": ["These islands get weirder the higher I go. Feels like I'm climbing into someone's nightmare.", "My chest is heavy… and something's shifting under my skin.", "I can't see the radiation now... Why?", "Whatever happens next… let's finish it."],
+		"outro_lines": ["…It's done. But… Why do I feel less like myself?", "Every time I plant a seed, my body feels weaker (?) That can't be normal...", ""]
 	}
 }
 
@@ -72,6 +87,7 @@ signal all_levels_complete()
 # Node References
 # ---------------------------
 @onready var timer: Timer = $Timer
+@onready var debug_ui: CanvasLayer = $DebugUI
 
 # Debug UI References
 @onready var time_label: Label = $DebugUI/Panel/VBox/TimeLabel
@@ -93,6 +109,20 @@ func _initialize_for_current_level() -> void:
 	if not is_inside_tree():
 		# Tree not ready yet, try again next frame
 		call_deferred("_initialize_for_current_level")
+		return
+	
+	# Check if we're on a gameplay level
+	var scene_path = ""
+	if get_tree() and get_tree().current_scene:
+		scene_path = get_tree().current_scene.scene_file_path
+	
+	# Hide debug UI if not on a gameplay level
+	var is_gameplay_level = scene_path in LEVEL_CONFIG
+	if debug_ui:
+		debug_ui.visible = is_gameplay_level
+	
+	# Don't initialize gameplay systems if not on a gameplay level
+	if not is_gameplay_level:
 		return
 	
 	# Reset state for new level
@@ -120,9 +150,6 @@ func _initialize_for_current_level() -> void:
 	# Update debug UI
 	_update_debug_ui()
 	
-	var scene_path = ""
-	if get_tree() and get_tree().current_scene:
-		scene_path = get_tree().current_scene.scene_file_path
 	print("[GameManager] Initialized for level: %s. Radiation count: %d, Next level: %s" % [scene_path, total_radiation_count, next_level_path])
 	
 	# Show intro dialogue if configured
@@ -232,7 +259,33 @@ func _apply_level_config() -> void:
 		var config = LEVEL_CONFIG[scene_path]
 		next_level_path = config.get("next_level", "")
 		reversed_mechanics = config.get("reversed_mechanics", false)
-		print("[GameManager] Level config applied - Next: %s" % next_level_path)
+		time_limit = config.get("time_limit", 120.0)
+		portal_spawn_position = config.get("portal_spawn_position", Vector3.ZERO)
+		
+		# Apply intro/outro lines
+		intro_lines.clear()
+		for line in config.get("intro_lines", []):
+			intro_lines.append(line)
+		outro_lines.clear()
+		for line in config.get("outro_lines", []):
+			outro_lines.append(line)
+		
+		# Find gridmap by path if specified
+		var gridmap_path = config.get("gridmap_path", "")
+		if gridmap_path != "":
+			gridmap = scene_root.get_node_or_null(gridmap_path)
+			if gridmap:
+				print("[GameManager] Found GridMap: %s" % gridmap_path)
+			else:
+				print("[GameManager] WARNING: GridMap not found at path: %s" % gridmap_path)
+		else:
+			gridmap = null
+		
+		# Load dialogue UI if not already set
+		if not dialogue_ui:
+			dialogue_ui = load("res://Scene/dialogue.tscn")
+		
+		print("[GameManager] Level config applied - Next: %s, Time: %.0f" % [next_level_path, time_limit])
 		print("[GameManager] Reversed mechanics from config: %s" % reversed_mechanics)
 	else:
 		print("[GameManager] No config found for scene: '%s' (using defaults)" % scene_path)

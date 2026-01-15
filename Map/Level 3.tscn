@@ -1,4 +1,4 @@
-[gd_scene load_steps=120 format=4 uid="uid://5st2matn1qe3"]
+[gd_scene load_steps=118 format=4 uid="uid://5st2matn1qe3"]
 
 [ext_resource type="PackedScene" uid="uid://blypntsmq3xo2" path="res://Map/Water.tscn" id="1_fa38q"]
 [ext_resource type="PackedScene" uid="uid://p6nnonr03ork" path="res://Scene/directional_light_3d.tscn" id="2_630rr"]
@@ -57,8 +57,6 @@
 [ext_resource type="PackedScene" uid="uid://caqxfqurbp3ku" path="res://addons/proton_scatter/demos/assets/pine_tree.tscn" id="53_qmm36"]
 [ext_resource type="PackedScene" uid="uid://i7rvwskvhtnd" path="res://Map Asset/TreeRadiant2.tscn" id="54_71g5e"]
 [ext_resource type="MultiMesh" uid="uid://bdgy3vae2o1j3" path="res://Generated Multimesh/7.tres" id="54_fbhpp"]
-[ext_resource type="PackedScene" uid="uid://c5uoeewfgcleu" path="res://Scene/dialogue.tscn" id="59_gx12f"]
-[ext_resource type="PackedScene" uid="uid://qfkfvt6felnv" path="res://Scene/GameManager.tscn" id="59_kdx7h"]
 [ext_resource type="PackedScene" uid="uid://4p5bvlkog65k" path="res://Scene/RadiationZoneBox.tscn" id="59_npuwj"]
 [ext_resource type="PackedScene" uid="uid://bweuh0jytwbxi" path="res://Scene/Pause menu.tscn" id="60_tp466"]
 [ext_resource type="PackedScene" uid="uid://cs4jjhmu6bg8l" path="res://Scene/world_environment.tscn" id="61_npuwj"]
@@ -1448,16 +1446,6 @@ transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -35.021053, 55.667, 99.24545)
 visible = false
 gridmap = NodePath("../../GridMap")
 spawn_grass_on_clear = true
-
-[node name="GameManager" parent="." instance=ExtResource("59_kdx7h")]
-time_limit = 360.0
-force_reversed_mechanics = true
-intro_lines = Array[String](["These islands get weirder the higher I go. Feels like I’m climbing into someone’s nightmare.", "My chest is heavy… and something’s shifting under my skin.", "I can't see the radiation now... Why?", "Whatever happens next… let’s finish it."])
-outro_lines = Array[String](["…It’s done. But… Why do I feel less like myself?", "Every time I plant a seed, my body feels weaker (?) That can’t be normal...", ""])
-dialogue_ui = ExtResource("59_gx12f")
-portal_spawn_position = Vector3(-6, 90, 97)
-
-[node name="DialogueUI" parent="GameManager" instance=ExtResource("59_gx12f")]
 
 [node name="Pause Menu" type="CanvasLayer" parent="."]
 
