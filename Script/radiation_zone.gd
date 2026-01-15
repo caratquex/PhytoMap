@@ -916,6 +916,11 @@ func is_zone_cleared() -> bool:
 	return is_cleared
 
 
+## Check if a world position is inside this zone (for external use by player, etc.)
+func is_position_inside(world_pos: Vector3) -> bool:
+	return _is_point_inside_zone(world_pos)
+
+
 ## Manually set the required sunflower count (useful for dynamic difficulty)
 func set_required_sunflowers(count: int) -> void:
 	required_sunflowers = max(1, count)

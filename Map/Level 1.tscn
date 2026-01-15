@@ -554,7 +554,7 @@ stream = ExtResource("42_ewipy")
 [node name="RadiationZone" type="Node" parent="."]
 
 [node name="RadiationZoneBox" parent="RadiationZone" node_paths=PackedStringArray("gridmap") instance=ExtResource("44_wwfh2")]
-transform = Transform3D(1.8, 0, 0, 0, 3.315, 0, 0, 0, 1.8, -27.628084, 1.755167, -5.7746367)
+transform = Transform3D(1.555, 0, 0, 0, 1.555, 0, 0, 0, 1.555, -28.1944, 3.917202, -7.3973975)
 gridmap = NodePath("../../GridMap2")
 grass_spawn_radius = 0.0
 grass_height_offset = 0.0

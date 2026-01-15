@@ -810,7 +810,13 @@ func _check_radiation_damage(delta: float) -> void:
 	is_in_radiation = false
 	
 	for node in radiation_nodes:
-		if node is Node3D:
+		# Check if the RadiationZone has the is_position_inside method (new proper detection)
+		if node.has_method("is_position_inside"):
+			if node.is_position_inside(global_position):
+				is_in_radiation = true
+				break
+		elif node is Node3D:
+			# Fallback for older RadiationZone nodes without the new method
 			var radiation_node = node as Node3D
 			var distance = global_position.distance_to(radiation_node.global_position)
 			
